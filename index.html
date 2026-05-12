@@ -75,7 +75,8 @@ html, body {
 .active-title,
 .rank-strip,
 .currency,
-button {
+button,
+.role-menu {
     text-shadow: 0 0 2px #000, 0 0 4px #000, 0 0 8px #000;
 }
 
@@ -242,10 +243,12 @@ button {
     font-size: 18px;
     line-height: 1.25;
     cursor: pointer;
+    font-family: Georgia, "Times New Roman", serif;
 }
 
 .menu-btn:hover {
     box-shadow: 0 0 15px rgba(155, 48, 255, 0.4);
+    color: #fff0b8;
 }
 
 .current-title {
@@ -407,6 +410,70 @@ button {
     font-size: 24px;
 }
 
+/* Role / Titles Popup */
+.role-menu {
+    display: none;
+    position: absolute;
+    top: 300px;
+    left: 320px;
+    width: 600px;
+    height: 430px;
+    z-index: 999;
+    background:
+        radial-gradient(circle at center, rgba(90, 20, 120, 0.25), transparent 55%),
+        rgba(5, 5, 5, 0.97);
+    border: 2px solid #8c6a12;
+    box-shadow:
+        0 0 35px rgba(155,48,255,0.55),
+        inset 0 0 25px rgba(212,175,55,0.12);
+    color: #d4af37;
+    padding: 35px;
+    text-align: center;
+}
+
+.role-menu-title {
+    font-size: 42px;
+    color: #9b30ff;
+    margin-bottom: 10px;
+}
+
+.role-menu-subtitle {
+    font-size: 22px;
+    margin-bottom: 28px;
+}
+
+.role-menu-buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+}
+
+.role-menu-buttons button {
+    height: 90px;
+    background: #080808;
+    border: 2px solid #8c6a12;
+    border-radius: 10px;
+    color: #d4af37;
+    font-size: 20px;
+}
+
+.role-menu-note {
+    font-size: 18px;
+    line-height: 1.35;
+    color: #c9aa69;
+    margin-bottom: 25px;
+}
+
+.role-menu-close {
+    width: 180px;
+    height: 55px;
+    background: #080808;
+    border: 2px solid #8c6a12;
+    color: #d4af37;
+    font-size: 20px;
+}
+
 button {
     font-family: Georgia, "Times New Roman", serif;
     cursor: pointer;
@@ -424,7 +491,7 @@ button {
 
         <div class="role">
             ROLE
-            <strong id="hudRole">SWITCH</strong>
+            <strong id="hudRole">LOADING</strong>
         </div>
 
         <div class="rank">
@@ -459,7 +526,7 @@ button {
             <button class="menu-btn">PROFILE</button>
             <button class="menu-btn">XP / LEVEL</button>
             <button class="menu-btn">DAILY QUEST</button>
-            <button class="menu-btn">TITLES</button>
+            <button class="menu-btn" onclick="openRoleMenu()">TITLES</button>
             <button class="menu-btn">PARTNER</button>
             <button class="menu-btn">EVENTS</button>
             <button class="menu-btn">LEADERBOARD</button>
@@ -534,6 +601,25 @@ button {
         💎 0 &nbsp;&nbsp; ♦ 0 &nbsp;&nbsp; 🔷 0
     </div>
 
+    <!-- TITLES / ROLE SWITCH MENU -->
+    <div class="role-menu" id="roleMenu">
+        <div class="role-menu-title">TITLES & ROLE</div>
+        <div class="role-menu-subtitle">Select a role to switch your path.</div>
+
+        <div class="role-menu-buttons">
+            <button onclick="selectRole('dominant')">DOMINANT</button>
+            <button onclick="selectRole('submissive')">SUBMISSIVE</button>
+            <button onclick="selectRole('switch')">SWITCH</button>
+        </div>
+
+        <div class="role-menu-note">
+            This changes the visible role selection locally.<br>
+            Your LSL script should save the role using <strong>/api/user/role</strong>.
+        </div>
+
+        <button class="role-menu-close" onclick="closeRoleMenu()">CLOSE</button>
+    </div>
+
 </div>
 </div>
 
@@ -555,11 +641,13 @@ function getParam(name, fallback) {
 }
 
 function cleanRole(role) {
-    role = (role || "switch").toLowerCase();
+    role = (role || "loading").toLowerCase();
 
     if (role === "dominant") return "DOMINANT";
     if (role === "submissive") return "SUBMISSIVE";
-    return "SWITCH";
+    if (role === "switch") return "SWITCH";
+
+    return "LOADING";
 }
 
 function rankIndexFromLevel(level) {
@@ -588,7 +676,7 @@ function updateRankStrip(level) {
 }
 
 function updateHUDFromParams() {
-    const role = getParam("role", "switch");
+    const role = getParam("role", "loading");
     const rank = getParam("rank", "Initiate");
     const level = parseInt(getParam("level", "1"), 10) || 1;
     const xp = parseInt(getParam("xp", "0"), 10) || 0;
@@ -610,6 +698,7 @@ function updateHUDFromParams() {
     document.getElementById("hudRole").textContent = cleanRole(role);
     document.getElementById("hudRank").textContent = rank.toUpperCase();
     document.getElementById("hudLevel").textContent = level;
+
     document.getElementById("hudXPText").textContent =
         xp.toLocaleString() + " / " + next.toLocaleString();
 
@@ -632,6 +721,35 @@ function updateHUDFromParams() {
         "Level: " + level + " / " + maxLevel;
 
     updateRankStrip(level);
+}
+
+function openRoleMenu() {
+    document.getElementById("roleMenu").style.display = "block";
+}
+
+function closeRoleMenu() {
+    document.getElementById("roleMenu").style.display = "none";
+}
+
+function selectRole(role) {
+    const displayRole = cleanRole(role);
+
+    document.getElementById("hudRole").textContent = displayRole;
+
+    document.getElementById("hudNotifications").innerHTML =
+        "<strong>NOTIFICATIONS</strong><br><br>" +
+        "Role switch selected:<br><br>" +
+        displayRole + "<br><br>" +
+        "Touch or use the LSL role update command to save this role.";
+
+    closeRoleMenu();
+
+    /*
+      IMPORTANT:
+      Do not put your API secret in this public HTML file.
+      The actual saved role change should be handled by LSL:
+      POST https://api.velvetorder.duckdns.org/api/user/role
+    */
 }
 
 window.addEventListener("resize", scaleHUD);
