@@ -9,9 +9,6 @@
 <title>Velvet Order HUD</title>
 
 <style>
-/* =========================
-   GLOBAL RESET
-========================= */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -26,9 +23,6 @@ html, body {
     font-family: Georgia, "Times New Roman", serif;
 }
 
-/* =========================
-   CENTER THE HUD
-========================= */
 .hud-wrapper {
     width: 100vw;
     height: 100vh;
@@ -37,10 +31,6 @@ html, body {
     background: #000;
 }
 
-/*
-  The HUD is designed on a 1240x1240 canvas.
-  We scale it proportionally so it never gets squished.
-*/
 .hud {
     position: absolute;
     width: 1240px;
@@ -50,16 +40,10 @@ html, body {
     margin-left: -620px;
     margin-top: -620px;
     transform-origin: center center;
-
-    /* JS updates this scale dynamically */
     transform: scale(1);
-
     background:
-        radial-gradient(circle at center,
-            rgba(110, 20, 160, 0.12),
-            transparent 40%),
+        radial-gradient(circle at center, rgba(110, 20, 160, 0.12), transparent 40%),
         linear-gradient(#080608, #020202);
-
     border: 2px solid #8c6a12;
     box-shadow:
         inset 0 0 60px rgba(120, 60, 180, 0.35),
@@ -68,7 +52,6 @@ html, body {
     color: #d4af37;
 }
 
-/* Decorative corner glow */
 .hud::before {
     content: "";
     position: absolute;
@@ -79,10 +62,6 @@ html, body {
         inset 0 0 20px rgba(212, 175, 55, 0.12);
 }
 
-/* =========================
-   TEXT READABILITY
-========================= */
-.readable,
 .title,
 .subtitle,
 .role,
@@ -97,15 +76,9 @@ html, body {
 .rank-strip,
 .currency,
 button {
-    text-shadow:
-        0 0 2px #000,
-        0 0 4px #000,
-        0 0 8px #000;
+    text-shadow: 0 0 2px #000, 0 0 4px #000, 0 0 8px #000;
 }
 
-/* =========================
-   TOP LEFT MAIN PANEL
-========================= */
 .main-card {
     position: absolute;
     left: 20px;
@@ -140,12 +113,11 @@ button {
     color: #d4af37;
 }
 
-/* Role / Rank / Level */
 .role {
     position: absolute;
     top: 170px;
     left: 60px;
-    width: 160px;
+    width: 180px;
     font-size: 20px;
     line-height: 1.3;
 }
@@ -161,7 +133,7 @@ button {
     position: absolute;
     top: 260px;
     left: 60px;
-    width: 160px;
+    width: 220px;
     font-size: 20px;
     line-height: 1.3;
 }
@@ -169,8 +141,9 @@ button {
 .rank strong {
     display: block;
     color: #9b30ff;
-    font-size: 34px;
+    font-size: 28px;
     font-weight: normal;
+    line-height: 1.1;
 }
 
 .level-label {
@@ -188,7 +161,6 @@ button {
     color: #9b30ff;
 }
 
-/* Top emblem */
 .top-crown {
     position: absolute;
     top: 155px;
@@ -206,19 +178,18 @@ button {
         drop-shadow(0 0 28px rgba(139, 0, 255, 0.45));
 }
 
-/* XP section */
 .xp-small {
     position: absolute;
     top: 170px;
     right: 40px;
-    width: 180px;
+    width: 190px;
     font-size: 20px;
     line-height: 1.4;
     text-align: right;
 }
 
 .xp-small-bar {
-    width: 180px;
+    width: 190px;
     height: 30px;
     margin: 12px 0;
     border: 1px solid #8c6a12;
@@ -226,13 +197,13 @@ button {
 }
 
 .xp-small-fill {
-    width: 78%;
+    width: 0%;
     height: 100%;
     background: linear-gradient(to right, #5f178f, #9b30ff);
     box-shadow: 0 0 10px rgba(155, 48, 255, 0.7);
+    transition: width 0.4s ease;
 }
 
-/* Motto */
 .motto {
     position: absolute;
     bottom: 30px;
@@ -243,9 +214,6 @@ button {
     color: #d4af37;
 }
 
-/* =========================
-   RIGHT MENU PANEL
-========================= */
 .button-panel {
     position: absolute;
     top: 20px;
@@ -280,9 +248,6 @@ button {
     box-shadow: 0 0 15px rgba(155, 48, 255, 0.4);
 }
 
-/* =========================
-   CURRENT TITLE
-========================= */
 .current-title {
     position: absolute;
     top: 500px;
@@ -292,14 +257,14 @@ button {
     border: 2px solid #8c6a12;
     display: flex;
     align-items: center;
-    padding-left: 140px;
-    font-size: 36px;
+    padding-left: 70px;
+    padding-right: 25px;
+    font-size: 34px;
     color: #9b30ff;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
-/* =========================
-   STATS PANEL
-========================= */
 .stats {
     position: absolute;
     top: 620px;
@@ -323,6 +288,7 @@ button {
 }
 
 .stat-fill {
+    display: block;
     height: 100%;
 }
 
@@ -330,9 +296,6 @@ button {
 .loyalty    { width: 65%; background: #c04060; }
 .control    { width: 80%; background: #2b8ec6; }
 
-/* =========================
-   NOTIFICATIONS
-========================= */
 .notifications {
     position: absolute;
     top: 525px;
@@ -346,9 +309,6 @@ button {
     overflow: hidden;
 }
 
-/* =========================
-   ACTION BUTTONS
-========================= */
 .action-row {
     position: absolute;
     top: 850px;
@@ -366,7 +326,6 @@ button {
     font-size: 14px;
 }
 
-/* Wear row */
 .wear-row {
     position: absolute;
     top: 890px;
@@ -384,9 +343,6 @@ button {
     font-size: 18px;
 }
 
-/* =========================
-   ACTIVE TITLE
-========================= */
 .active-title {
     position: absolute;
     top: 975px;
@@ -395,14 +351,12 @@ button {
     height: 180px;
     border: 2px solid #8c6a12;
     text-align: center;
-    padding-top: 55px;
-    font-size: 46px;
+    padding: 45px 20px 0;
+    font-size: 42px;
     color: #9b30ff;
+    overflow: hidden;
 }
 
-/* =========================
-   RANK STRIP
-========================= */
 .rank-strip {
     position: absolute;
     top: 975px;
@@ -416,9 +370,11 @@ button {
     font-size: 28px;
 }
 
-/* =========================
-   FOOTER
-========================= */
+.rank-mark.active {
+    color: #9b30ff;
+    text-shadow: 0 0 10px #9b30ff, 0 0 20px #9b30ff;
+}
+
 .footer-left {
     position: absolute;
     bottom: 10px;
@@ -451,9 +407,6 @@ button {
     font-size: 24px;
 }
 
-/* =========================
-   BUTTON STYLE
-========================= */
 button {
     font-family: Georgia, "Times New Roman", serif;
     cursor: pointer;
@@ -465,23 +418,22 @@ button {
 <div class="hud-wrapper">
 <div class="hud">
 
-    <!-- MAIN PANEL -->
     <div class="main-card">
         <div class="title">VELVET ORDER</div>
         <div class="subtitle">ROLE PROGRESSION HUD</div>
 
         <div class="role">
             ROLE
-            <strong>DOMINANT</strong>
+            <strong id="hudRole">SWITCH</strong>
         </div>
 
         <div class="rank">
             RANK
-            <strong>KEEPER</strong>
+            <strong id="hudRank">INITIATE</strong>
         </div>
 
         <div class="level-label">LEVEL</div>
-        <div class="level">12</div>
+        <div class="level" id="hudLevel">1</div>
 
         <div class="top-crown">
             <img src="VO_Crown_Logo.png" alt="Velvet Order Logo">
@@ -489,20 +441,19 @@ button {
 
         <div class="xp-small">
             XP<br>
-            4,725 / 6,000
+            <span id="hudXPText">0 / 250</span>
 
             <div class="xp-small-bar">
-                <div class="xp-small-fill"></div>
+                <div class="xp-small-fill" id="hudXPFill"></div>
             </div>
 
             NEXT LEVEL<br>
-            +1,275 XP
+            <span id="hudNextText">+250 XP</span>
         </div>
 
         <div class="motto">Power. Devotion. Respect.</div>
     </div>
 
-    <!-- MENU -->
     <div class="button-panel">
         <div class="grid">
             <button class="menu-btn">PROFILE</button>
@@ -517,46 +468,33 @@ button {
         </div>
     </div>
 
-    <!-- CURRENT TITLE -->
-    <div class="current-title">DISCIPLINE KEEPER</div>
+    <div class="current-title" id="hudCurrentTitle">INITIATE</div>
 
-    <!-- STATS -->
     <div class="stats">
         <div class="stat">
             DISCIPLINE
-            <span class="stat-bar">
-                <span class="stat-fill discipline"></span>
-            </span>
+            <span class="stat-bar"><span class="stat-fill discipline"></span></span>
             72%
         </div>
 
         <div class="stat">
             LOYALTY
-            <span class="stat-bar">
-                <span class="stat-fill loyalty"></span>
-            </span>
+            <span class="stat-bar"><span class="stat-fill loyalty"></span></span>
             65%
         </div>
 
         <div class="stat">
             CONTROL
-            <span class="stat-bar">
-                <span class="stat-fill control"></span>
-            </span>
+            <span class="stat-bar"><span class="stat-fill control"></span></span>
             80%
         </div>
     </div>
 
-    <!-- NOTIFICATIONS -->
-    <div class="notifications">
+    <div class="notifications" id="hudNotifications">
         <strong>NOTIFICATIONS</strong><br><br>
-        Daily Login Bonus Claimed +100 XP<br><br>
-        Quest Completed +250 XP<br><br>
-        Level Up! You are now level 12<br><br>
-        Event Available Tonight
+        HUD loaded. Awaiting profile data.
     </div>
 
-    <!-- ACTION BUTTONS -->
     <div class="action-row">
         <button>KNEEL</button>
         <button>OBEY</button>
@@ -566,7 +504,6 @@ button {
         <button>REWARD</button>
     </div>
 
-    <!-- WEAR ROW -->
     <div class="wear-row">
         <button>WEAR</button>
         <button>UNWEAR</button>
@@ -574,23 +511,27 @@ button {
         <button>UNLOCK</button>
     </div>
 
-    <!-- ACTIVE TITLE -->
-    <div class="active-title">
-        KEEPER OF DESIRE
+    <div class="active-title" id="hudActiveTitle">
+        INITIATE
     </div>
 
-    <!-- RANK STRIP -->
-    <div class="rank-strip">
-        I&nbsp;&nbsp;II&nbsp;&nbsp;III&nbsp;&nbsp;IV&nbsp;&nbsp;V&nbsp;&nbsp;VI&nbsp;&nbsp;VII
+    <div class="rank-strip" id="hudRankStrip">
+        <span class="rank-mark">I</span>&nbsp;&nbsp;
+        <span class="rank-mark">II</span>&nbsp;&nbsp;
+        <span class="rank-mark">III</span>&nbsp;&nbsp;
+        <span class="rank-mark">IV</span>&nbsp;&nbsp;
+        <span class="rank-mark">V</span>&nbsp;&nbsp;
+        <span class="rank-mark">VI</span>&nbsp;&nbsp;
+        <span class="rank-mark">VII</span>&nbsp;&nbsp;
+        <span class="rank-mark">VIII</span>&nbsp;&nbsp;
+        <span class="rank-mark">IX</span>&nbsp;&nbsp;
+        <span class="rank-mark">X</span>
     </div>
 
-    <!-- FOOTER -->
     <div class="footer-left"></div>
-
     <button class="close-btn">CLOSE HUD</button>
-
-    <div class="currency">
-        💎 5,250 &nbsp;&nbsp; ♦ 120 &nbsp;&nbsp; 🔷 80
+    <div class="currency" id="hudCurrency">
+        💎 0 &nbsp;&nbsp; ♦ 0 &nbsp;&nbsp; 🔷 0
     </div>
 
 </div>
@@ -604,12 +545,101 @@ function scaleHUD() {
         window.innerHeight / baseSize
     );
 
-    document.querySelector('.hud').style.transform =
-        'scale(' + scale + ')';
+    document.querySelector(".hud").style.transform = "scale(" + scale + ")";
 }
 
-window.addEventListener('resize', scaleHUD);
-window.addEventListener('load', scaleHUD);
+function getParam(name, fallback) {
+    const params = new URLSearchParams(window.location.search);
+    const value = params.get(name);
+    return value === null || value === "" ? fallback : value;
+}
+
+function cleanRole(role) {
+    role = (role || "switch").toLowerCase();
+
+    if (role === "dominant") return "DOMINANT";
+    if (role === "submissive") return "SUBMISSIVE";
+    return "SWITCH";
+}
+
+function rankIndexFromLevel(level) {
+    level = parseInt(level, 10) || 1;
+
+    if (level >= 100) return 9;
+
+    let index = Math.floor((level - 1) / 10);
+    if (index < 0) index = 0;
+    if (index > 9) index = 9;
+
+    return index;
+}
+
+function updateRankStrip(level) {
+    const index = rankIndexFromLevel(level);
+    const marks = document.querySelectorAll(".rank-mark");
+
+    marks.forEach((mark, i) => {
+        if (i === index) {
+            mark.classList.add("active");
+        } else {
+            mark.classList.remove("active");
+        }
+    });
+}
+
+function updateHUDFromParams() {
+    const role = getParam("role", "switch");
+    const rank = getParam("rank", "Initiate");
+    const level = parseInt(getParam("level", "1"), 10) || 1;
+    const xp = parseInt(getParam("xp", "0"), 10) || 0;
+    const next = parseInt(getParam("next", "250"), 10) || 250;
+    const tokens = parseInt(getParam("tokens", "0"), 10) || 0;
+    const title = getParam("title", rank);
+    const maxLevel = parseInt(getParam("max", "100"), 10) || 100;
+
+    const percent =
+        level >= maxLevel || next <= 0
+            ? 100
+            : Math.min(Math.max((xp / next) * 100, 0), 100);
+
+    const remaining =
+        level >= maxLevel || next <= 0
+            ? 0
+            : Math.max(next - xp, 0);
+
+    document.getElementById("hudRole").textContent = cleanRole(role);
+    document.getElementById("hudRank").textContent = rank.toUpperCase();
+    document.getElementById("hudLevel").textContent = level;
+    document.getElementById("hudXPText").textContent =
+        xp.toLocaleString() + " / " + next.toLocaleString();
+
+    document.getElementById("hudXPFill").style.width = percent + "%";
+
+    document.getElementById("hudNextText").textContent =
+        level >= maxLevel ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
+
+    document.getElementById("hudCurrentTitle").textContent = rank.toUpperCase();
+    document.getElementById("hudActiveTitle").textContent = title.toUpperCase();
+
+    document.getElementById("hudCurrency").innerHTML =
+        "💎 " + tokens.toLocaleString() + " &nbsp;&nbsp; ♦ 0 &nbsp;&nbsp; 🔷 0";
+
+    document.getElementById("hudNotifications").innerHTML =
+        "<strong>NOTIFICATIONS</strong><br><br>" +
+        "Profile loaded.<br><br>" +
+        "Role: " + cleanRole(role) + "<br>" +
+        "Rank: " + rank + "<br>" +
+        "Level: " + level + " / " + maxLevel;
+
+    updateRankStrip(level);
+}
+
+window.addEventListener("resize", scaleHUD);
+
+window.addEventListener("load", function () {
+    scaleHUD();
+    updateHUDFromParams();
+});
 </script>
 
 </body>
