@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>Velvet Order HUD</title>
 
 <style>
@@ -84,20 +87,18 @@ html, body {
     height: 23vw;
     max-width: 230px;
     max-height: 230px;
-    background: radial-gradient(circle, #4b0082, #1a0033);
-    border: 14px solid #ffd700;
-    border-radius: 50%;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 7vw;
-    color: #ffd700;
-    box-shadow: 0 0 50px #ffd700;
 }
 
-.center-emblem span {
-    font-size: 4.2vw;
+.center-emblem img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.8))
+            drop-shadow(0 0 35px rgba(139, 0, 255, 0.5));
 }
 
 .xp-area {
@@ -203,7 +204,7 @@ button:hover {
     bottom: 6%;
     right: 5%;
     width: 29%;
-    background: rgba(26,15,36,0.95);
+    background: rgba(26, 15, 36, 0.95);
     border: 4px solid #8b00ff;
     padding: 16px;
     font-size: 1.55vw;
@@ -228,7 +229,6 @@ button:hover {
 
     <div class="center-emblem">
         <img src="VO_Crown_Logo.png" alt="Velvet Order Crown Logo">
-        <span>VO</span>
     </div>
 
     <div class="xp-area">
@@ -279,21 +279,11 @@ button:hover {
 
 <script>
 function sendCommand(cmd) {
-    var note = document.getElementById("notifications");
-
+    const note = document.getElementById("notifications");
     note.innerHTML =
         "<strong>NOTIFICATIONS</strong><br>" +
         "Command clicked: " + cmd;
-
     console.log("Command clicked:", cmd);
-
-    /*
-    Do NOT use this inside Second Life MOAP during testing:
-
-    window.location.href = "secondlife:///app/chat/local/" + encodeURIComponent("/" + cmd.toLowerCase());
-
-    It can cause the media face to stop rendering or go white.
-    */
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -305,10 +295,6 @@ document.addEventListener("DOMContentLoaded", function () {
         document.querySelector(".hud").style.transform = "translateZ(0)";
     }, 250);
 });
-
-window.onload = function () {
-    document.body.style.opacity = "1";
-};
 </script>
 
 </body>
