@@ -62,21 +62,9 @@ html, body {
         inset 0 0 20px rgba(212, 175, 55, 0.12);
 }
 
-.title,
-.subtitle,
-.role,
-.rank,
-.level-label,
-.level,
-.xp-small,
-.current-title,
-.notifications,
-.stat,
-.active-title,
-.rank-strip,
-.currency,
-button,
-.role-menu {
+.title, .subtitle, .role, .rank, .level-label, .level, .xp-small,
+.current-title, .notifications, .stat, .active-title, .rank-strip,
+.currency, button, .titles-menu {
     text-shadow: 0 0 2px #000, 0 0 4px #000, 0 0 8px #000;
 }
 
@@ -410,68 +398,78 @@ button,
     font-size: 24px;
 }
 
-/* Role / Titles Popup */
-.role-menu {
+.titles-menu {
     display: none;
     position: absolute;
-    top: 300px;
-    left: 320px;
-    width: 600px;
-    height: 430px;
+    top: 260px;
+    left: 285px;
+    width: 670px;
+    height: 650px;
     z-index: 999;
     background:
         radial-gradient(circle at center, rgba(90, 20, 120, 0.25), transparent 55%),
-        rgba(5, 5, 5, 0.97);
+        rgba(5, 5, 5, 0.98);
     border: 2px solid #8c6a12;
     box-shadow:
         0 0 35px rgba(155,48,255,0.55),
         inset 0 0 25px rgba(212,175,55,0.12);
     color: #d4af37;
-    padding: 35px;
+    padding: 32px;
     text-align: center;
 }
 
-.role-menu-title {
+.titles-menu-title {
     font-size: 42px;
     color: #9b30ff;
-    margin-bottom: 10px;
+    margin-bottom: 18px;
 }
 
-.role-menu-subtitle {
+.titles-section {
+    border: 1px solid #8c6a12;
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+.section-heading {
     font-size: 22px;
-    margin-bottom: 28px;
+    color: #d4af37;
+    margin-bottom: 12px;
 }
 
-.role-menu-buttons {
+.menu-current-title {
+    font-size: 30px;
+    color: #9b30ff;
+}
+
+.title-buttons,
+.role-buttons {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 28px;
+    gap: 12px;
 }
 
-.role-menu-buttons button {
-    height: 90px;
+.title-buttons button,
+.role-buttons button,
+.menu-close {
     background: #080808;
     border: 2px solid #8c6a12;
-    border-radius: 10px;
     color: #d4af37;
-    font-size: 20px;
+    border-radius: 8px;
+    min-height: 58px;
+    font-size: 17px;
 }
 
-.role-menu-note {
-    font-size: 18px;
-    line-height: 1.35;
+.menu-note {
+    font-size: 16px;
     color: #c9aa69;
-    margin-bottom: 25px;
+    line-height: 1.35;
+    margin-top: 10px;
 }
 
-.role-menu-close {
+.menu-close {
     width: 180px;
     height: 55px;
-    background: #080808;
-    border: 2px solid #8c6a12;
-    color: #d4af37;
-    font-size: 20px;
+    margin-top: 5px;
 }
 
 button {
@@ -489,15 +487,8 @@ button {
         <div class="title">VELVET ORDER</div>
         <div class="subtitle">ROLE PROGRESSION HUD</div>
 
-        <div class="role">
-            ROLE
-            <strong id="hudRole">LOADING</strong>
-        </div>
-
-        <div class="rank">
-            RANK
-            <strong id="hudRank">INITIATE</strong>
-        </div>
+        <div class="role">ROLE <strong id="hudRole">LOADING</strong></div>
+        <div class="rank">RANK <strong id="hudRank">INITIATE</strong></div>
 
         <div class="level-label">LEVEL</div>
         <div class="level" id="hudLevel">1</div>
@@ -509,11 +500,9 @@ button {
         <div class="xp-small">
             XP<br>
             <span id="hudXPText">0 / 250</span>
-
             <div class="xp-small-bar">
                 <div class="xp-small-fill" id="hudXPFill"></div>
             </div>
-
             NEXT LEVEL<br>
             <span id="hudNextText">+250 XP</span>
         </div>
@@ -526,7 +515,7 @@ button {
             <button class="menu-btn">PROFILE</button>
             <button class="menu-btn">XP / LEVEL</button>
             <button class="menu-btn">DAILY QUEST</button>
-            <button class="menu-btn" onclick="openRoleMenu()">TITLES</button>
+            <button class="menu-btn" onclick="openTitlesMenu()">TITLES</button>
             <button class="menu-btn">PARTNER</button>
             <button class="menu-btn">EVENTS</button>
             <button class="menu-btn">LEADERBOARD</button>
@@ -538,23 +527,9 @@ button {
     <div class="current-title" id="hudCurrentTitle">INITIATE</div>
 
     <div class="stats">
-        <div class="stat">
-            DISCIPLINE
-            <span class="stat-bar"><span class="stat-fill discipline"></span></span>
-            72%
-        </div>
-
-        <div class="stat">
-            LOYALTY
-            <span class="stat-bar"><span class="stat-fill loyalty"></span></span>
-            65%
-        </div>
-
-        <div class="stat">
-            CONTROL
-            <span class="stat-bar"><span class="stat-fill control"></span></span>
-            80%
-        </div>
+        <div class="stat">DISCIPLINE <span class="stat-bar"><span class="stat-fill discipline"></span></span> 72%</div>
+        <div class="stat">LOYALTY <span class="stat-bar"><span class="stat-fill loyalty"></span></span> 65%</div>
+        <div class="stat">CONTROL <span class="stat-bar"><span class="stat-fill control"></span></span> 80%</div>
     </div>
 
     <div class="notifications" id="hudNotifications">
@@ -578,9 +553,7 @@ button {
         <button>UNLOCK</button>
     </div>
 
-    <div class="active-title" id="hudActiveTitle">
-        INITIATE
-    </div>
+    <div class="active-title" id="hudActiveTitle">INITIATE</div>
 
     <div class="rank-strip" id="hudRankStrip">
         <span class="rank-mark">I</span>&nbsp;&nbsp;
@@ -597,27 +570,44 @@ button {
 
     <div class="footer-left"></div>
     <button class="close-btn">CLOSE HUD</button>
+
     <div class="currency" id="hudCurrency">
         💎 0 &nbsp;&nbsp; ♦ 0 &nbsp;&nbsp; 🔷 0
     </div>
 
-    <!-- TITLES / ROLE SWITCH MENU -->
-    <div class="role-menu" id="roleMenu">
-        <div class="role-menu-title">TITLES & ROLE</div>
-        <div class="role-menu-subtitle">Select a role to switch your path.</div>
+    <div class="titles-menu" id="titlesMenu">
+        <div class="titles-menu-title">TITLES & ROLE</div>
 
-        <div class="role-menu-buttons">
-            <button onclick="selectRole('dominant')">DOMINANT</button>
-            <button onclick="selectRole('submissive')">SUBMISSIVE</button>
-            <button onclick="selectRole('switch')">SWITCH</button>
+        <div class="titles-section">
+            <div class="section-heading">CURRENT TITLE</div>
+            <div class="menu-current-title" id="menuCurrentTitle">INITIATE</div>
         </div>
 
-        <div class="role-menu-note">
-            This changes the visible role selection locally.<br>
-            Your LSL script should save the role using <strong>/api/user/role</strong>.
+        <div class="titles-section">
+            <div class="section-heading">AVAILABLE TITLES</div>
+            <div class="title-buttons">
+                <button onclick="selectTitle('Initiate')">INITIATE</button>
+                <button onclick="selectTitle('Discipline Keeper')">DISCIPLINE KEEPER</button>
+                <button onclick="selectTitle('Keeper of Desire')">KEEPER OF DESIRE</button>
+            </div>
+            <div class="menu-note">
+                Title saving should be handled through LSL using /api/user/title.
+            </div>
         </div>
 
-        <button class="role-menu-close" onclick="closeRoleMenu()">CLOSE</button>
+        <div class="titles-section">
+            <div class="section-heading">SWITCH ROLE</div>
+            <div class="role-buttons">
+                <button onclick="selectRole('dominant')">DOMINANT</button>
+                <button onclick="selectRole('submissive')">SUBMISSIVE</button>
+                <button onclick="selectRole('switch')">SWITCH</button>
+            </div>
+            <div class="menu-note">
+                Role saving should be handled through LSL using /api/user/role.
+            </div>
+        </div>
+
+        <button class="menu-close" onclick="closeTitlesMenu()">CLOSE</button>
     </div>
 
 </div>
@@ -626,11 +616,7 @@ button {
 <script>
 function scaleHUD() {
     const baseSize = 1240;
-    const scale = Math.min(
-        window.innerWidth / baseSize,
-        window.innerHeight / baseSize
-    );
-
+    const scale = Math.min(window.innerWidth / baseSize, window.innerHeight / baseSize);
     document.querySelector(".hud").style.transform = "scale(" + scale + ")";
 }
 
@@ -642,23 +628,18 @@ function getParam(name, fallback) {
 
 function cleanRole(role) {
     role = (role || "loading").toLowerCase();
-
     if (role === "dominant") return "DOMINANT";
     if (role === "submissive") return "SUBMISSIVE";
     if (role === "switch") return "SWITCH";
-
     return "LOADING";
 }
 
 function rankIndexFromLevel(level) {
     level = parseInt(level, 10) || 1;
-
     if (level >= 100) return 9;
-
     let index = Math.floor((level - 1) / 10);
     if (index < 0) index = 0;
     if (index > 9) index = 9;
-
     return index;
 }
 
@@ -667,11 +648,7 @@ function updateRankStrip(level) {
     const marks = document.querySelectorAll(".rank-mark");
 
     marks.forEach((mark, i) => {
-        if (i === index) {
-            mark.classList.add("active");
-        } else {
-            mark.classList.remove("active");
-        }
+        mark.classList.toggle("active", i === index);
     });
 }
 
@@ -698,7 +675,6 @@ function updateHUDFromParams() {
     document.getElementById("hudRole").textContent = cleanRole(role);
     document.getElementById("hudRank").textContent = rank.toUpperCase();
     document.getElementById("hudLevel").textContent = level;
-
     document.getElementById("hudXPText").textContent =
         xp.toLocaleString() + " / " + next.toLocaleString();
 
@@ -709,6 +685,7 @@ function updateHUDFromParams() {
 
     document.getElementById("hudCurrentTitle").textContent = rank.toUpperCase();
     document.getElementById("hudActiveTitle").textContent = title.toUpperCase();
+    document.getElementById("menuCurrentTitle").textContent = title.toUpperCase();
 
     document.getElementById("hudCurrency").innerHTML =
         "💎 " + tokens.toLocaleString() + " &nbsp;&nbsp; ♦ 0 &nbsp;&nbsp; 🔷 0";
@@ -723,33 +700,40 @@ function updateHUDFromParams() {
     updateRankStrip(level);
 }
 
-function openRoleMenu() {
-    document.getElementById("roleMenu").style.display = "block";
+function openTitlesMenu() {
+    document.getElementById("titlesMenu").style.display = "block";
+    document.getElementById("menuCurrentTitle").textContent =
+        document.getElementById("hudActiveTitle").textContent;
 }
 
-function closeRoleMenu() {
-    document.getElementById("roleMenu").style.display = "none";
+function closeTitlesMenu() {
+    document.getElementById("titlesMenu").style.display = "none";
+}
+
+function selectTitle(title) {
+    document.getElementById("hudActiveTitle").textContent = title.toUpperCase();
+    document.getElementById("menuCurrentTitle").textContent = title.toUpperCase();
+
+    document.getElementById("hudNotifications").innerHTML =
+        "<strong>NOTIFICATIONS</strong><br><br>" +
+        "Title selected:<br><br>" +
+        title.toUpperCase() +
+        "<br><br>Save this through LSL /api/user/title.";
+
+    closeTitlesMenu();
 }
 
 function selectRole(role) {
     const displayRole = cleanRole(role);
-
     document.getElementById("hudRole").textContent = displayRole;
 
     document.getElementById("hudNotifications").innerHTML =
         "<strong>NOTIFICATIONS</strong><br><br>" +
         "Role switch selected:<br><br>" +
-        displayRole + "<br><br>" +
-        "Touch or use the LSL role update command to save this role.";
+        displayRole +
+        "<br><br>Save this through LSL /api/user/role.";
 
-    closeRoleMenu();
-
-    /*
-      IMPORTANT:
-      Do not put your API secret in this public HTML file.
-      The actual saved role change should be handled by LSL:
-      POST https://api.velvetorder.duckdns.org/api/user/role
-    */
+    closeTitlesMenu();
 }
 
 window.addEventListener("resize", scaleHUD);
