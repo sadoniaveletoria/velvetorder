@@ -4,189 +4,124 @@
 <meta charset="UTF-8">
 <title>Velvet Order HUD</title>
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Playfair+Display:wght@700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
 
-    body {
+    body, html {
         margin: 0;
         padding: 0;
-        width: 860px;
-        height: 640px;
+        width: 920px;     /* Increased width */
+        height: 680px;    /* Increased height */
         background: #0c0614;
-        color: #e8d4a9;
-        font-family: 'Cinzel', serif;
         overflow: hidden;
+        font-family: 'Cinzel', serif;
     }
 
     .hud {
-        width: 100%;
-        height: 100%;
+        width: 920px;
+        height: 680px;
         background: linear-gradient(#1a0f24, #0c0614);
-        border: 18px solid #3d2a1f;
-        box-shadow: 
-            0 0 60px #8b00ff inset,
-            0 0 30px #ffd700,
-            0 0 80px rgba(139, 0, 255, 0.4);
+        border: 20px solid #3d2a1f;
+        box-shadow: 0 0 70px #8b00ff inset, 0 0 40px #ffd700;
         position: relative;
-        border-radius: 8px;
     }
 
     .header {
         text-align: center;
-        padding: 18px 0 10px;
+        padding: 20px 0 12px;
         background: linear-gradient(#2a1a3d, #1a0f24);
         border-bottom: 6px solid #ffd700;
     }
 
     .title {
-        font-size: 52px;
-        margin: 0;
+        font-size: 54px;
         color: #ffd700;
-        text-shadow: 0 0 20px #ffd700, 0 0 30px #8b00ff;
+        text-shadow: 0 0 25px #ffd700;
         letter-spacing: 8px;
+        margin: 0;
     }
 
     .subtitle {
-        font-size: 15px;
+        font-size: 16px;
         color: #b89778;
-        margin-top: 4px;
-    }
-
-    /* Left Role Panel */
-    .left {
-        position: absolute;
-        top: 110px;
-        left: 45px;
-        width: 160px;
-        text-align: center;
-    }
-
-    .role-text { color: #c79bff; font-size: 17px; margin: 6px 0; }
-    .rank-text { color: #ffd700; font-size: 21px; font-weight: bold; }
-    .level {
-        font-size: 78px;
-        color: #e8b0ff;
-        text-shadow: 0 0 25px #8b00ff;
-        margin: 8px 0 0;
     }
 
     /* Center Emblem */
     .center-emblem {
         position: absolute;
-        top: 95px;
+        top: 110px;
         left: 50%;
         transform: translateX(-50%);
-        width: 210px;
-        height: 210px;
-        background: radial-gradient(circle at 50% 40%, #4b0082, #1a0033);
-        border: 12px solid #ffd700;
+        width: 220px;
+        height: 220px;
+        background: radial-gradient(circle, #4b0082, #1a0033);
+        border: 14px solid #ffd700;
         border-radius: 50%;
-        box-shadow: 0 0 60px #ffd700;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 110px;
+        font-size: 115px;
         color: #ffd700;
-        text-shadow: 0 0 20px #000;
     }
 
-    /* XP Area */
-    .xp-area {
+    /* Left Panel */
+    .left-panel {
         position: absolute;
-        top: 125px;
-        right: 45px;
-        width: 290px;
+        top: 130px;
+        left: 50px;
+        width: 170px;
         text-align: center;
     }
 
-    .xp-text {
-        color: #ffd700;
-        font-size: 18px;
+    .level { font-size: 82px; color: #ffd700; margin: 10px 0; text-shadow: 0 0 20px #8b00ff; }
+
+    /* XP */
+    .xp-area {
+        position: absolute;
+        top: 135px;
+        right: 60px;
+        width: 300px;
+        text-align: right;
     }
 
-    .xp-bar-bg {
-        height: 28px;
-        background: #1a0f24;
-        border: 3px solid #ffd700;
-        margin: 8px 0;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .xp-bar {
-        height: 100%;
-        width: 78%;
-        background: linear-gradient(to right, #8b00ff, #d000ff);
-        box-shadow: 0 0 15px #ff00ff;
-    }
-
-    /* Stats */
+    /* Stats + Buttons */
     .stats {
         position: absolute;
-        top: 340px;
-        left: 45px;
-        width: 190px;
+        top: 360px;
+        left: 50px;
+        width: 200px;
     }
 
-    .stat {
-        margin: 16px 0;
-    }
-
-    .stat-label {
-        display: flex;
-        justify-content: space-between;
-        font-size: 15px;
-        margin-bottom: 4px;
-    }
-
-    .stat-bar-bg {
-        height: 20px;
-        background: #1a0f24;
-        border: 2px solid #4a2c0f;
-        position: relative;
-    }
-
-    .stat-fill {
-        height: 100%;
-        transition: width 0.6s;
-    }
-
-    /* Bottom Buttons */
     .action-buttons {
         position: absolute;
-        bottom: 95px;
-        left: 40px;
+        bottom: 110px;
+        left: 45px;
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 110px);
         gap: 12px;
     }
 
     button {
+        padding: 16px;
+        font-size: 16px;
         background: #2a1a3d;
         color: #e8d4a9;
-        border: 3px solid #b89778;
-        padding: 16px 12px;
-        font-size: 15px;
+        border: 3px solid #ffd700;
         cursor: pointer;
-        transition: all 0.2s;
     }
 
     button:hover {
-        background: #3d2a1f;
+        background: #4a2c0f;
         color: #ffd700;
-        border-color: #ffd700;
-        box-shadow: 0 0 12px #ffd700;
     }
 
-    /* Notifications */
     .notifications {
         position: absolute;
-        bottom: 35px;
-        right: 40px;
+        bottom: 45px;
+        right: 60px;
+        width: 280px;
         background: rgba(26,15,36,0.95);
         border: 4px solid #8b00ff;
-        padding: 14px 20px;
-        width: 260px;
-        color: #e8d4a9;
+        padding: 15px;
     }
 </style>
 </head>
@@ -198,42 +133,39 @@
         <div class="subtitle">ROLE PROGRESSION HUD</div>
     </div>
 
-    <!-- Left -->
-    <div class="left">
-        <div class="role-text">ROLE<br><strong>DOMINANT</strong></div>
-        <div class="role-text">RANK<br><strong>KEEPER</strong></div>
+    <div class="left-panel">
+        <div style="color:#c79bff; font-size:18px;">ROLE<br><strong>DOMINANT</strong></div>
+        <div style="color:#c79bff; font-size:18px;">RANK<br><strong>KEEPER</strong></div>
         <div class="level">12</div>
     </div>
 
-    <!-- Center -->
-    <div class="center-emblem">👑<br><span style="font-size:42px; position:relative; top:-15px;">VO</span></div>
+    <div class="center-emblem">👑<br><span style="font-size:42px;">VO</span></div>
 
-    <!-- XP -->
     <div class="xp-area">
-        <div class="xp-text">XP 4,725 / 6,000</div>
-        <div class="xp-bar-bg">
-            <div class="xp-bar"></div>
+        <div style="color:#ffd700; font-size:19px;">XP 4,725 / 6,000</div>
+        <div style="height:28px; background:#1a0f24; border:3px solid #ffd700; margin:8px 0;">
+            <div style="height:100%; width:78%; background:linear-gradient(to right, #8b00ff, #ff00ff);"></div>
         </div>
-        <div style="font-size:13px; color:#b89778;">NEXT LEVEL +1,275 XP</div>
+        <div style="font-size:14px; color:#b89778;">NEXT LEVEL +1,275 XP</div>
     </div>
 
-    <!-- Stats -->
     <div class="stats">
-        <div class="stat">
-            <div class="stat-label">Discipline <span>72%</span></div>
-            <div class="stat-bar-bg"><div class="stat-fill" style="width:72%; background:linear-gradient(#8b00ff, #4b0082);"></div></div>
+        <div style="margin:18px 0;">Discipline 72%</div>
+        <div style="height:22px; background:#1a0f24; border:2px solid #4a2c0f;">
+            <div style="width:72%; height:100%; background:linear-gradient(#8b00ff,#4b0082);"></div>
         </div>
-        <div class="stat">
-            <div class="stat-label">Loyalty <span>65%</span></div>
-            <div class="stat-bar-bg"><div class="stat-fill" style="width:65%; background:linear-gradient(#ff3366, #aa0022);"></div></div>
+        
+        <div style="margin:18px 0;">Loyalty 65%</div>
+        <div style="height:22px; background:#1a0f24; border:2px solid #4a2c0f;">
+            <div style="width:65%; height:100%; background:linear-gradient(#ff3366,#aa0022);"></div>
         </div>
-        <div class="stat">
-            <div class="stat-label">Control <span>80%</span></div>
-            <div class="stat-bar-bg"><div class="stat-fill" style="width:80%; background:linear-gradient(#00ddff, #006699);"></div></div>
+        
+        <div style="margin:18px 0;">Control 80%</div>
+        <div style="height:22px; background:#1a0f24; border:2px solid #4a2c0f;">
+            <div style="width:80%; height:100%; background:linear-gradient(#00ddff,#006699);"></div>
         </div>
     </div>
 
-    <!-- Action Buttons -->
     <div class="action-buttons">
         <button onclick="sendCommand('KNEEL')">KNEEL</button>
         <button onclick="sendCommand('OBEY')">OBEY</button>
@@ -243,7 +175,6 @@
         <button onclick="sendCommand('REWARD')">REWARD</button>
     </div>
 
-    <!-- Notifications -->
     <div class="notifications">
         <strong>NOTIFICATIONS</strong><br>
         Daily Login Bonus Claimed +100 XP
