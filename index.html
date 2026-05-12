@@ -2,79 +2,142 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Velvet Order • Role Progression HUD</title>
+<title>Velvet Order • HUD</title>
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=UnifrakturMaguntia&display=swap');
+
     body {
         margin: 0;
         padding: 0;
-        background: #0f0a14 url('https://i.imgur.com/your-dark-bg.jpg') center/cover;
+        width: 820px;
+        height: 620px;
+        background: #0a050f;
         color: #e8d4a9;
-        font-family: 'Cinzel', 'Georgia', serif;
+        font-family: 'Cinzel', serif;
         overflow: hidden;
-        width: 800px;
-        height: 600px;
         image-rendering: crisp-edges;
     }
 
     .hud {
         width: 100%;
         height: 100%;
-        background: linear-gradient(rgba(15,10,20,0.95), rgba(15,10,20,0.98));
-        border: 12px solid #4a2c0f;
-        box-shadow: 0 0 60px #8b00ff inset, 0 0 30px #ffd700;
+        background: linear-gradient(180deg, rgba(26,15,36,0.95), rgba(10,5,15,0.98));
+        border: 14px solid #4a2c0f;
+        box-shadow: 0 0 80px #8b00ff inset, 0 0 40px #ffd700;
         position: relative;
     }
 
     .header {
         text-align: center;
-        padding: 15px 0;
+        padding: 12px 0;
         background: linear-gradient(#2a1a3d, #1a0f24);
-        border-bottom: 4px solid #ffd700;
+        border-bottom: 5px solid #ffd700;
     }
 
-    .title { font-size: 42px; margin: 0; text-shadow: 0 0 15px #ffd700; letter-spacing: 4px; }
-    .subtitle { font-size: 14px; margin: 5px 0 0; color: #b89778; }
-
-    .center-crown {
-        position: absolute;
-        top: 80px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 180px;
-        height: 180px;
-        background: radial-gradient(circle, #4b0082, #1a0033);
-        border: 8px solid #ffd700;
-        border-radius: 50%;
-        box-shadow: 0 0 40px #ffd700;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 80px;
+    .title {
+        font-size: 48px;
+        margin: 0;
+        text-shadow: 0 0 20px #ffd700;
+        letter-spacing: 6px;
         color: #ffd700;
     }
 
-    .bar-container {
-        background: #1a0f24;
-        border: 2px solid #4a2c0f;
-        padding: 4px;
-        margin: 8px 20px;
+    .subtitle {
+        font-size: 14px;
+        color: #b89778;
+        margin: 4px 0 0;
     }
 
-    .progress-bar {
-        height: 22px;
+    /* Left Panel */
+    .left-panel {
+        position: absolute;
+        top: 90px;
+        left: 35px;
+        width: 180px;
+        text-align: center;
+    }
+
+    .role { color: #8b00ff; font-size: 18px; margin: 8px 0; }
+    .rank { color: #ffd700; font-size: 22px; font-weight: bold; }
+    .level {
+        font-size: 68px;
+        color: #ffd700;
+        text-shadow: 0 0 15px #8b00ff;
+        margin: 10px 0;
+    }
+
+    /* Center Emblem */
+    .center {
+        position: absolute;
+        top: 85px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, #4b0082 20%, #1a0033);
+        border: 10px solid #ffd700;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 90px;
+        box-shadow: 0 0 50px #ffd700;
+    }
+
+    /* XP Bar */
+    .xp-area {
+        position: absolute;
+        top: 95px;
+        right: 40px;
+        width: 280px;
+    }
+
+    .progress {
+        height: 26px;
         background: linear-gradient(to right, #8b00ff, #ff00ff);
-        transition: width 0.6s ease;
+        border: 2px solid #ffd700;
+        margin-top: 6px;
+    }
+
+    /* Stats */
+    .stats {
+        position: absolute;
+        top: 320px;
+        left: 35px;
+        width: 200px;
+    }
+
+    .stat-bar {
+        height: 18px;
+        background: #1a0f24;
+        border: 2px solid #4a2c0f;
+        margin: 12px 0;
+        position: relative;
+    }
+
+    .fill {
+        height: 100%;
+        transition: width 0.8s ease;
+    }
+
+    /* Buttons */
+    .buttons {
+        position: absolute;
+        bottom: 90px;
+        left: 30px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
     }
 
     button {
         background: #2a1a3d;
         color: #e8d4a9;
-        border: 2px solid #ffd700;
-        padding: 12px 20px;
-        margin: 6px;
-        font-family: inherit;
+        border: 3px solid #ffd700;
+        padding: 14px 8px;
+        font-size: 15px;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: all 0.3s;
     }
 
     button:hover {
@@ -83,14 +146,21 @@
         box-shadow: 0 0 15px #ffd700;
     }
 
-    .notification {
+    /* Notifications */
+    .notifications {
         position: absolute;
-        bottom: 10px;
-        right: 10px;
-        background: #1a0f24;
-        border: 2px solid #8b00ff;
-        padding: 10px;
-        width: 280px;
+        bottom: 25px;
+        right: 30px;
+        background: rgba(26,15,36,0.9);
+        border: 3px solid #8b00ff;
+        padding: 12px 18px;
+        width: 260px;
+    }
+
+    .notif-title {
+        color: #ffd700;
+        font-size: 16px;
+        margin-bottom: 6px;
     }
 </style>
 </head>
@@ -98,43 +168,42 @@
 
 <div class="hud">
 
-    <!-- Header -->
     <div class="header">
-        <h1 class="title">VELVET ORDER</h1>
+        <div class="title">VELVET ORDER</div>
         <div class="subtitle">ROLE PROGRESSION HUD</div>
     </div>
 
-    <!-- Role Info -->
-    <div style="position:absolute; top:90px; left:40px; text-align:center;">
-        <h2 style="color:#8b00ff;">ROLE<br><b>DOMINANT</b></h2>
-        <h2 style="color:#8b00ff;">RANK<br><b>KEEPER</b></h2>
-        <h1 style="font-size:60px; margin:10px 0; color:#ffd700;">12</h1>
+    <!-- Left Panel -->
+    <div class="left-panel">
+        <div class="role">ROLE<br><strong>DOMINANT</strong></div>
+        <div class="role">RANK<br><strong>KEEPER</strong></div>
+        <div class="level">12</div>
     </div>
 
     <!-- Center Crown -->
-    <div class="center-crown">👑<br><span style="font-size:28px;">VO</span></div>
+    <div class="center">👑<br><span style="font-size:32px;">VO</span></div>
 
-    <!-- XP Bar -->
-    <div style="position:absolute; top:120px; right:50px; width:280px;">
-        <div>XP <span id="xp-text">4725 / 6000</span></div>
-        <div class="bar-container"><div class="progress-bar" id="xp-bar" style="width:78%"></div></div>
-        <small>NEXT LEVEL +1,275 XP</small>
+    <!-- XP Area -->
+    <div class="xp-area">
+        <div style="color:#ffd700; font-size:18px;">XP 4,725 / 6,000</div>
+        <div class="progress" style="width:78%"></div>
+        <div style="font-size:13px; margin-top:4px;">NEXT LEVEL +1,275 XP</div>
     </div>
 
-    <!-- Discipline, Loyalty, Control -->
-    <div style="position:absolute; top:280px; left:40px; width:220px;">
-        <div>Discipline <span id="disc-text">72%</span></div>
-        <div class="bar-container"><div class="progress-bar" id="disc-bar" style="width:72%; background:linear-gradient(#8b00ff,#4b0082)"></div></div>
+    <!-- Stats -->
+    <div class="stats">
+        <div>Discipline 72%</div>
+        <div class="stat-bar"><div class="fill" style="width:72%; background:linear-gradient(#8b00ff,#4b0082)"></div></div>
         
-        <div>Loyalty <span id="loy-text">65%</span></div>
-        <div class="bar-container"><div class="progress-bar" id="loy-bar" style="width:65%; background:linear-gradient(#ff0066,#8b0000)"></div></div>
+        <div>Loyalty 65%</div>
+        <div class="stat-bar"><div class="fill" style="width:65%; background:linear-gradient(#ff3366,#aa0022)"></div></div>
         
-        <div>Control <span id="ctrl-text">80%</span></div>
-        <div class="bar-container"><div class="progress-bar" id="ctrl-bar" style="width:80%; background:linear-gradient(#00ccff,#0066aa)"></div></div>
+        <div>Control 80%</div>
+        <div class="stat-bar"><div class="fill" style="width:80%; background:linear-gradient(#00ccff,#006699)"></div></div>
     </div>
 
     <!-- Action Buttons -->
-    <div style="position:absolute; bottom:80px; left:30px; display:grid; grid-template-columns: repeat(3, 1fr); gap:8px;">
+    <div class="buttons">
         <button onclick="sendCommand('KNEEL')">KNEEL</button>
         <button onclick="sendCommand('OBEY')">OBEY</button>
         <button onclick="sendCommand('SERVE')">SERVE</button>
@@ -143,41 +212,21 @@
         <button onclick="sendCommand('REWARD')">REWARD</button>
     </div>
 
-    <!-- Right Menu Icons (you can make them real clickable buttons) -->
-    <div style="position:absolute; top:90px; right:30px; display:grid; grid-template-columns: repeat(3, 60px); gap:12px; text-align:center;">
-        <button style="width:60px;height:60px;font-size:28px;">👤</button>
-        <button style="width:60px;height:60px;font-size:28px;">📈</button>
-        <button style="width:60px;height:60px;font-size:28px;">📜</button>
-        <!-- Add more as needed -->
-    </div>
-
     <!-- Notifications -->
-    <div class="notification">
-        <strong>NOTIFICATIONS</strong><br>
-        <div id="notif">Daily Login Bonus Claimed +100 XP</div>
+    <div class="notifications">
+        <div class="notif-title">NOTIFICATIONS</div>
+        Daily Login Bonus Claimed<br>+100 XP
     </div>
 
 </div>
 
 <script>
-// Dynamic updates example
-function updateXP(current, max) {
-    const percent = (current / max) * 100;
-    document.getElementById('xp-bar').style.width = percent + '%';
-    document.getElementById('xp-text').textContent = current + ' / ' + max;
-}
-
-// Example: Simulate progress
-setTimeout(() => updateXP(5120, 6000), 2000);
-
-// Send commands back to Second Life
 function sendCommand(cmd) {
-    // This sends the command to LSL via URL hash
     window.location.href = "#" + cmd;
-    console.log("Command sent:", cmd);
+    console.log("Sent:", cmd);
 }
 
-// You can add more JS features (animations, real-time updates, etc.)
+// You can expand this later
 </script>
 
 </body>
