@@ -1,41 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Velvet Order HUD</title>
-
-<style>
-* {
-    box-sizing: border-box;
-}
-
-html, body {
-    margin: 0;
-    padding: 0;
-    width: 100vw;
-    height: 100vh;
-    background: #000;
-    overflow: hidden;
-    font-family: Georgia, "Times New Roman", serif;
-}
-
-.hud-wrapper {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #000;
-}
-
+/* Replace the existing .hud rule with this */
 .hud {
     position: relative;
-    width: min(100vw, 100vh);
-    height: min(100vw, 100vh);
+
+    /* Fixed reference size matching your source artwork */
+    width: 1240px;
+    height: 1240px;
+
+    /* Scale the entire HUD proportionally instead of squishing it */
+    transform-origin: top left;
+    transform: scale(
+        min(
+            calc(100vw / 1240),
+            calc(100vh / 1240)
+        )
+    );
+
     background:
-        radial-gradient(circle at center, rgba(90, 20, 120, 0.25), transparent 40%),
+        radial-gradient(circle at center,
+            rgba(90, 20, 120, 0.25),
+            transparent 40%),
         linear-gradient(#080608, #020202);
+
     border: 2px solid #8c6a12;
     box-shadow:
         inset 0 0 60px rgba(120, 60, 180, 0.35),
@@ -43,414 +28,73 @@ html, body {
     overflow: hidden;
 }
 
-/* Top left main card */
-.main-card {
-    position: absolute;
-    left: 20px;
-    top: 20px;
-    width: 710px;
-    height: 455px;
-    border: 2px solid #8c6a12;
-    border-radius: 12px;
-    box-shadow: inset 0 0 25px #000;
+/* Update the wrapper so the scaled HUD is centered correctly */
+.hud-wrapper {
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    overflow: hidden;
+    position: relative;
 }
 
-.title {
+.hud {
     position: absolute;
-    top: 55px;
-    left: 180px;
-    font-size: 48px;
-    color: #d4af37;
-    letter-spacing: 3px;
+    top: 50%;
+    left: 50%;
+    margin-left: -620px;  /* half of 1240 */
+    margin-top: -620px;   /* half of 1240 */
 }
 
-.subtitle {
-    position: absolute;
-    top: 118px;
-    left: 240px;
+/* Remove the center medallion entirely */
+.center-medallion {
+    display: none;
+}
+
+/* Improve readability on all text */
+.title,
+.subtitle,
+.role,
+.rank,
+.level-label,
+.level,
+.xp-small,
+.current-title,
+.notifications,
+.stat,
+.active-title,
+.rank-strip,
+.currency,
+button {
+    text-shadow:
+        0 0 2px #000,
+        0 0 4px #000,
+        0 0 8px #000;
+}
+
+/* Give the right-side panels a little more internal space */
+.notifications {
+    padding: 35px;
     font-size: 22px;
-    color: #d4af37;
-    letter-spacing: 2px;
-}
-
-.role {
-    position: absolute;
-    top: 160px;
-    left: 90px;
-    color: #d4af37;
-    font-size: 18px;
-}
-
-.role strong,
-.rank strong {
-    color: #9b30ff;
-    font-size: 22px;
-}
-
-.rank {
-    position: absolute;
-    top: 250px;
-    left: 90px;
-    color: #d4af37;
-    font-size: 18px;
-}
-
-.level-label {
-    position: absolute;
-    top: 335px;
-    left: 115px;
-    color: #d4af37;
-    font-size: 18px;
-}
-
-.level {
-    position: absolute;
-    top: 365px;
-    left: 105px;
-    color: #9b30ff;
-    font-size: 48px;
-    text-shadow: 0 0 18px #9b30ff;
-}
-
-.top-crown {
-    position: absolute;
-    top: 145px;
-    left: 282px;
-    width: 210px;
-    height: 210px;
-}
-
-.top-crown img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+    line-height: 1.45;
 }
 
 .xp-small {
-    position: absolute;
-    top: 165px;
-    left: 555px;
-    width: 150px;
-    color: #d4af37;
-    font-size: 18px;
+    font-size: 20px;
+    line-height: 1.4;
 }
 
-.xp-small-bar {
-    margin-top: 14px;
-    width: 150px;
-    height: 28px;
-    border: 1px solid #8c6a12;
-    background: #111;
-}
-
-.xp-small-fill {
-    height: 100%;
-    width: 78%;
-    background: linear-gradient(to right, #5f178f, #9b30ff);
-}
-
-/* Right button panel */
-.button-panel {
-    position: absolute;
-    top: 25px;
-    left: 745px;
-    width: 475px;
-    height: 475px;
-    border: 2px solid #8c6a12;
-    border-radius: 10px;
-}
-
-.grid {
-    position: absolute;
-    top: 30px;
-    left: 25px;
-    display: grid;
-    grid-template-columns: repeat(3, 130px);
-    grid-template-rows: repeat(3, 130px);
-    gap: 20px;
-}
-
+/* Make menu button text easier to read */
 .menu-btn {
-    background: #080808;
-    border: 2px solid #8c6a12;
-    color: #d4af37;
-    font-size: 15px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-
-.menu-btn:hover {
-    box-shadow: 0 0 15px #9b30ff;
-}
-
-/* Current title row */
-.current-title {
-    position: absolute;
-    top: 500px;
-    left: 20px;
-    width: 600px;
-    height: 100px;
-    border: 2px solid #8c6a12;
-    color: #9b30ff;
-    font-size: 28px;
-    padding: 35px 0 0 160px;
-}
-
-/* Center medallion */
-.center-medallion {
-    position: absolute;
-    top: 520px;
-    left: 500px;
-    width: 260px;
-    height: 260px;
-}
-
-.center-medallion img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
-
-/* Stats */
-.stats {
-    position: absolute;
-    top: 610px;
-    left: 20px;
-    width: 470px;
-    height: 230px;
-}
-
-.stat {
-    margin: 22px 0;
-    color: #d4af37;
     font-size: 18px;
+    line-height: 1.25;
+    padding: 10px;
 }
 
-.stat-bar {
-    display: inline-block;
-    width: 320px;
-    height: 16px;
-    background: #050505;
-    border: 1px solid #8c6a12;
-    margin-left: 15px;
-}
-
-.stat-fill {
-    height: 100%;
-}
-
-.discipline { width: 72%; background: #9b30ff; }
-.loyalty { width: 65%; background: #b03050; }
-.control { width: 80%; background: #2b8ec6; }
-
-/* Notifications */
-.notifications {
-    position: absolute;
-    top: 525px;
-    left: 780px;
-    width: 440px;
-    height: 350px;
-    border: 2px solid #8c6a12;
-    padding: 25px;
-    color: #d4af37;
-    font-size: 18px;
-}
-
-/* Action buttons */
-.action-row {
-    position: absolute;
-    top: 855px;
-    left: 20px;
-    width: 620px;
-    display: grid;
-    grid-template-columns: repeat(6, 95px);
-    gap: 10px;
-}
-
-.action-row button {
-    height: 90px;
-    background: #080808;
-    border: 2px solid #8c6a12;
-    color: #d4af37;
-    font-size: 14px;
-}
-
-/* Wear buttons */
-.wear-row {
-    position: absolute;
-    top: 895px;
-    left: 650px;
-    width: 570px;
-    display: grid;
-    grid-template-columns: repeat(4, 135px);
-    gap: 8px;
-}
-
-.wear-row button {
-    height: 55px;
-    background: #080808;
-    border: 2px solid #8c6a12;
-    color: #d4af37;
-}
-
-/* Active title */
-.active-title {
-    position: absolute;
-    top: 975px;
-    left: 20px;
-    width: 520px;
-    height: 180px;
-    border: 2px solid #8c6a12;
-    color: #9b30ff;
-    text-align: center;
-    padding-top: 55px;
-    font-size: 30px;
-}
-
-/* Rank strip */
-.rank-strip {
-    position: absolute;
-    top: 975px;
-    left: 550px;
-    width: 670px;
-    height: 180px;
-    border: 2px solid #8c6a12;
-    color: #d4af37;
-    text-align: center;
-    padding-top: 70px;
-    font-size: 24px;
-}
-
-/* Footer */
-.footer-left {
-    position: absolute;
-    bottom: 10px;
-    left: 20px;
-    width: 440px;
-    height: 55px;
-    border: 2px solid #8c6a12;
-}
-
+/* Improve action button text */
+.action-row button,
+.wear-row button,
 .close-btn {
-    position: absolute;
-    bottom: 10px;
-    left: 520px;
-    width: 210px;
-    height: 55px;
-    background: #080808;
-    border: 2px solid #8c6a12;
-    color: #d4af37;
     font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
-
-.currency {
-    position: absolute;
-    bottom: 10px;
-    right: 20px;
-    width: 460px;
-    height: 55px;
-    border: 2px solid #8c6a12;
-    color: #d4af37;
-    font-size: 22px;
-    padding: 14px 25px;
-}
-</style>
-</head>
-
-<body>
-<div class="hud-wrapper">
-<div class="hud">
-
-    <div class="main-card">
-        <div class="title">VELVET ORDER</div>
-        <div class="subtitle">ROLE PROGRESSION HUD</div>
-
-        <div class="role">ROLE<br><strong>DOMINANT</strong></div>
-        <div class="rank">RANK<br><strong>KEEPER</strong></div>
-        <div class="level-label">LEVEL</div>
-        <div class="level">12</div>
-
-        <div class="top-crown">
-            <img src="VO_Crown_Logo.png">
-        </div>
-
-        <div class="xp-small">
-            XP<br>4,725 / 6,000
-            <div class="xp-small-bar">
-                <div class="xp-small-fill"></div>
-            </div>
-            NEXT LEVEL<br>+1,275 XP
-        </div>
-    </div>
-
-    <div class="button-panel">
-        <div class="grid">
-            <button class="menu-btn">PROFILE</button>
-            <button class="menu-btn">XP / LEVEL</button>
-            <button class="menu-btn">DAILY QUEST</button>
-            <button class="menu-btn">TITLES</button>
-            <button class="menu-btn">PARTNER</button>
-            <button class="menu-btn">EVENTS</button>
-            <button class="menu-btn">LEADERBOARD</button>
-            <button class="menu-btn">HOUSE</button>
-            <button class="menu-btn">SETTINGS</button>
-        </div>
-    </div>
-
-    <div class="current-title">DISCIPLINE KEEPER</div>
-
-    <div class="center-medallion">
-        <img src="VO_Crown_Logo.png">
-    </div>
-
-    <div class="stats">
-        <div class="stat">DISCIPLINE <span class="stat-bar"><span class="stat-fill discipline"></span></span> 72%</div>
-        <div class="stat">LOYALTY <span class="stat-bar"><span class="stat-fill loyalty"></span></span> 65%</div>
-        <div class="stat">CONTROL <span class="stat-bar"><span class="stat-fill control"></span></span> 80%</div>
-    </div>
-
-    <div class="notifications">
-        <strong>NOTIFICATIONS</strong><br><br>
-        Daily Login Bonus Claimed +100 XP<br><br>
-        Quest Completed +250 XP<br><br>
-        Level Up! You are now level 12<br><br>
-        Event Available Tonight
-    </div>
-
-    <div class="action-row">
-        <button>KNEEL</button>
-        <button>OBEY</button>
-        <button>SERVE</button>
-        <button>PRAISE</button>
-        <button>BOND</button>
-        <button>REWARD</button>
-    </div>
-
-    <div class="wear-row">
-        <button>WEAR</button>
-        <button>UNWEAR</button>
-        <button>LOCK</button>
-        <button>UNLOCK</button>
-    </div>
-
-    <div class="active-title">KEEPER OF DESIRE</div>
-
-    <div class="rank-strip">
-        I&nbsp;&nbsp; II&nbsp;&nbsp; III&nbsp;&nbsp; IV&nbsp;&nbsp; V&nbsp;&nbsp; VI&nbsp;&nbsp; VII
-    </div>
-
-    <div class="footer-left"></div>
-    <button class="close-btn">CLOSE HUD</button>
-    <div class="currency">💎 5,250 &nbsp;&nbsp; ♦ 120 &nbsp;&nbsp; 🔷 80</div>
-
-</div>
-</div>
-
-<script>
-function sendCommand(cmd) {
-    console.log("Command:", cmd);
-}
-</script>
-
-</body>
-</html>
