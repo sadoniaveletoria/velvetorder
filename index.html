@@ -3,9 +3,6 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
 <title>Velvet Order HUD</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
@@ -28,9 +25,9 @@ html, body {
 .hud-wrapper {
     width: 100vw;
     height: 100vh;
-    position: relative;
-    overflow: hidden;
     background: #000;
+    overflow: hidden;
+    position: relative;
 }
 
 .hud {
@@ -41,309 +38,491 @@ html, body {
     left: 50%;
     margin-left: -620px;
     margin-top: -620px;
-    transform-origin: center center;
     transform: scale(1);
+    transform-origin: center center;
+    background:
+        radial-gradient(circle at center, rgba(120, 25, 170, 0.18), transparent 36%),
+        linear-gradient(145deg, #050307, #0b0710 45%, #030203);
+    border: 3px solid #8c6a12;
+    box-shadow:
+        inset 0 0 70px rgba(155, 48, 255, 0.16),
+        inset 0 0 30px rgba(212, 175, 55, 0.18),
+        0 0 35px rgba(0,0,0,0.9);
+    color: #d4af37;
     overflow: hidden;
 }
 
-.hud-bg {
+.panel {
     position: absolute;
-    inset: 0;
-    width: 1240px;
-    height: 1240px;
-    object-fit: cover;
-    z-index: 1;
+    background:
+        linear-gradient(180deg, rgba(20,14,22,0.96), rgba(3,3,5,0.96));
+    border: 2px solid #8c6a12;
+    border-radius: 16px;
+    box-shadow:
+        inset 0 0 25px rgba(0,0,0,0.9),
+        inset 0 0 18px rgba(155,48,255,0.08),
+        0 0 12px rgba(212,175,55,0.12);
 }
 
-.hud-text {
+.panel::before {
+    content: "";
     position: absolute;
-    z-index: 5;
+    inset: 8px;
+    border: 1px solid rgba(212,175,55,0.28);
+    border-radius: 12px;
     pointer-events: none;
-    text-shadow: 0 0 4px #000, 0 0 8px #000, 0 0 14px #000;
 }
 
-.gold-text {
-    color: #d4af37;
+.gold {
+    background: linear-gradient(to bottom, #fff4b8 0%, #d4af37 45%, #7c5416 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.purple-text {
-    color: #9b30ff;
-    text-shadow: 0 0 5px #000, 0 0 10px #5a007f, 0 0 16px #000;
+.purple {
+    background: linear-gradient(to bottom, #f0b8ff 0%, #a735ff 45%, #4d0872 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
-.script-text {
-    font-family: "Cormorant Garamond", Georgia, serif;
-    font-style: italic;
+.shadow {
+    text-shadow: 0 0 4px #000, 0 0 10px #000;
 }
 
-/* Live text overlays */
-#hudRoleLabel {
-    top: 168px;
-    left: 112px;
-    font-size: 19px;
+/* TOP PROFILE */
+.profile-panel {
+    left: 20px;
+    top: 20px;
+    width: 710px;
+    height: 455px;
 }
 
-#hudRole {
-    top: 150px;
-    left: 85px;
-    width: 135px;
+.main-title {
+    position: absolute;
+    top: 38px;
+    width: 100%;
+    text-align: center;
+    font-size: 62px;
+    letter-spacing: 5px;
+    font-weight: 600;
+}
+
+.subtitle {
+    position: absolute;
+    top: 112px;
+    width: 100%;
     text-align: center;
     font-size: 22px;
+    letter-spacing: 3px;
 }
 
-#hudRankLabel {
-    top: 258px;
-    left: 112px;
-    font-size: 19px;
+.info-block {
+    position: absolute;
+    left: 58px;
+    width: 190px;
 }
 
-#hudRank {
-    top: 238px;
-    left: 85px;
-    width: 135px;
-    text-align: center;
-    font-size: 22px;
+.info-label {
+    font-size: 20px;
+    letter-spacing: 2px;
 }
 
-#hudLevelLabel {
-    top: 339px;
-    left: 112px;
-    font-size: 19px;
+.info-value {
+    margin-top: 4px;
+    font-size: 30px;
+    letter-spacing: 1px;
 }
+
+.role-block { top: 165px; }
+.rank-block { top: 255px; }
+.level-block { top: 345px; }
 
 #hudLevel {
-    top: 315px;
-    left: 80px;
-    width: 140px;
-    text-align: center;
-    font-size: 46px;
-    line-height: 1;
+    font-size: 60px;
+    line-height: 0.9;
 }
 
-#hudXPLabel {
-    top: 168px;
-    left: 595px;
-    font-size: 19px;
-}
-
-#hudXPText {
-    top: 150px;
-    left: 440px;
-    width: 130px;
-    text-align: center;
-    font-size: 17px;
-}
-
-#hudXPFill {
+.center-logo {
     position: absolute;
-    z-index: 6;
-    top: 195px;
-    left: 386px;
-    width: 0px;
-    height: 18px;
-    background: linear-gradient(to right, #5f178f, #9b30ff);
-    box-shadow: 0 0 10px rgba(155, 48, 255, 0.85);
-    border-radius: 3px;
-    pointer-events: none;
+    top: 150px;
+    left: 278px;
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-#hudXPPercent {
-    top: 193px;
-    left: 440px;
-    width: 120px;
+.center-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter:
+        drop-shadow(0 0 16px rgba(212,175,55,0.85))
+        drop-shadow(0 0 26px rgba(155,48,255,0.45));
+}
+
+.xp-area {
+    position: absolute;
+    top: 158px;
+    right: 40px;
+    width: 185px;
     text-align: center;
-    font-size: 16px;
+}
+
+.xp-label {
+    font-size: 22px;
+    letter-spacing: 2px;
+}
+
+.xp-number {
+    margin-top: 8px;
+    font-size: 20px;
+}
+
+.xp-bar {
+    position: relative;
+    margin-top: 12px;
+    width: 185px;
+    height: 30px;
+    border: 2px solid #8c6a12;
+    background: #050406;
+    clip-path: polygon(8% 0%, 92% 0%, 100% 50%, 92% 100%, 8% 100%, 0% 50%);
+    overflow: hidden;
+}
+
+.xp-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #5b087d, #a735ff, #ec8bff);
+    box-shadow: 0 0 18px rgba(167,53,255,0.9);
+}
+
+.xp-percent {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #fff0ff;
-    z-index: 7;
+    font-size: 16px;
+    z-index: 2;
 }
 
-#hudNextText {
-    top: 238px;
-    left: 435px;
-    width: 140px;
+.next-xp {
+    margin-top: 16px;
+    font-size: 17px;
+    line-height: 1.4;
+}
+
+.prestige {
+    position: absolute;
+    right: 74px;
+    top: 330px;
     text-align: center;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 #hudPrestige {
-    top: 294px;
-    left: 455px;
-    width: 90px;
+    font-size: 42px;
+}
+
+.motto {
+    position: absolute;
+    bottom: 35px;
+    width: 100%;
     text-align: center;
-    font-size: 34px;
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: 30px;
 }
 
-#hudCurrentTitle {
-    top: 548px;
-    left: 180px;
-    width: 330px;
-    font-size: 28px;
+/* MENU GRID */
+.menu-panel {
+    top: 20px;
+    right: 20px;
+    width: 475px;
+    height: 475px;
+    padding: 28px;
 }
 
-#hudDisciplineValue {
-    top: 654px;
-    left: 433px;
-    font-size: 20px;
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 130px);
+    grid-template-rows: repeat(3, 130px);
+    gap: 18px;
 }
 
-#hudLoyaltyValue {
-    top: 727px;
-    left: 433px;
-    font-size: 20px;
+.menu-btn {
+    background:
+        linear-gradient(180deg, rgba(19,16,18,0.95), rgba(5,5,7,0.95));
+    border: 2px solid #8c6a12;
+    border-radius: 12px;
+    color: #d4af37;
+    font-family: "Cinzel", serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    box-shadow: inset 0 0 14px rgba(0,0,0,0.85);
 }
 
-#hudControlValue {
+.menu-btn:hover {
+    color: #fff1b0;
+    border-color: #f0c95a;
+    transform: translateY(-2px);
+    box-shadow:
+        0 0 18px rgba(155,48,255,0.55),
+        inset 0 0 20px rgba(212,175,55,0.12);
+}
+
+.menu-icon {
+    display: block;
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+/* MIDDLE */
+.large-panel {
+    left: 20px;
+    top: 500px;
+    width: 470px;
+    height: 275px;
+}
+
+.feature-title {
+    position: absolute;
+    top: 24px;
+    width: 100%;
+    text-align: center;
+    font-size: 22px;
+    letter-spacing: 2px;
+}
+
+.medallion {
+    position: absolute;
+    top: 515px;
+    left: 505px;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 3px solid #8c6a12;
+    background: radial-gradient(circle, #1a0729, #050307 70%);
+    box-shadow:
+        inset 0 0 35px rgba(155,48,255,0.25),
+        0 0 28px rgba(212,175,55,0.18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.medallion img {
+    width: 75%;
+    height: 75%;
+    object-fit: contain;
+    filter:
+        drop-shadow(0 0 18px rgba(212,175,55,0.8))
+        drop-shadow(0 0 28px rgba(155,48,255,0.5));
+}
+
+.status-pill {
+    position: absolute;
     top: 800px;
-    left: 433px;
-    font-size: 20px;
+    left: 535px;
+    width: 200px;
+    height: 42px;
+    border: 2px solid #8c6a12;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #31d75b;
+    font-size: 16px;
+    background: #050406;
 }
 
-#hudStatus {
-    top: 817px;
-    left: 565px;
+.notifications-panel {
+    top: 520px;
+    right: 20px;
+    width: 440px;
+    height: 355px;
+    padding: 28px;
+}
+
+.notifications-title {
+    text-align: center;
+    font-size: 24px;
+    letter-spacing: 2px;
+}
+
+.notifications-body {
+    margin-top: 34px;
     font-size: 18px;
-    color: #32d65a;
+    line-height: 1.5;
+    color: #c9aa69;
+    text-align: center;
 }
 
-#hudActiveTitleLabel {
-    top: 1007px;
-    left: 220px;
-    width: 220px;
-    text-align: center;
-    font-size: 18px;
+/* ACTIONS */
+.action-row {
+    position: absolute;
+    top: 800px;
+    left: 20px;
+    display: grid;
+    grid-template-columns: repeat(6, 100px);
+    gap: 10px;
 }
 
-#hudActiveTitle {
-    top: 785px;
-    left: 95px;
-    width: 255px;
-    text-align: center;
-    font-size: 27px;
+.action-btn {
+    height: 92px;
+    background: linear-gradient(180deg, #120f14, #050406);
+    border: 2px solid #8c6a12;
+    border-radius: 10px;
+    color: #d4af37;
+    font-family: "Cinzel", serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.18s ease;
 }
 
-#hudActiveRankLabel {
-    top: 1007px;
-    left: 675px;
-    width: 380px;
-    text-align: center;
-    font-size: 18px;
+.action-btn:hover {
+    color: #fff1b0;
+    border-color: #f0c95a;
+    box-shadow: 0 0 16px rgba(155,48,255,0.5);
 }
 
-#hudActiveRank {
-    top: 785px;
-    left: 430px;
-    width: 185px;
+.wear-row {
+    position: absolute;
+    top: 815px;
+    right: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 135px);
+    gap: 8px;
+}
+
+.wear-btn {
+    height: 60px;
+    background: linear-gradient(180deg, #120f14, #050406);
+    border: 2px solid #8c6a12;
+    border-radius: 10px;
+    color: #d4af37;
+    font-family: "Cinzel", serif;
+    font-size: 17px;
+}
+
+/* BOTTOM PANELS */
+.active-title-panel {
+    left: 20px;
+    top: 920px;
+    width: 520px;
+    height: 190px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.active-rank-panel {
+    right: 20px;
+    top: 920px;
+    width: 670px;
+    height: 190px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.panel-label {
+    font-size: 22px;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+}
+
+.panel-value {
+    font-size: 38px;
+    letter-spacing: 3px;
     text-align: center;
+}
+
+.footer-left {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 460px;
+    height: 60px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+}
+
+.footer-btn {
+    background: #050406;
+    border: 2px solid #8c6a12;
+    border-radius: 8px;
+    color: #d4af37;
     font-size: 24px;
 }
 
-#hudCurrency {
-    top: 1195px;
-    left: 835px;
-    width: 330px;
-    font-size: 22px;
-}
-
-/* Clickable hitboxes */
-.hitbox {
+.close-btn {
     position: absolute;
-    z-index: 20;
-    background: transparent;
-    border: none;
+    bottom: 20px;
+    left: 520px;
+    width: 220px;
+    height: 60px;
+    background: #050406;
+    border: 2px solid #8c6a12;
+    border-radius: 10px;
+    font-family: "Cinzel", serif;
+    font-size: 20px;
+    color: #d4af37;
     cursor: pointer;
 }
 
-.hitbox:hover {
-    outline: 2px solid rgba(155, 48, 255, 0.45);
-    box-shadow: 0 0 18px rgba(155, 48, 255, 0.55);
-}
-
-.profile-hit { top: 55px; left: 765px; width: 130px; height: 130px; }
-.xp-hit { top: 55px; left: 915px; width: 130px; height: 130px; }
-.quest-hit { top: 55px; left: 1065px; width: 130px; height: 130px; }
-
-.titles-hit { top: 210px; left: 765px; width: 130px; height: 130px; }
-.partner-hit { top: 210px; left: 915px; width: 130px; height: 130px; }
-.events-hit { top: 210px; left: 1065px; width: 130px; height: 130px; }
-
-.house-hit { top: 365px; left: 915px; width: 130px; height: 130px; }
-.settings-hit { top: 365px; left: 1065px; width: 130px; height: 130px; }
-
-.kneel-hit { top: 858px; left: 25px; width: 90px; height: 90px; }
-.obey-hit { top: 858px; left: 130px; width: 90px; height: 90px; }
-.serve-hit { top: 858px; left: 230px; width: 90px; height: 90px; }
-.praise-hit { top: 858px; left: 335px; width: 90px; height: 90px; }
-.bond-hit { top: 858px; left: 440px; width: 90px; height: 90px; }
-.reward-hit { top: 858px; left: 545px; width: 90px; height: 90px; }
-
-.wear-hit { top: 895px; left: 660px; width: 120px; height: 55px; }
-.unwear-hit { top: 895px; left: 790px; width: 135px; height: 55px; }
-.lock-hit { top: 895px; left: 940px; width: 120px; height: 55px; }
-.unlock-hit { top: 895px; left: 1070px; width: 145px; height: 55px; }
-
-.close-hit { top: 1180px; left: 520px; width: 215px; height: 55px; }
-
-/* Minimize restore button */
-.restore-btn {
-    display: none;
+.currency {
     position: absolute;
-    bottom: 25px;
-    right: 25px;
-    width: 95px;
-    height: 95px;
-    border-radius: 50%;
-    background: #080808;
-    border: 3px solid #8c6a12;
-    color: #9b30ff;
-    font-family: "Cinzel", Georgia, serif;
-    font-size: 32px;
-    box-shadow: 0 0 25px rgba(155,48,255,0.6);
-    z-index: 3000;
+    bottom: 20px;
+    right: 20px;
+    width: 455px;
+    height: 60px;
+    border: 2px solid #8c6a12;
+    border-radius: 10px;
+    background: #050406;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 22px;
 }
 
-/* Popup menu */
+/* POPUP */
 .titles-menu {
     display: none;
     position: absolute;
-    z-index: 2500;
-    top: 260px;
+    top: 245px;
     left: 285px;
     width: 670px;
-    height: 650px;
-    background:
-        radial-gradient(circle at center, rgba(90, 20, 120, 0.25), transparent 55%),
-        rgba(5, 5, 5, 0.98);
+    height: 660px;
+    z-index: 5000;
+    background: rgba(4, 4, 6, 0.98);
     border: 2px solid #8c6a12;
-    box-shadow:
-        0 0 35px rgba(155,48,255,0.55),
-        inset 0 0 25px rgba(212,175,55,0.12);
-    color: #d4af37;
-    padding: 32px;
+    border-radius: 16px;
+    box-shadow: 0 0 35px rgba(155,48,255,0.55);
+    padding: 35px;
     text-align: center;
-    font-family: "Cinzel", Georgia, serif;
 }
 
 .titles-menu-title {
     font-size: 42px;
-    color: #9b30ff;
-    margin-bottom: 18px;
     letter-spacing: 4px;
+    margin-bottom: 22px;
 }
 
 .titles-section {
     border: 1px solid #8c6a12;
+    border-radius: 10px;
     padding: 18px;
     margin-bottom: 18px;
-}
-
-.section-heading {
-    font-size: 22px;
-    margin-bottom: 12px;
-}
-
-.menu-current-title {
-    font-size: 30px;
-    color: #9b30ff;
 }
 
 .title-buttons,
@@ -361,20 +540,25 @@ html, body {
     color: #d4af37;
     border-radius: 8px;
     min-height: 58px;
-    font-family: "Cinzel", Georgia, serif;
+    font-family: "Cinzel", serif;
     font-size: 16px;
     cursor: pointer;
 }
 
-.menu-close {
-    width: 180px;
-    height: 55px;
-}
-
-.menu-note {
-    font-size: 15px;
-    color: #c9aa69;
-    margin-top: 10px;
+.restore-btn {
+    display: none;
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    width: 95px;
+    height: 95px;
+    border-radius: 50%;
+    background: #080808;
+    border: 3px solid #8c6a12;
+    color: #9b30ff;
+    font-family: "Cinzel", serif;
+    font-size: 32px;
+    z-index: 6000;
 }
 </style>
 </head>
@@ -383,86 +567,139 @@ html, body {
 <div class="hud-wrapper">
 <div class="hud" id="hud">
 
-    <img class="hud-bg" src="HUD_Background.png" alt="Velvet Order HUD Background">
+    <section class="panel profile-panel">
+        <div class="main-title gold shadow">VELVET ORDER</div>
+        <div class="subtitle gold shadow">ROLE PROGRESSION HUD</div>
 
-    <!-- Live text overlays -->
-    <!-- <div class="hud-text gold-text" id="hudRoleLabel">ROLE</div> -->
-    <div class="hud-text purple-text" id="hudRole">LOADING</div>
+        <div class="info-block role-block">
+            <div class="info-label gold">ROLE</div>
+            <div class="info-value purple" id="hudRole">LOADING</div>
+        </div>
 
-    <!-- <div class="hud-text gold-text" id="hudRankLabel">RANK</div> -->
-    <div class="hud-text purple-text" id="hudRank">INITIATE</div>
+        <div class="info-block rank-block">
+            <div class="info-label gold">RANK</div>
+            <div class="info-value purple" id="hudRank">INITIATE</div>
+        </div>
 
-    <!-- <div class="hud-text gold-text" id="hudLevelLabel">LEVEL</div> -->
-    <div class="hud-text purple-text" id="hudLevel">1</div>
+        <div class="info-block level-block">
+            <div class="info-label gold">LEVEL</div>
+            <div class="info-value purple" id="hudLevel">1</div>
+        </div>
 
-    <!-- <div class="hud-text gold-text" id="hudXPLabel">XP</div> -->
-    <div class="hud-text gold-text" id="hudXPText">0 / 250</div>
-    <div id="hudXPFill"></div>
-    <div class="hud-text" id="hudXPPercent">0%</div>
-    <div class="hud-text gold-text" id="hudNextText">+250 XP</div>
+        <div class="center-logo">
+            <img src="VO_Crown_Logo.png" alt="VO Crown Logo">
+        </div>
 
-    <div class="hud-text purple-text" id="hudPrestige">0</div>
+        <div class="xp-area">
+            <div class="xp-label gold">XP</div>
+            <div class="xp-number gold" id="hudXPText">0 / 250</div>
+            <div class="xp-bar">
+                <div class="xp-fill" id="hudXPFill"></div>
+                <div class="xp-percent" id="hudXPPercent">0%</div>
+            </div>
+            <div class="next-xp gold">
+                NEXT LEVEL<br>
+                <span id="hudNextText">+250 XP</span>
+            </div>
+        </div>
 
-    <div class="hud-text gold-text" id="hudActiveTitleLabel">ACTIVE TITLE</div>
-    <div class="hud-text purple-text" id="hudActiveTitle">INITIATE</div>
+        <div class="prestige gold">
+            PRESTIGE<br>
+            <span class="purple" id="hudPrestige">0</span>
+        </div>
 
-    <!-- <div class="hud-text gold-text" id="hudActiveRankLabel">ACTIVE RANK</div> -->
-    <div class="hud-text purple-text" id="hudActiveTitle">INITIATE</div>
-    
-    <!-- <div class="hud-text gold-text" id="hudCurrency">💎 0 &nbsp;&nbsp; ♦ 0 &nbsp;&nbsp; 🔷 0</div> -->
+        <div class="motto gold">Power. Devotion. Respect.</div>
+    </section>
 
-    <!-- Click hitboxes -->
-    <button class="hitbox profile-hit" onclick="showNotice('Profile selected.')"></button>
-    <button class="hitbox xp-hit" onclick="showNotice('XP / Level selected.')"></button>
-    <button class="hitbox quest-hit" onclick="showNotice('Daily Quest selected.')"></button>
+    <section class="panel menu-panel">
+        <div class="menu-grid">
+            <button class="menu-btn"><span class="menu-icon">👤</span>PROFILE</button>
+            <button class="menu-btn"><span class="menu-icon">📈</span>XP / LEVEL</button>
+            <button class="menu-btn"><span class="menu-icon">📜</span>DAILY QUEST</button>
+            <button class="menu-btn" onclick="openTitlesMenu()"><span class="menu-icon">♕</span>TITLES</button>
+            <button class="menu-btn"><span class="menu-icon">♡</span>PARTNER</button>
+            <button class="menu-btn"><span class="menu-icon">☆</span>EVENTS</button>
+            <!-- <button class="menu-btn">LEADERBOARD</button> -->
+            <button class="menu-btn"><span class="menu-icon">⚜</span>HOUSE</button>
+            <button class="menu-btn"><span class="menu-icon">⚙</span>SETTINGS</button>
+        </div>
+    </section>
 
-    <button class="hitbox titles-hit" onclick="openTitlesMenu()"></button>
-    <button class="hitbox partner-hit" onclick="showNotice('Partner selected.')"></button>
-    <button class="hitbox events-hit" onclick="showNotice('Events selected.')"></button>
+    <section class="panel large-panel">
+        <div class="feature-title gold">FEATURE PANEL</div>
+    </section>
 
-    <!-- Leaderboard intentionally commented out for now -->
-    <!-- <button class="hitbox leaderboard-hit"></button> -->
+    <div class="medallion">
+        <img src="VO_Crown_Logo.png" alt="VO Crown Logo">
+    </div>
+    <div class="status-pill">● STATUS: ONLINE</div>
 
-    <button class="hitbox house-hit" onclick="showNotice('House selected.')"></button>
-    <button class="hitbox settings-hit" onclick="showNotice('Settings selected.')"></button>
+    <section class="panel notifications-panel">
+        <div class="notifications-title gold">NOTIFICATIONS</div>
+        <div class="notifications-body" id="hudNotifications"></div>
+    </section>
 
-    <button class="hitbox kneel-hit" onclick="showNotice('Kneel selected.')"></button>
-    <button class="hitbox obey-hit" onclick="showNotice('Obey selected.')"></button>
-    <button class="hitbox serve-hit" onclick="showNotice('Serve selected.')"></button>
-    <button class="hitbox praise-hit" onclick="showNotice('Praise selected.')"></button>
-    <button class="hitbox bond-hit" onclick="showNotice('Bond selected.')"></button>
-    <button class="hitbox reward-hit" onclick="showNotice('Reward selected.')"></button>
+    <div class="action-row">
+        <button class="action-btn">KNEEL</button>
+        <button class="action-btn">OBEY</button>
+        <button class="action-btn">SERVE</button>
+        <button class="action-btn">PRAISE</button>
+        <button class="action-btn">BOND</button>
+        <button class="action-btn">REWARD</button>
+    </div>
 
-    <button class="hitbox wear-hit" onclick="showNotice('Wear selected.')"></button>
-    <button class="hitbox unwear-hit" onclick="showNotice('Unwear selected.')"></button>
-    <button class="hitbox lock-hit" onclick="showNotice('Lock selected.')"></button>
-    <button class="hitbox unlock-hit" onclick="showNotice('Unlock selected.')"></button>
+    <div class="wear-row">
+        <button class="wear-btn">WEAR</button>
+        <button class="wear-btn">UNWEAR</button>
+        <button class="wear-btn">LOCK</button>
+        <button class="wear-btn">UNLOCK</button>
+    </div>
 
-    <button class="hitbox close-hit" onclick="minimizeHUD()"></button>
+    <section class="panel active-title-panel">
+        <div class="panel-label gold">ACTIVE TITLE</div>
+        <div class="panel-value purple" id="hudActiveTitle">INITIATE</div>
+    </section>
 
-    <!-- Titles / Role popup -->
+    <section class="panel active-rank-panel">
+        <div class="panel-label gold">ACTIVE RANK</div>
+        <div class="panel-value purple" id="hudActiveRank">INITIATE</div>
+    </section>
+
+    <div class="footer-left">
+        <button class="footer-btn">▥</button>
+        <button class="footer-btn">♟</button>
+        <button class="footer-btn">✉</button>
+        <button class="footer-btn">♪</button>
+        <button class="footer-btn">?</button>
+        <button class="footer-btn">⏻</button>
+    </div>
+
+    <button class="close-btn" onclick="minimizeHUD()">CLOSE HUD</button>
+
+    <div class="currency gold" id="hudCurrency">
+        <span>💎 0</span><span>♦ 0</span><span>🔷 0</span>
+    </div>
+
     <div class="titles-menu" id="titlesMenu">
-        <div class="titles-menu-title">TITLES & ROLE</div>
+        <div class="titles-menu-title purple">TITLES & ROLE</div>
 
         <div class="titles-section">
-            <div class="section-heading">CURRENT TITLE</div>
-            <div class="menu-current-title" id="menuCurrentTitle">INITIATE</div>
+            <div class="gold">CURRENT TITLE</div><br>
+            <div class="purple" id="menuCurrentTitle">INITIATE</div>
         </div>
 
         <div class="titles-section">
-            <div class="section-heading">UNLOCKED TITLES</div>
+            <div class="gold">UNLOCKED TITLES</div><br>
             <div class="title-buttons" id="titleButtons"></div>
-            <div class="menu-note">Only titles unlocked through your level appear here.</div>
         </div>
 
         <div class="titles-section">
-            <div class="section-heading">SWITCH ROLE</div>
+            <div class="gold">SWITCH ROLE</div><br>
             <div class="role-buttons">
                 <button onclick="selectRole('dominant')">DOMINANT</button>
                 <button onclick="selectRole('submissive')">SUBMISSIVE</button>
                 <button onclick="selectRole('switch')">SWITCH</button>
             </div>
-            <div class="menu-note">Role saving should be handled by LSL using /api/user/role.</div>
         </div>
 
         <button class="menu-close" onclick="closeTitlesMenu()">CLOSE</button>
@@ -477,15 +714,13 @@ html, body {
 let unlockedTitles = [];
 
 function scaleHUD() {
-    const baseSize = 1240;
-    const scale = Math.min(window.innerWidth / baseSize, window.innerHeight / baseSize);
+    const scale = Math.min(window.innerWidth / 1240, window.innerHeight / 1240);
     document.querySelector(".hud").style.transform = "scale(" + scale + ")";
 }
 
 function getParam(name, fallback) {
     const params = new URLSearchParams(window.location.search);
-    const value = params.get(name);
-    return value === null || value === "" ? fallback : value;
+    return params.get(name) || fallback;
 }
 
 function cleanRole(role) {
@@ -497,98 +732,58 @@ function cleanRole(role) {
 }
 
 function buildUnlockedTitles(role, level) {
-    const titleSets = {
-        dominant: [
-            [1, "Initiate"], [10, "Handler"], [20, "Trainer"], [30, "Keeper"],
-            [40, "Owner"], [50, "Regent"], [60, "Sovereign"], [70, "High Sovereign"],
-            [80, "Velvet Monarch"], [90, "Ascendant Dominant"], [100, "Eternal Sovereign"]
-        ],
-        submissive: [
-            [1, "Initiate"], [10, "Attendant"], [20, "Pet"], [30, "Companion"],
-            [40, "Service Bound"], [50, "Devoted"], [60, "Cherished"], [70, "Treasured"],
-            [80, "Velvet Beloved"], [90, "Ascendant Submissive"], [100, "Eternal Devotion"]
-        ],
-        switch: [
-            [1, "Initiate"], [10, "Curious"], [20, "Adaptive"], [30, "Dual-Bonded"],
-            [40, "Harmonized"], [50, "Versatile Elite"], [60, "Ascendant"], [70, "Velvet Balanced"],
-            [80, "Twin Flame"], [90, "Ascendant Switch"], [100, "Eternal Balance"]
-        ]
+    const sets = {
+        dominant: [[1,"Initiate"],[10,"Handler"],[20,"Trainer"],[30,"Keeper"],[40,"Owner"],[50,"Regent"],[60,"Sovereign"],[70,"High Sovereign"],[80,"Velvet Monarch"],[90,"Ascendant Dominant"],[100,"Eternal Sovereign"]],
+        submissive: [[1,"Initiate"],[10,"Attendant"],[20,"Pet"],[30,"Companion"],[40,"Service Bound"],[50,"Devoted"],[60,"Cherished"],[70,"Treasured"],[80,"Velvet Beloved"],[90,"Ascendant Submissive"],[100,"Eternal Devotion"]],
+        switch: [[1,"Initiate"],[10,"Curious"],[20,"Adaptive"],[30,"Dual-Bonded"],[40,"Harmonized"],[50,"Versatile Elite"],[60,"Ascendant"],[70,"Velvet Balanced"],[80,"Twin Flame"],[90,"Ascendant Switch"],[100,"Eternal Balance"]]
     };
-
-    role = (role || "switch").toLowerCase();
-    const set = titleSets[role] || titleSets.switch;
+    const set = sets[(role || "switch").toLowerCase()] || sets.switch;
     return set.filter(t => level >= t[0]).map(t => t[1]);
 }
 
 function renderTitleButtons() {
-    const container = document.getElementById("titleButtons");
-    container.innerHTML = "";
-
+    const box = document.getElementById("titleButtons");
+    box.innerHTML = "";
     unlockedTitles.forEach(title => {
         const btn = document.createElement("button");
         btn.textContent = title.toUpperCase();
-        btn.onclick = function() { selectTitle(title); };
-        container.appendChild(btn);
+        btn.onclick = () => selectTitle(title);
+        box.appendChild(btn);
     });
 }
 
 function updateHUDFromParams() {
     const role = getParam("role", "loading");
     const rank = getParam("rank", "Initiate");
-    const level = parseInt(getParam("level", "1"), 10) || 1;
-    const xp = parseInt(getParam("xp", "0"), 10) || 0;
-    const next = parseInt(getParam("next", "250"), 10) || 250;
-    const tokens = parseInt(getParam("tokens", "0"), 10) || 0;
+    const level = parseInt(getParam("level", "1")) || 1;
+    const xp = parseInt(getParam("xp", "0")) || 0;
+    const next = parseInt(getParam("next", "250")) || 250;
     const title = getParam("title", rank);
-    const maxLevel = parseInt(getParam("max", "100"), 10) || 100;
+    const tokens = parseInt(getParam("tokens", "0")) || 0;
+    const max = parseInt(getParam("max", "100")) || 100;
 
-    const percent =
-        level >= maxLevel || next <= 0
-            ? 100
-            : Math.min(Math.max((xp / next) * 100, 0), 100);
-
-    const remaining =
-        level >= maxLevel || next <= 0
-            ? 0
-            : Math.max(next - xp, 0);
+    const percent = level >= max ? 100 : Math.min((xp / next) * 100, 100);
+    const remaining = level >= max ? 0 : Math.max(next - xp, 0);
 
     unlockedTitles = buildUnlockedTitles(role, level);
 
     document.getElementById("hudRole").textContent = cleanRole(role);
     document.getElementById("hudRank").textContent = rank.toUpperCase();
     document.getElementById("hudLevel").textContent = level;
-
-    document.getElementById("hudXPText").textContent =
-        xp.toLocaleString() + " / " + next.toLocaleString();
-
-    document.getElementById("hudXPFill").style.width =
-        Math.round(percent * 1.9) + "px";
-
-    document.getElementById("hudXPPercent").textContent =
-        Math.round(percent) + "%";
-
-    document.getElementById("hudNextText").textContent =
-        level >= maxLevel ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
-
-    document.getElementById("hudCurrentTitle").textContent = rank.toUpperCase();
+    document.getElementById("hudXPText").textContent = xp.toLocaleString() + " / " + next.toLocaleString();
+    document.getElementById("hudXPFill").style.width = percent + "%";
+    document.getElementById("hudXPPercent").textContent = Math.round(percent) + "%";
+    document.getElementById("hudNextText").textContent = level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
     document.getElementById("hudActiveTitle").textContent = title.toUpperCase();
     document.getElementById("hudActiveRank").textContent = rank.toUpperCase();
     document.getElementById("menuCurrentTitle").textContent = title.toUpperCase();
-
-   // document.getElementById("hudCurrency").innerHTML =
-       // "💎 " + tokens.toLocaleString() + " &nbsp;&nbsp; ♦ 0 &nbsp;&nbsp; 🔷 0";
+    document.getElementById("hudCurrency").innerHTML = `<span>💎 ${tokens.toLocaleString()}</span><span>♦ 0</span><span>🔷 0</span>`;
 
     renderTitleButtons();
 }
 
-function showNotice(text) {
-    console.log(text);
-}
-
 function openTitlesMenu() {
     document.getElementById("titlesMenu").style.display = "block";
-    document.getElementById("menuCurrentTitle").textContent =
-        document.getElementById("hudActiveTitle").textContent;
     renderTitleButtons();
 }
 
@@ -608,26 +803,22 @@ function selectRole(role) {
 }
 
 function minimizeHUD() {
-    document.querySelectorAll(".hud > *").forEach(function(el) {
-        if (el.id !== "restoreBtn") {
-            el.style.display = "none";
-        }
+    document.querySelectorAll(".hud > *").forEach(el => {
+        if (el.id !== "restoreBtn") el.style.display = "none";
     });
     document.getElementById("restoreBtn").style.display = "block";
 }
 
 function restoreHUD() {
-    document.querySelectorAll(".hud > *").forEach(function(el) {
-        if (el.id !== "restoreBtn") {
-            el.style.display = "";
-        }
+    document.querySelectorAll(".hud > *").forEach(el => {
+        if (el.id !== "restoreBtn") el.style.display = "";
     });
     document.getElementById("titlesMenu").style.display = "none";
     document.getElementById("restoreBtn").style.display = "none";
 }
 
 window.addEventListener("resize", scaleHUD);
-window.addEventListener("load", function () {
+window.addEventListener("load", () => {
     scaleHUD();
     updateHUDFromParams();
 });
