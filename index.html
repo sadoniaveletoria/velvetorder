@@ -9,11 +9,7 @@
 <title>Velvet Order HUD</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
     width: 100%;
@@ -278,14 +274,11 @@ html, body {
     border: 1px solid #8c6a12;
 }
 
-.stat-fill {
-    display: block;
-    height: 100%;
-}
+.stat-fill { display: block; height: 100%; }
 
-.discipline { width: 0%; background: #9b30ff; }
-.loyalty    { width: 0%; background: #c04060; }
-.control    { width: 0%; background: #2b8ec6; }
+.discipline { width: 72%; background: #9b30ff; }
+.loyalty    { width: 65%; background: #c04060; }
+.control    { width: 80%; background: #2b8ec6; }
 
 .notifications {
     position: absolute;
@@ -385,6 +378,7 @@ html, body {
     border: 2px solid #8c6a12;
     color: #d4af37;
     font-size: 20px;
+    z-index: 50;
 }
 
 .currency {
@@ -396,6 +390,22 @@ html, body {
     border: 2px solid #8c6a12;
     padding: 12px 25px;
     font-size: 24px;
+}
+
+.restore-btn {
+    display: none;
+    position: absolute;
+    bottom: 25px;
+    right: 25px;
+    width: 95px;
+    height: 95px;
+    border-radius: 50%;
+    background: #080808;
+    border: 3px solid #8c6a12;
+    color: #9b30ff;
+    font-size: 32px;
+    box-shadow: 0 0 25px rgba(155,48,255,0.6);
+    z-index: 2000;
 }
 
 .titles-menu {
@@ -471,22 +481,7 @@ html, body {
     height: 55px;
     margin-top: 5px;
 }
-    
-.restore-btn {
-    display: none;
-    position: absolute;
-    bottom: 25px;
-    right: 25px;
-    width: 95px;
-    height: 95px;
-    border-radius: 50%;
-    background: #080808;
-    border: 3px solid #8c6a12;
-    color: #9b30ff;
-    font-size: 32px;
-    box-shadow: 0 0 25px rgba(155,48,255,0.6);
-    z-index: 1000;
-}
+
 button {
     font-family: Georgia, "Times New Roman", serif;
     cursor: pointer;
@@ -496,7 +491,7 @@ button {
 
 <body>
 <div class="hud-wrapper">
-<div class="hud">
+<div class="hud" id="hud">
 
     <div class="main-card">
         <div class="title">VELVET ORDER</div>
@@ -539,13 +534,13 @@ button {
         </div>
     </div>
 
-    <!-- <div class="current-title" id="hudCurrentTitle">INITIATE</div> -->
+    <div class="current-title" id="hudCurrentTitle">INITIATE</div>
 
-    <!-- <div class="stats">
-        <div class="stat">DISCIPLINE <span class="stat-bar"><span class="stat-fill discipline"></span></span> 0%</div>
-        <div class="stat">LOYALTY <span class="stat-bar"><span class="stat-fill loyalty"></span></span> 0%</div>
-        <div class="stat">CONTROL <span class="stat-bar"><span class="stat-fill control"></span></span> 0%</div>
-    </div> -->
+    <div class="stats">
+        <div class="stat">DISCIPLINE <span class="stat-bar"><span class="stat-fill discipline"></span></span> 72%</div>
+        <div class="stat">LOYALTY <span class="stat-bar"><span class="stat-fill loyalty"></span></span> 65%</div>
+        <div class="stat">CONTROL <span class="stat-bar"><span class="stat-fill control"></span></span> 80%</div>
+    </div>
 
     <div class="notifications" id="hudNotifications">
         <strong>NOTIFICATIONS</strong><br><br>
@@ -584,7 +579,6 @@ button {
     </div>
 
     <div class="footer-left"></div>
-    <button class="restore-btn" id="restoreBtn" onclick="restoreHUD()">VO</button>
     <button class="close-btn" onclick="minimizeHUD()">CLOSE HUD</button>
 
     <div class="currency" id="hudCurrency">
@@ -600,15 +594,9 @@ button {
         </div>
 
         <div class="titles-section">
-            <div class="section-heading">AVAILABLE TITLES</div>
-            <div class="title-buttons">
-                <button onclick="selectTitle('Initiate')">INITIATE</button>
-                <button onclick="selectTitle('Discipline Keeper')">DISCIPLINE KEEPER</button>
-                <button onclick="selectTitle('Keeper of Desire')">KEEPER OF DESIRE</button>
-            </div>
-            <div class="menu-note">
-                Title saving should be handled through LSL using /api/user/title.
-            </div>
+            <div class="section-heading">UNLOCKED TITLES</div>
+            <div class="title-buttons" id="titleButtons"></div>
+            <div class="menu-note">Only titles unlocked through your level will appear here.</div>
         </div>
 
         <div class="titles-section">
@@ -618,18 +606,20 @@ button {
                 <button onclick="selectRole('submissive')">SUBMISSIVE</button>
                 <button onclick="selectRole('switch')">SWITCH</button>
             </div>
-            <div class="menu-note">
-                Role saving should be handled through LSL using /api/user/role.
-            </div>
+            <div class="menu-note">Role saving should be handled through LSL using /api/user/role.</div>
         </div>
 
         <button class="menu-close" onclick="closeTitlesMenu()">CLOSE</button>
     </div>
 
+    <button class="restore-btn" id="restoreBtn" onclick="restoreHUD()">VO</button>
+
 </div>
 </div>
 
 <script>
+let unlockedTitles = [];
+
 function scaleHUD() {
     const baseSize = 1240;
     const scale = Math.min(window.innerWidth / baseSize, window.innerHeight / baseSize);
@@ -661,10 +651,44 @@ function rankIndexFromLevel(level) {
 
 function updateRankStrip(level) {
     const index = rankIndexFromLevel(level);
-    const marks = document.querySelectorAll(".rank-mark");
-
-    marks.forEach((mark, i) => {
+    document.querySelectorAll(".rank-mark").forEach((mark, i) => {
         mark.classList.toggle("active", i === index);
+    });
+}
+
+function buildUnlockedTitles(role, level) {
+    const titleSets = {
+        dominant: [
+            [1, "Initiate"], [10, "Handler"], [20, "Trainer"], [30, "Keeper"],
+            [40, "Owner"], [50, "Regent"], [60, "Sovereign"], [70, "High Sovereign"],
+            [80, "Velvet Monarch"], [90, "Ascendant Dominant"], [100, "Eternal Sovereign"]
+        ],
+        submissive: [
+            [1, "Initiate"], [10, "Attendant"], [20, "Pet"], [30, "Companion"],
+            [40, "Service Bound"], [50, "Devoted"], [60, "Cherished"], [70, "Treasured"],
+            [80, "Velvet Beloved"], [90, "Ascendant Submissive"], [100, "Eternal Devotion"]
+        ],
+        switch: [
+            [1, "Initiate"], [10, "Curious"], [20, "Adaptive"], [30, "Dual-Bonded"],
+            [40, "Harmonized"], [50, "Versatile Elite"], [60, "Ascendant"], [70, "Velvet Balanced"],
+            [80, "Twin Flame"], [90, "Ascendant Switch"], [100, "Eternal Balance"]
+        ]
+    };
+
+    role = (role || "switch").toLowerCase();
+    const set = titleSets[role] || titleSets.switch;
+    return set.filter(t => level >= t[0]).map(t => t[1]);
+}
+
+function renderTitleButtons() {
+    const container = document.getElementById("titleButtons");
+    container.innerHTML = "";
+
+    unlockedTitles.forEach(title => {
+        const btn = document.createElement("button");
+        btn.textContent = title.toUpperCase();
+        btn.onclick = function() { selectTitle(title); };
+        container.appendChild(btn);
     });
 }
 
@@ -687,6 +711,8 @@ function updateHUDFromParams() {
         level >= maxLevel || next <= 0
             ? 0
             : Math.max(next - xp, 0);
+
+    unlockedTitles = buildUnlockedTitles(role, level);
 
     document.getElementById("hudRole").textContent = cleanRole(role);
     document.getElementById("hudRank").textContent = rank.toUpperCase();
@@ -714,12 +740,14 @@ function updateHUDFromParams() {
         "Level: " + level + " / " + maxLevel;
 
     updateRankStrip(level);
+    renderTitleButtons();
 }
 
 function openTitlesMenu() {
     document.getElementById("titlesMenu").style.display = "block";
     document.getElementById("menuCurrentTitle").textContent =
         document.getElementById("hudActiveTitle").textContent;
+    renderTitleButtons();
 }
 
 function closeTitlesMenu() {
@@ -752,8 +780,26 @@ function selectRole(role) {
     closeTitlesMenu();
 }
 
-window.addEventListener("resize", scaleHUD);
+function minimizeHUD() {
+    document.querySelectorAll(".hud > *").forEach(function(el) {
+        if (el.id !== "restoreBtn") {
+            el.style.display = "none";
+        }
+    });
+    document.getElementById("restoreBtn").style.display = "block";
+}
 
+function restoreHUD() {
+    document.querySelectorAll(".hud > *").forEach(function(el) {
+        if (el.id !== "restoreBtn") {
+            el.style.display = "";
+        }
+    });
+    document.getElementById("titlesMenu").style.display = "none";
+    document.getElementById("restoreBtn").style.display = "none";
+}
+
+window.addEventListener("resize", scaleHUD);
 window.addEventListener("load", function () {
     scaleHUD();
     updateHUDFromParams();
