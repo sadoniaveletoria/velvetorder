@@ -2,15 +2,20 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">    
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 <title>Velvet Order HUD</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
 html, body {
     width: 100%;
@@ -38,362 +43,241 @@ html, body {
     margin-top: -620px;
     transform-origin: center center;
     transform: scale(1);
-    background:
-        radial-gradient(circle at center, rgba(110, 20, 160, 0.12), transparent 40%),
-        linear-gradient(#080608, #020202);
-    border: 2px solid #8c6a12;
-    box-shadow:
-        inset 0 0 60px rgba(120, 60, 180, 0.35),
-        inset 0 0 20px rgba(212, 175, 55, 0.35);
     overflow: hidden;
-    color: #d4af37;
 }
 
-.hud::before {
-    content: "";
+.hud-bg {
     position: absolute;
     inset: 0;
+    width: 1240px;
+    height: 1240px;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.hud-text {
+    position: absolute;
+    z-index: 5;
     pointer-events: none;
-    box-shadow:
-        inset 0 0 120px rgba(155, 48, 255, 0.08),
-        inset 0 0 20px rgba(212, 175, 55, 0.12);
+    text-shadow: 0 0 4px #000, 0 0 8px #000, 0 0 14px #000;
 }
 
-.title, .subtitle, .role, .rank, .level-label, .level, .xp-small,
-.current-title, .notifications, .stat, .active-title, .rank-strip,
-.currency, button, .titles-menu {
-    text-shadow: 0 0 2px #000, 0 0 4px #000, 0 0 8px #000;
-}
-
-.main-card {
-    position: absolute;
-    left: 20px;
-    top: 20px;
-    width: 710px;
-    height: 455px;
-    border: 2px solid #8c6a12;
-    border-radius: 12px;
-    box-shadow:
-        inset 0 0 25px rgba(0,0,0,0.9),
-        inset 0 0 20px rgba(155, 48, 255, 0.05);
-}
-
-.title {
-    position: absolute;
-    top: 45px;
-    width: 100%;
-    text-align: center;
-    font-size: 64px;
-    font-weight: normal;
-    letter-spacing: 3px;
+.gold-text {
     color: #d4af37;
 }
 
-.subtitle {
-    position: absolute;
-    top: 120px;
-    width: 100%;
-    text-align: center;
-    font-size: 24px;
-    letter-spacing: 2px;
-    color: #d4af37;
-}
-
-.role {
-    position: absolute;
-    top: 170px;
-    left: 60px;
-    width: 180px;
-    font-size: 20px;
-    line-height: 1.3;
-}
-
-.role strong {
-    display: block;
+.purple-text {
     color: #9b30ff;
-    font-size: 34px;
-    font-weight: normal;
+    text-shadow: 0 0 5px #000, 0 0 10px #5a007f, 0 0 16px #000;
 }
 
-.rank {
-    position: absolute;
-    top: 260px;
-    left: 60px;
-    width: 220px;
-    font-size: 20px;
-    line-height: 1.3;
-}
-
-.rank strong {
-    display: block;
-    color: #9b30ff;
-    font-size: 28px;
-    font-weight: normal;
-    line-height: 1.1;
-}
-
-.level-label {
-    position: absolute;
-    top: 360px;
-    left: 90px;
-    font-size: 22px;
-}
-
-.level {
-    position: absolute;
-    top: 375px;
-    left: 75px;
-    font-size: 76px;
-    line-height: 1;
-    color: #9b30ff;
-}
-
-.top-crown {
-    position: absolute;
-    top: 155px;
-    left: 255px;
-    width: 200px;
-    height: 200px;
-}
-
-.top-crown img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    filter:
-        drop-shadow(0 0 18px rgba(255, 215, 0, 0.75))
-        drop-shadow(0 0 28px rgba(139, 0, 255, 0.45));
-}
-
-.xp-small {
-    position: absolute;
-    top: 170px;
-    right: 40px;
-    width: 190px;
-    font-size: 20px;
-    line-height: 1.4;
-    text-align: right;
-}
-
-.xp-small-bar {
-    width: 190px;
-    height: 30px;
-    margin: 12px 0;
-    border: 1px solid #8c6a12;
-    background: #0c0c0c;
-}
-
-.xp-small-fill {
-    width: 0%;
-    height: 100%;
-    background: linear-gradient(to right, #5f178f, #9b30ff);
-    box-shadow: 0 0 10px rgba(155, 48, 255, 0.7);
-    transition: width 0.4s ease;
-}
-
-.motto {
-    position: absolute;
-    bottom: 30px;
-    width: 100%;
-    text-align: center;
-    font-size: 22px;
+.script-text {
+    font-family: "Cormorant Garamond", Georgia, serif;
     font-style: italic;
-    color: #d4af37;
 }
 
-.button-panel {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 475px;
-    height: 475px;
-    border: 2px solid #8c6a12;
-    border-radius: 12px;
+/* Live text overlays */
+#hudRoleLabel {
+    top: 168px;
+    left: 112px;
+    font-size: 19px;
 }
 
-.grid {
-    position: absolute;
-    top: 28px;
-    left: 25px;
-    display: grid;
-    grid-template-columns: repeat(3, 130px);
-    grid-template-rows: repeat(3, 130px);
-    gap: 18px;
+#hudRole {
+    top: 195px;
+    left: 112px;
+    font-size: 25px;
 }
 
-.menu-btn {
-    background: #080808;
-    border: 2px solid #8c6a12;
-    border-radius: 10px;
-    color: #d4af37;
-    font-size: 18px;
-    line-height: 1.25;
-    cursor: pointer;
-    font-family: Georgia, "Times New Roman", serif;
+#hudRankLabel {
+    top: 258px;
+    left: 112px;
+    font-size: 19px;
 }
 
-.menu-btn:hover {
-    box-shadow: 0 0 15px rgba(155, 48, 255, 0.4);
-    color: #fff0b8;
+#hudRank {
+    top: 285px;
+    left: 112px;
+    font-size: 25px;
 }
 
-.current-title {
-    position: absolute;
-    top: 500px;
-    left: 20px;
-    width: 600px;
-    height: 100px;
-    border: 2px solid #8c6a12;
-    display: flex;
-    align-items: center;
-    padding-left: 70px;
-    padding-right: 25px;
-    font-size: 34px;
-    color: #9b30ff;
-    overflow: hidden;
-    white-space: nowrap;
+#hudLevelLabel {
+    top: 339px;
+    left: 112px;
+    font-size: 19px;
 }
 
-.stats {
-    position: absolute;
-    top: 620px;
-    left: 20px;
-    width: 470px;
+#hudLevel {
+    top: 363px;
+    left: 112px;
+    font-size: 47px;
+    line-height: 1;
 }
 
-.stat {
-    margin: 22px 0;
-    font-size: 22px;
+#hudXPLabel {
+    top: 168px;
+    left: 595px;
+    font-size: 19px;
 }
 
-.stat-bar {
-    display: inline-block;
-    vertical-align: middle;
-    width: 300px;
-    height: 16px;
-    margin: 0 12px;
-    background: #050505;
-    border: 1px solid #8c6a12;
-}
-
-.stat-fill { display: block; height: 100%; }
-
-.discipline { width: 72%; background: #9b30ff; }
-.loyalty    { width: 65%; background: #c04060; }
-.control    { width: 80%; background: #2b8ec6; }
-
-.notifications {
-    position: absolute;
-    top: 525px;
-    right: 20px;
-    width: 440px;
-    height: 350px;
-    border: 2px solid #8c6a12;
-    padding: 30px;
-    font-size: 22px;
-    line-height: 1.45;
-    overflow: hidden;
-}
-
-.action-row {
-    position: absolute;
-    top: 850px;
-    left: 20px;
-    display: grid;
-    grid-template-columns: repeat(6, 95px);
-    gap: 10px;
-}
-
-.action-row button {
-    height: 90px;
-    background: #080808;
-    border: 2px solid #8c6a12;
-    color: #d4af37;
-    font-size: 14px;
-}
-
-.wear-row {
-    position: absolute;
-    top: 890px;
-    right: 20px;
-    display: grid;
-    grid-template-columns: repeat(4, 135px);
-    gap: 8px;
-}
-
-.wear-row button {
-    height: 55px;
-    background: #080808;
-    border: 2px solid #8c6a12;
-    color: #d4af37;
-    font-size: 18px;
-}
-
-.active-title {
-    position: absolute;
-    top: 975px;
-    left: 20px;
-    width: 520px;
-    height: 180px;
-    border: 2px solid #8c6a12;
+#hudXPText {
+    top: 198px;
+    left: 552px;
+    width: 150px;
     text-align: center;
-    padding: 45px 20px 0;
-    font-size: 42px;
-    color: #9b30ff;
-    overflow: hidden;
+    font-size: 18px;
 }
 
-.rank-strip {
+#hudXPFill {
     position: absolute;
-    top: 975px;
-    left: 550px;
-    width: 670px;
-    height: 180px;
-    border: 2px solid #8c6a12;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    z-index: 6;
+    top: 233px;
+    left: 513px;
+    width: 0px;
+    height: 21px;
+    background: linear-gradient(to right, #5f178f, #9b30ff);
+    box-shadow: 0 0 10px rgba(155, 48, 255, 0.85);
+    border-radius: 3px;
+    pointer-events: none;
+}
+
+#hudXPPercent {
+    top: 232px;
+    left: 585px;
+    width: 70px;
+    text-align: center;
+    font-size: 18px;
+    color: #fff0ff;
+    z-index: 7;
+}
+
+#hudNextText {
+    top: 278px;
+    left: 570px;
+    width: 140px;
+    text-align: center;
+    font-size: 18px;
+}
+
+#hudPrestige {
+    top: 367px;
+    left: 605px;
+    width: 60px;
+    text-align: center;
+    font-size: 38px;
+}
+
+#hudCurrentTitle {
+    top: 548px;
+    left: 180px;
+    width: 330px;
     font-size: 28px;
 }
 
-.rank-mark.active {
-    color: #9b30ff;
-    text-shadow: 0 0 10px #9b30ff, 0 0 20px #9b30ff;
-}
-
-.footer-left {
-    position: absolute;
-    bottom: 10px;
-    left: 20px;
-    width: 440px;
-    height: 55px;
-    border: 2px solid #8c6a12;
-}
-
-.close-btn {
-    position: absolute;
-    bottom: 10px;
-    left: 520px;
-    width: 210px;
-    height: 55px;
-    background: #080808;
-    border: 2px solid #8c6a12;
-    color: #d4af37;
+#hudDisciplineValue {
+    top: 654px;
+    left: 433px;
     font-size: 20px;
-    z-index: 50;
 }
 
-.currency {
+#hudLoyaltyValue {
+    top: 727px;
+    left: 433px;
+    font-size: 20px;
+}
+
+#hudControlValue {
+    top: 800px;
+    left: 433px;
+    font-size: 20px;
+}
+
+#hudStatus {
+    top: 817px;
+    left: 565px;
+    font-size: 18px;
+    color: #32d65a;
+}
+
+#hudActiveTitleLabel {
+    top: 1007px;
+    left: 220px;
+    width: 220px;
+    text-align: center;
+    font-size: 18px;
+}
+
+#hudActiveTitle {
+    top: 1042px;
+    left: 135px;
+    width: 360px;
+    text-align: center;
+    font-size: 30px;
+}
+
+#hudActiveRankLabel {
+    top: 1007px;
+    left: 675px;
+    width: 380px;
+    text-align: center;
+    font-size: 18px;
+}
+
+#hudActiveRank {
+    top: 1045px;
+    left: 640px;
+    width: 450px;
+    text-align: center;
+    font-size: 36px;
+}
+
+#hudCurrency {
+    top: 1195px;
+    left: 835px;
+    width: 330px;
+    font-size: 22px;
+}
+
+/* Clickable hitboxes */
+.hitbox {
     position: absolute;
-    bottom: 10px;
-    right: 20px;
-    width: 460px;
-    height: 55px;
-    border: 2px solid #8c6a12;
-    padding: 12px 25px;
-    font-size: 24px;
+    z-index: 20;
+    background: transparent;
+    border: none;
+    cursor: pointer;
 }
 
+.hitbox:hover {
+    outline: 2px solid rgba(155, 48, 255, 0.45);
+    box-shadow: 0 0 18px rgba(155, 48, 255, 0.55);
+}
+
+.profile-hit { top: 55px; left: 765px; width: 130px; height: 130px; }
+.xp-hit { top: 55px; left: 915px; width: 130px; height: 130px; }
+.quest-hit { top: 55px; left: 1065px; width: 130px; height: 130px; }
+
+.titles-hit { top: 210px; left: 765px; width: 130px; height: 130px; }
+.partner-hit { top: 210px; left: 915px; width: 130px; height: 130px; }
+.events-hit { top: 210px; left: 1065px; width: 130px; height: 130px; }
+
+.house-hit { top: 365px; left: 915px; width: 130px; height: 130px; }
+.settings-hit { top: 365px; left: 1065px; width: 130px; height: 130px; }
+
+.kneel-hit { top: 858px; left: 25px; width: 90px; height: 90px; }
+.obey-hit { top: 858px; left: 130px; width: 90px; height: 90px; }
+.serve-hit { top: 858px; left: 230px; width: 90px; height: 90px; }
+.praise-hit { top: 858px; left: 335px; width: 90px; height: 90px; }
+.bond-hit { top: 858px; left: 440px; width: 90px; height: 90px; }
+.reward-hit { top: 858px; left: 545px; width: 90px; height: 90px; }
+
+.wear-hit { top: 895px; left: 660px; width: 120px; height: 55px; }
+.unwear-hit { top: 895px; left: 790px; width: 135px; height: 55px; }
+.lock-hit { top: 895px; left: 940px; width: 120px; height: 55px; }
+.unlock-hit { top: 895px; left: 1070px; width: 145px; height: 55px; }
+
+.close-hit { top: 1180px; left: 520px; width: 215px; height: 55px; }
+
+/* Minimize restore button */
 .restore-btn {
     display: none;
     position: absolute;
@@ -405,19 +289,21 @@ html, body {
     background: #080808;
     border: 3px solid #8c6a12;
     color: #9b30ff;
+    font-family: "Cinzel", Georgia, serif;
     font-size: 32px;
     box-shadow: 0 0 25px rgba(155,48,255,0.6);
-    z-index: 2000;
+    z-index: 3000;
 }
 
+/* Popup menu */
 .titles-menu {
     display: none;
     position: absolute;
+    z-index: 2500;
     top: 260px;
     left: 285px;
     width: 670px;
     height: 650px;
-    z-index: 999;
     background:
         radial-gradient(circle at center, rgba(90, 20, 120, 0.25), transparent 55%),
         rgba(5, 5, 5, 0.98);
@@ -428,12 +314,14 @@ html, body {
     color: #d4af37;
     padding: 32px;
     text-align: center;
+    font-family: "Cinzel", Georgia, serif;
 }
 
 .titles-menu-title {
     font-size: 42px;
     color: #9b30ff;
     margin-bottom: 18px;
+    letter-spacing: 4px;
 }
 
 .titles-section {
@@ -444,7 +332,6 @@ html, body {
 
 .section-heading {
     font-size: 22px;
-    color: #d4af37;
     margin-bottom: 12px;
 }
 
@@ -468,32 +355,20 @@ html, body {
     color: #d4af37;
     border-radius: 8px;
     min-height: 58px;
-    font-size: 17px;
-}
-
-.menu-note {
+    font-family: "Cinzel", Georgia, serif;
     font-size: 16px;
-    color: #c9aa69;
-    line-height: 1.35;
-    margin-top: 10px;
+    cursor: pointer;
 }
 
 .menu-close {
     width: 180px;
     height: 55px;
-    margin-top: 5px;
 }
 
-.title,
-.titles-menu-title,
-.active-title {
-    letter-spacing: 4px;
-    font-weight: 600;
-}
-    
-button {
-    font-family: "Cinzel", Georgia, serif;
-    cursor: pointer;
+.menu-note {
+    font-size: 15px;
+    color: #c9aa69;
+    margin-top: 10px;
 }
 </style>
 </head>
@@ -502,98 +377,66 @@ button {
 <div class="hud-wrapper">
 <div class="hud" id="hud">
 
-    <div class="main-card">
-        <div class="title">VELVET ORDER</div>
-        <div class="subtitle">ROLE PROGRESSION HUD</div>
+    <img class="hud-bg" src="HUD_Background.png" alt="Velvet Order HUD Background">
 
-        <div class="role">ROLE <strong id="hudRole">LOADING</strong></div>
-        <div class="rank">RANK <strong id="hudRank">INITIATE</strong></div>
+    <!-- Live text overlays -->
+    <div class="hud-text gold-text" id="hudRoleLabel">ROLE</div>
+    <div class="hud-text purple-text" id="hudRole">LOADING</div>
 
-        <div class="level-label">LEVEL</div>
-        <div class="level" id="hudLevel">1</div>
+    <div class="hud-text gold-text" id="hudRankLabel">RANK</div>
+    <div class="hud-text purple-text" id="hudRank">INITIATE</div>
 
-        <div class="top-crown">
-            <img src="VO_Crown_Logo.png" alt="Velvet Order Logo">
-        </div>
+    <div class="hud-text gold-text" id="hudLevelLabel">LEVEL</div>
+    <div class="hud-text purple-text" id="hudLevel">1</div>
 
-        <div class="xp-small">
-            XP<br>
-            <span id="hudXPText">0 / 250</span>
-            <div class="xp-small-bar">
-                <div class="xp-small-fill" id="hudXPFill"></div>
-            </div>
-            NEXT LEVEL<br>
-            <span id="hudNextText">+250 XP</span>
-        </div>
+    <div class="hud-text gold-text" id="hudXPLabel">XP</div>
+    <div class="hud-text gold-text" id="hudXPText">0 / 250</div>
+    <div id="hudXPFill"></div>
+    <div class="hud-text" id="hudXPPercent">0%</div>
+    <div class="hud-text gold-text" id="hudNextText">+250 XP</div>
 
-        <div class="motto">Power. Devotion. Respect.</div>
-    </div>
+    <div class="hud-text purple-text" id="hudPrestige">0</div>
 
-    <div class="button-panel">
-        <div class="grid">
-            <button class="menu-btn">PROFILE</button>
-            <button class="menu-btn">XP / LEVEL</button>
-            <button class="menu-btn">DAILY QUEST</button>
-            <button class="menu-btn" onclick="openTitlesMenu()">TITLES</button>
-            <button class="menu-btn">PARTNER</button>
-            <button class="menu-btn">EVENTS</button>
-            <button class="menu-btn">LEADERBOARD</button>
-            <button class="menu-btn">HOUSE</button>
-            <button class="menu-btn">SETTINGS</button>
-        </div>
-    </div>
+    <div class="hud-text" id="hudStatus">STATUS: ONLINE</div>
 
-    <div class="current-title" id="hudCurrentTitle">INITIATE</div>
+    <div class="hud-text gold-text" id="hudActiveTitleLabel">ACTIVE TITLE</div>
+    <div class="hud-text purple-text" id="hudActiveTitle">INITIATE</div>
 
-    <div class="stats">
-        <div class="stat">DISCIPLINE <span class="stat-bar"><span class="stat-fill discipline"></span></span> 72%</div>
-        <div class="stat">LOYALTY <span class="stat-bar"><span class="stat-fill loyalty"></span></span> 65%</div>
-        <div class="stat">CONTROL <span class="stat-bar"><span class="stat-fill control"></span></span> 80%</div>
-    </div>
+    <div class="hud-text gold-text" id="hudActiveRankLabel">ACTIVE RANK</div>
+    <div class="hud-text purple-text" id="hudActiveTitle">INITIATE</div>
+    
+    <div class="hud-text gold-text" id="hudCurrency">💎 0 &nbsp;&nbsp; ♦ 0 &nbsp;&nbsp; 🔷 0</div>
 
-    <div class="notifications" id="hudNotifications">
-        <strong>NOTIFICATIONS</strong><br><br>
-        HUD loaded. Awaiting profile data.
-    </div>
+    <!-- Click hitboxes -->
+    <button class="hitbox profile-hit" onclick="showNotice('Profile selected.')"></button>
+    <button class="hitbox xp-hit" onclick="showNotice('XP / Level selected.')"></button>
+    <button class="hitbox quest-hit" onclick="showNotice('Daily Quest selected.')"></button>
 
-    <div class="action-row">
-        <button>KNEEL</button>
-        <button>OBEY</button>
-        <button>SERVE</button>
-        <button>PRAISE</button>
-        <button>BOND</button>
-        <button>REWARD</button>
-    </div>
+    <button class="hitbox titles-hit" onclick="openTitlesMenu()"></button>
+    <button class="hitbox partner-hit" onclick="showNotice('Partner selected.')"></button>
+    <button class="hitbox events-hit" onclick="showNotice('Events selected.')"></button>
 
-    <div class="wear-row">
-        <button>WEAR</button>
-        <button>UNWEAR</button>
-        <button>LOCK</button>
-        <button>UNLOCK</button>
-    </div>
+    <!-- Leaderboard intentionally commented out for now -->
+    <!-- <button class="hitbox leaderboard-hit"></button> -->
 
-    <div class="active-title" id="hudActiveTitle">INITIATE</div>
+    <button class="hitbox house-hit" onclick="showNotice('House selected.')"></button>
+    <button class="hitbox settings-hit" onclick="showNotice('Settings selected.')"></button>
 
-    <div class="rank-strip" id="hudRankStrip">
-        <span class="rank-mark">I</span>&nbsp;&nbsp;
-        <span class="rank-mark">II</span>&nbsp;&nbsp;
-        <span class="rank-mark">III</span>&nbsp;&nbsp;
-        <span class="rank-mark">IV</span>&nbsp;&nbsp;
-        <span class="rank-mark">V</span>&nbsp;&nbsp;
-        <span class="rank-mark">VI</span>&nbsp;&nbsp;
-        <span class="rank-mark">VII</span>&nbsp;&nbsp;
-        <span class="rank-mark">VIII</span>&nbsp;&nbsp;
-        <span class="rank-mark">IX</span>&nbsp;&nbsp;
-        <span class="rank-mark">X</span>
-    </div>
+    <button class="hitbox kneel-hit" onclick="showNotice('Kneel selected.')"></button>
+    <button class="hitbox obey-hit" onclick="showNotice('Obey selected.')"></button>
+    <button class="hitbox serve-hit" onclick="showNotice('Serve selected.')"></button>
+    <button class="hitbox praise-hit" onclick="showNotice('Praise selected.')"></button>
+    <button class="hitbox bond-hit" onclick="showNotice('Bond selected.')"></button>
+    <button class="hitbox reward-hit" onclick="showNotice('Reward selected.')"></button>
 
-    <div class="footer-left"></div>
-    <button class="close-btn" onclick="minimizeHUD()">CLOSE HUD</button>
+    <button class="hitbox wear-hit" onclick="showNotice('Wear selected.')"></button>
+    <button class="hitbox unwear-hit" onclick="showNotice('Unwear selected.')"></button>
+    <button class="hitbox lock-hit" onclick="showNotice('Lock selected.')"></button>
+    <button class="hitbox unlock-hit" onclick="showNotice('Unlock selected.')"></button>
 
-    <div class="currency" id="hudCurrency">
-        💎 0 &nbsp;&nbsp; ♦ 0 &nbsp;&nbsp; 🔷 0
-    </div>
+    <button class="hitbox close-hit" onclick="minimizeHUD()"></button>
 
+    <!-- Titles / Role popup -->
     <div class="titles-menu" id="titlesMenu">
         <div class="titles-menu-title">TITLES & ROLE</div>
 
@@ -605,7 +448,7 @@ button {
         <div class="titles-section">
             <div class="section-heading">UNLOCKED TITLES</div>
             <div class="title-buttons" id="titleButtons"></div>
-            <div class="menu-note">Only titles unlocked through your level will appear here.</div>
+            <div class="menu-note">Only titles unlocked through your level appear here.</div>
         </div>
 
         <div class="titles-section">
@@ -615,7 +458,7 @@ button {
                 <button onclick="selectRole('submissive')">SUBMISSIVE</button>
                 <button onclick="selectRole('switch')">SWITCH</button>
             </div>
-            <div class="menu-note">Role saving should be handled through LSL using /api/user/role.</div>
+            <div class="menu-note">Role saving should be handled by LSL using /api/user/role.</div>
         </div>
 
         <button class="menu-close" onclick="closeTitlesMenu()">CLOSE</button>
@@ -647,22 +490,6 @@ function cleanRole(role) {
     if (role === "submissive") return "SUBMISSIVE";
     if (role === "switch") return "SWITCH";
     return "LOADING";
-}
-
-function rankIndexFromLevel(level) {
-    level = parseInt(level, 10) || 1;
-    if (level >= 100) return 9;
-    let index = Math.floor((level - 1) / 10);
-    if (index < 0) index = 0;
-    if (index > 9) index = 9;
-    return index;
-}
-
-function updateRankStrip(level) {
-    const index = rankIndexFromLevel(level);
-    document.querySelectorAll(".rank-mark").forEach((mark, i) => {
-        mark.classList.toggle("active", i === index);
-    });
 }
 
 function buildUnlockedTitles(role, level) {
@@ -726,30 +553,32 @@ function updateHUDFromParams() {
     document.getElementById("hudRole").textContent = cleanRole(role);
     document.getElementById("hudRank").textContent = rank.toUpperCase();
     document.getElementById("hudLevel").textContent = level;
+
     document.getElementById("hudXPText").textContent =
         xp.toLocaleString() + " / " + next.toLocaleString();
 
-    document.getElementById("hudXPFill").style.width = percent + "%";
+    document.getElementById("hudXPFill").style.width =
+        Math.round(percent * 1.9) + "px";
+
+    document.getElementById("hudXPPercent").textContent =
+        Math.round(percent) + "%";
 
     document.getElementById("hudNextText").textContent =
         level >= maxLevel ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
 
     document.getElementById("hudCurrentTitle").textContent = rank.toUpperCase();
     document.getElementById("hudActiveTitle").textContent = title.toUpperCase();
+    document.getElementById("hudActiveRank").textContent = rank.toUpperCase();
     document.getElementById("menuCurrentTitle").textContent = title.toUpperCase();
 
     document.getElementById("hudCurrency").innerHTML =
         "💎 " + tokens.toLocaleString() + " &nbsp;&nbsp; ♦ 0 &nbsp;&nbsp; 🔷 0";
 
-    document.getElementById("hudNotifications").innerHTML =
-        "<strong>NOTIFICATIONS</strong><br><br>" +
-        "Profile loaded.<br><br>" +
-        "Role: " + cleanRole(role) + "<br>" +
-        "Rank: " + rank + "<br>" +
-        "Level: " + level + " / " + maxLevel;
-
-    updateRankStrip(level);
     renderTitleButtons();
+}
+
+function showNotice(text) {
+    console.log(text);
 }
 
 function openTitlesMenu() {
@@ -766,26 +595,11 @@ function closeTitlesMenu() {
 function selectTitle(title) {
     document.getElementById("hudActiveTitle").textContent = title.toUpperCase();
     document.getElementById("menuCurrentTitle").textContent = title.toUpperCase();
-
-    document.getElementById("hudNotifications").innerHTML =
-        "<strong>NOTIFICATIONS</strong><br><br>" +
-        "Title selected:<br><br>" +
-        title.toUpperCase() +
-        "<br><br>Save this through LSL /api/user/title.";
-
     closeTitlesMenu();
 }
 
 function selectRole(role) {
-    const displayRole = cleanRole(role);
-    document.getElementById("hudRole").textContent = displayRole;
-
-    document.getElementById("hudNotifications").innerHTML =
-        "<strong>NOTIFICATIONS</strong><br><br>" +
-        "Role switch selected:<br><br>" +
-        displayRole +
-        "<br><br>Save this through LSL /api/user/role.";
-
+    document.getElementById("hudRole").textContent = cleanRole(role);
     closeTitlesMenu();
 }
 
