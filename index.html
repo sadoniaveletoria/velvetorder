@@ -805,6 +805,10 @@ function updateHUDFromParams() {
     const title = getParam("title", rank);
     const tokens = parseInt(getParam("tokens", "0")) || 0;
     const max = parseInt(getParam("max", "100")) || 100;
+    const notice = getParam("notice", "");
+    document.getElementById("hudNotifications").innerHTML = notice
+    ? notice.replaceAll("|", "<br>")
+    : "";
 
     const percent = level >= max ? 100 : Math.min((xp / next) * 100, 100);
     const remaining = level >= max ? 0 : Math.max(next - xp, 0);
