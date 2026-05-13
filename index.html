@@ -409,7 +409,7 @@ html, body {
     <!-- <div class="hud-text gold-text" id="hudActiveRankLabel">ACTIVE RANK</div> -->
     <div class="hud-text purple-text" id="hudActiveTitle">INITIATE</div>
     
-    <div class="hud-text gold-text" id="hudCurrency">💎 0 &nbsp;&nbsp; ♦ 0 &nbsp;&nbsp; 🔷 0</div>
+    <!-- <div class="hud-text gold-text" id="hudCurrency">💎 0 &nbsp;&nbsp; ♦ 0 &nbsp;&nbsp; 🔷 0</div> -->
 
     <!-- Click hitboxes -->
     <button class="hitbox profile-hit" onclick="showNotice('Profile selected.')"></button>
@@ -575,8 +575,8 @@ function updateHUDFromParams() {
     document.getElementById("hudActiveRank").textContent = rank.toUpperCase();
     document.getElementById("menuCurrentTitle").textContent = title.toUpperCase();
 
-    document.getElementById("hudCurrency").innerHTML =
-        "💎 " + tokens.toLocaleString() + " &nbsp;&nbsp; ♦ 0 &nbsp;&nbsp; 🔷 0";
+   // document.getElementById("hudCurrency").innerHTML =
+       // "💎 " + tokens.toLocaleString() + " &nbsp;&nbsp; ♦ 0 &nbsp;&nbsp; 🔷 0";
 
     renderTitleButtons();
 }
