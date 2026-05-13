@@ -99,29 +99,33 @@ html, body {
 
 .main-title {
     position: absolute;
-    top: 34px;
+    top: 36px;
     width: 100%;
     text-align: center;
-    font-size: 68px;
-    letter-spacing: 6px;
+    font-size: 66px;
+    letter-spacing: 7px;
     font-weight: 700;
+
     background: linear-gradient(
         to bottom,
-        #fff9dc 0%,
-        #ffe89a 15%,
-        #f7d35a 35%,
-        #d4af37 55%,
-        #a97914 75%,
-        #fff2b3 100%
+        #fff6c8 0%,
+        #f8dc75 22%,
+        #d4af37 48%,
+        #9f7417 72%,
+        #f4d86a 100%
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+
     text-shadow:
-        0 0 2px rgba(0,0,0,0.9),
-        0 0 8px rgba(0,0,0,0.95),
-        0 0 16px rgba(212,175,55,0.35),
-        0 0 28px rgba(212,175,55,0.15);
-    filter: drop-shadow(0 0 6px rgba(212,175,55,0.2));
+        0 0 4px #000,
+        0 0 8px #000,
+        0 0 18px rgba(212,175,55,0.75),
+        0 0 34px rgba(212,175,55,0.35);
+
+    filter:
+        drop-shadow(0 0 8px rgba(212,175,55,0.7))
+        drop-shadow(0 0 18px rgba(155,48,255,0.25));
 }
 
 .subtitle {
@@ -389,28 +393,23 @@ html, body {
     top: 800px;
     left: 20px;
     display: grid;
-    grid-template-columns: repeat(6, 92px);
-    gap: 8px;
+    grid-template-columns: repeat(6, 82px);
+    gap: 10px;
 }
 
 .action-btn {
-    height: 92px;
+    height: 72px;
     background: linear-gradient(180deg, #120f14, #050406);
     border: 2px solid #8c6a12;
-    border-radius: 10px;
+    border-radius: 9px;
     color: #d4af37;
     font-family: "Cinzel", serif;
-    font-size: 13px;
-    letter-spacing: 1px;
+    font-size: 11px;
+    letter-spacing: 0.8px;
     cursor: pointer;
     transition: all 0.18s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    line-height: 1.1;
-    padding: 6px;
-    text-align: center;
+    padding: 4px;
+    white-space: nowrap;
 }
 
 .action-btn:hover {
@@ -430,26 +429,22 @@ html, body {
     top: 815px;
     right: 20px;
     display: grid;
-    grid-template-columns: repeat(4, 120px);
-    gap: 6px;
+    grid-template-columns: repeat(4, 92px);
+    gap: 8px;
 }
 
 .wear-btn {
-    height: 58px;
+    height: 52px;
     background: linear-gradient(180deg, #120f14, #050406);
     border: 2px solid #8c6a12;
-    border-radius: 10px;
+    border-radius: 9px;
     color: #d4af37;
     font-family: "Cinzel", serif;
-    font-size: 15px;
-    letter-spacing: 1px;
+    font-size: 11px;
+    letter-spacing: 0.7px;
     cursor: pointer;
     transition: all 0.18s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 0 8px;
+    padding: 4px;
     white-space: nowrap;
 }
 
@@ -685,7 +680,7 @@ html, body {
     <div class="medallion">
         <img src="VO_Crown_Logo.png" alt="VO Crown Logo">
     </div>
-    <div class="status-pill">● STATUS: ONLINE</div>
+    <!-- <div class="status-pill">● STATUS: ONLINE</div> -->
 
     <section class="panel notifications-panel">
         <div class="notifications-title gold">NOTIFICATIONS</div>
