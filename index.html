@@ -108,24 +108,18 @@ html, body {
 
     background: linear-gradient(
         to bottom,
-        #fff6c8 0%,
-        #f8dc75 22%,
-        #d4af37 48%,
-        #9f7417 72%,
-        #f4d86a 100%
+        #fff7cc 0%,
+        #f4d86a 20%,
+        #d4af37 50%,
+        #a77b18 80%,
+        #f6dc7a 100%
     );
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 
     text-shadow:
-        0 0 4px #000,
-        0 0 8px #000,
-        0 0 18px rgba(212,175,55,0.75),
-        0 0 34px rgba(212,175,55,0.35);
-
-    filter:
-        drop-shadow(0 0 8px rgba(212,175,55,0.7))
-        drop-shadow(0 0 18px rgba(155,48,255,0.25));
+        0 1px 1px rgba(0,0,0,0.8),
+        0 2px 4px rgba(0,0,0,0.6);
 }
 
 .subtitle {
@@ -266,15 +260,16 @@ html, body {
     top: 20px;
     right: 20px;
     width: 475px;
-    height: 475px;
+    height: 455px;
     padding: 28px;
 }
 
 .menu-grid {
     display: grid;
-    grid-template-columns: repeat(3, 130px);
-    grid-template-rows: repeat(3, 130px);
+    grid-template-columns: repeat(2, 190px);
+    grid-template-rows: repeat(3, 115px);
     gap: 18px;
+    justify-content: center;
 }
 
 .menu-btn {
@@ -366,10 +361,10 @@ html, body {
 }
 
 .notifications-panel {
-    top: 520px;
+    top: 500px;
     right: 20px;
-    width: 440px;
-    height: 355px;
+    width: 470px;
+    height: 275px;
     padding: 28px;
 }
 
@@ -426,25 +421,26 @@ html, body {
     
 .wear-row {
     position: absolute;
-    top: 815px;
-    right: 20px;
+    top: 800px;
+    right: 40px;
+    width: 430px;
     display: grid;
-    grid-template-columns: repeat(4, 92px);
-    gap: 8px;
+    grid-template-columns: repeat(4, 100px);
+    gap: 10px;
+    justify-content: center;
 }
 
 .wear-btn {
-    height: 52px;
+    height: 58px;
     background: linear-gradient(180deg, #120f14, #050406);
     border: 2px solid #8c6a12;
-    border-radius: 9px;
+    border-radius: 10px;
     color: #d4af37;
     font-family: "Cinzel", serif;
-    font-size: 11px;
-    letter-spacing: 0.7px;
+    font-size: 13px;
+    letter-spacing: 0.8px;
     cursor: pointer;
     transition: all 0.18s ease;
-    padding: 4px;
     white-space: nowrap;
 }
 
@@ -661,9 +657,9 @@ html, body {
 
     <section class="panel menu-panel">
         <div class="menu-grid">
-            <button class="menu-btn"><span class="menu-icon">👤</span>PROFILE</button>
+            <!--<button class="menu-btn"><span class="menu-icon">👤</span>PROFILE</button>
             <button class="menu-btn"><span class="menu-icon">📈</span>XP / LEVEL</button>
-            <button class="menu-btn"><span class="menu-icon">📜</span>DAILY QUEST</button>
+            <button class="menu-btn"><span class="menu-icon">📜</span>DAILY QUEST</button>-->
             <button class="menu-btn" onclick="openTitlesMenu()"><span class="menu-icon">♕</span>TITLES</button>
             <button class="menu-btn"><span class="menu-icon">♡</span>PARTNER</button>
             <button class="menu-btn"><span class="menu-icon">☆</span>EVENTS</button>
@@ -851,10 +847,22 @@ function selectRole(role) {
 }
 
 function minimizeHUD() {
+    if (window.location.href.indexOf("secondlife://") !== -1) {
+        window.location.href = "secondlife:///app/objectim/" + "close";
+    }
+
     document.querySelectorAll(".hud > *").forEach(el => {
-        if (el.id !== "restoreBtn") el.style.display = "none";
+        if (el.id !== "restoreBtn") {
+            el.style.display = "none";
+        }
     });
+
     document.getElementById("restoreBtn").style.display = "block";
+
+    // Notify LSL script in the HUD prim
+    if (window.location.protocol === "secondlife:" || window.location.href.indexOf("secondlife") !== -1) {
+        console.log("MINIMIZE_HUD");
+    }
 }
 
 function restoreHUD() {
