@@ -8,11 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
 
 <style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
     width: 100%;
@@ -54,8 +50,7 @@ html, body {
 
 .panel {
     position: absolute;
-    background:
-        linear-gradient(180deg, rgba(20,14,22,0.96), rgba(3,3,5,0.96));
+    background: linear-gradient(180deg, rgba(20,14,22,0.96), rgba(3,3,5,0.96));
     border: 2px solid #8c6a12;
     border-radius: 16px;
     box-shadow:
@@ -85,11 +80,6 @@ html, body {
     -webkit-text-fill-color: transparent;
 }
 
-.shadow {
-    text-shadow: 0 0 4px #000, 0 0 10px #000;
-}
-
-/* TOP PROFILE */
 .profile-panel {
     left: 20px;
     top: 20px;
@@ -105,23 +95,9 @@ html, body {
     font-size: 66px;
     letter-spacing: 7px;
     font-weight: 700;
-
-    background: linear-gradient(
-        to bottom,
-        #fffbe0 0%,
-        #ffe89a 20%,
-        #f4d86a 40%,
-        #d4af37 60%,
-        #b8860b 80%,
-        #f7df78 100%
-    );
-
+    background: linear-gradient(to bottom, #fffbe0 0%, #ffe89a 20%, #f4d86a 40%, #d4af37 60%, #b8860b 80%, #f7df78 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-
-    text-shadow:
-        0 1px 1px rgba(0,0,0,0.6),
-        0 2px 3px rgba(0,0,0,0.45);
 }
 
 .subtitle {
@@ -132,34 +108,17 @@ html, body {
     font-size: 22px;
     letter-spacing: 3px;
     font-weight: 600;
-    opacity: 0.95;
 }
 
-.info-block {
-    position: absolute;
-    left: 58px;
-    width: 190px;
-}
-
-.info-label {
-    font-size: 20px;
-    letter-spacing: 2px;
-}
-
-.info-value {
-    margin-top: 4px;
-    font-size: 30px;
-    letter-spacing: 1px;
-}
+.info-block { position: absolute; left: 58px; width: 190px; }
+.info-label { font-size: 20px; letter-spacing: 2px; }
+.info-value { margin-top: 4px; font-size: 30px; letter-spacing: 1px; }
 
 .role-block { top: 165px; }
 .rank-block { top: 255px; }
 .level-block { top: 345px; }
 
-#hudLevel {
-    font-size: 60px;
-    line-height: 0.9;
-}
+#hudLevel { font-size: 60px; line-height: 0.9; }
 
 .center-logo {
     position: absolute;
@@ -167,7 +126,6 @@ html, body {
     left: 278px;
     width: 190px;
     height: 190px;
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -190,15 +148,8 @@ html, body {
     text-align: center;
 }
 
-.xp-label {
-    font-size: 22px;
-    letter-spacing: 2px;
-}
-
-.xp-number {
-    margin-top: 8px;
-    font-size: 20px;
-}
+.xp-label { font-size: 22px; letter-spacing: 2px; }
+.xp-number { margin-top: 8px; font-size: 20px; }
 
 .xp-bar {
     position: relative;
@@ -229,11 +180,7 @@ html, body {
     z-index: 2;
 }
 
-.next-xp {
-    margin-top: 16px;
-    font-size: 17px;
-    line-height: 1.4;
-}
+.next-xp { margin-top: 16px; font-size: 17px; line-height: 1.4; }
 
 .prestige {
     position: absolute;
@@ -243,9 +190,7 @@ html, body {
     font-size: 18px;
 }
 
-#hudPrestige {
-    font-size: 42px;
-}
+#hudPrestige { font-size: 42px; }
 
 .motto {
     position: absolute;
@@ -257,7 +202,6 @@ html, body {
     font-size: 30px;
 }
 
-/* MENU GRID */
 .menu-panel {
     top: 20px;
     right: 20px;
@@ -275,8 +219,7 @@ html, body {
 }
 
 .menu-btn {
-    background:
-        linear-gradient(180deg, rgba(19,16,18,0.95), rgba(5,5,7,0.95));
+    background: linear-gradient(180deg, rgba(19,16,18,0.95), rgba(5,5,7,0.95));
     border: 2px solid #8c6a12;
     border-radius: 12px;
     color: #d4af37;
@@ -288,13 +231,14 @@ html, body {
     box-shadow: inset 0 0 14px rgba(0,0,0,0.85);
 }
 
-.menu-btn:hover {
+.menu-btn:hover,
+.action-btn:hover,
+.wear-btn:hover,
+.close-btn:hover {
     color: #fff1b0;
     border-color: #f0c95a;
     transform: translateY(-2px);
-    box-shadow:
-        0 0 18px rgba(155,48,255,0.55),
-        inset 0 0 20px rgba(212,175,55,0.12);
+    box-shadow: 0 0 16px rgba(155,48,255,0.5);
 }
 
 .menu-icon {
@@ -303,7 +247,6 @@ html, body {
     margin-bottom: 10px;
 }
 
-/* MIDDLE */
 .large-panel {
     left: 20px;
     top: 500px;
@@ -326,10 +269,7 @@ html, body {
     left: 505px;
     width: 260px;
     height: 260px;
-    border-radius: 50%;
-    border: none;
     background: transparent;
-    box-shadow: none;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -342,22 +282,6 @@ html, body {
     filter:
         drop-shadow(0 0 18px rgba(212,175,55,0.8))
         drop-shadow(0 0 28px rgba(155,48,255,0.5));
-}
-
-.status-pill {
-    position: absolute;
-    top: 800px;
-    left: 535px;
-    width: 200px;
-    height: 42px;
-    border: 2px solid #8c6a12;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #31d75b;
-    font-size: 16px;
-    background: #050406;
 }
 
 .notifications-panel {
@@ -382,7 +306,6 @@ html, body {
     text-align: center;
 }
 
-/* ACTIONS */
 .action-row {
     position: absolute;
     top: 800px;
@@ -407,18 +330,6 @@ html, body {
     white-space: nowrap;
 }
 
-.action-btn:hover {
-    color: #fff1b0;
-    border-color: #f0c95a;
-    box-shadow: 0 0 16px rgba(155,48,255,0.5);
-    transform: translateY(-2px);
-}
-
-.action-btn .icon {
-    font-size: 28px;
-    margin-bottom: 6px;
-}
-    
 .wear-row {
     position: absolute;
     top: 800px;
@@ -442,52 +353,6 @@ html, body {
     cursor: pointer;
     transition: all 0.18s ease;
     white-space: nowrap;
-}
-
-.wear-btn:hover {
-    color: #fff1b0;
-    border-color: #f0c95a;
-    box-shadow: 0 0 16px rgba(155,48,255,0.5);
-    transform: translateY(-2px);
-}
-
-.wear-btn .icon {
-    font-size: 18px;
-}
-    
-/* BOTTOM PANELS */
-.active-title-panel {
-    left: 20px;
-    top: 920px;
-    width: 520px;
-    height: 190px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.active-rank-panel {
-    right: 20px;
-    top: 920px;
-    width: 670px;
-    height: 190px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.panel-label {
-    font-size: 22px;
-    letter-spacing: 3px;
-    margin-bottom: 20px;
-}
-
-.panel-value {
-    font-size: 38px;
-    letter-spacing: 3px;
-    text-align: center;
 }
 
 .footer-left {
@@ -522,6 +387,7 @@ html, body {
     font-size: 20px;
     color: #d4af37;
     cursor: pointer;
+    transition: all 0.18s ease;
 }
 
 .currency {
@@ -539,7 +405,6 @@ html, body {
     font-size: 22px;
 }
 
-/* POPUP */
 .titles-menu {
     display: none;
     position: absolute;
@@ -588,22 +453,6 @@ html, body {
     font-size: 16px;
     cursor: pointer;
 }
-
-.restore-btn {
-    display: none;
-    position: absolute;
-    bottom: 25px;
-    right: 25px;
-    width: 95px;
-    height: 95px;
-    border-radius: 50%;
-    background: #080808;
-    border: 3px solid #8c6a12;
-    color: #9b30ff;
-    font-family: "Cinzel", serif;
-    font-size: 32px;
-    z-index: 6000;
-}
 </style>
 </head>
 
@@ -612,8 +461,8 @@ html, body {
 <div class="hud" id="hud">
 
     <section class="panel profile-panel">
-        <div class="main-title gold shadow">VELVET ORDER</div>
-        <div class="subtitle gold shadow">ROLE PROGRESSION HUD</div>
+        <div class="main-title">VELVET ORDER</div>
+        <div class="subtitle gold">ROLE PROGRESSION HUD</div>
 
         <div class="info-block role-block">
             <div class="info-label gold">ROLE</div>
@@ -657,13 +506,9 @@ html, body {
 
     <section class="panel menu-panel">
         <div class="menu-grid">
-            <!--<button class="menu-btn"><span class="menu-icon">👤</span>PROFILE</button>
-            <button class="menu-btn"><span class="menu-icon">📈</span>XP / LEVEL</button>
-            <button class="menu-btn"><span class="menu-icon">📜</span>DAILY QUEST</button>-->
             <button class="menu-btn" onclick="openTitlesMenu()"><span class="menu-icon">♕</span>TITLES</button>
             <button class="menu-btn"><span class="menu-icon">♡</span>PARTNER</button>
             <button class="menu-btn"><span class="menu-icon">☆</span>EVENTS</button>
-            <!-- <button class="menu-btn">LEADERBOARD</button> -->
             <button class="menu-btn"><span class="menu-icon">⚜</span>HOUSE</button>
             <button class="menu-btn"><span class="menu-icon">⚙</span>SETTINGS</button>
         </div>
@@ -676,7 +521,6 @@ html, body {
     <div class="medallion">
         <img src="VO_Crown_Logo.png" alt="VO Crown Logo">
     </div>
-    <!-- <div class="status-pill">● STATUS: ONLINE</div> -->
 
     <section class="panel notifications-panel">
         <div class="notifications-title gold">NOTIFICATIONS</div>
@@ -698,17 +542,7 @@ html, body {
         <button class="wear-btn">LOCK</button>
         <button class="wear-btn">UNLOCK</button>
     </div>
-    <!--
-    <section class="panel active-title-panel">
-        <div class="panel-label gold">ACTIVE TITLE</div>
-        <div class="panel-value purple" id="hudActiveTitle">INITIATE</div>
-    </section>
 
-    <section class="panel active-rank-panel">
-        <div class="panel-label gold">ACTIVE RANK</div>
-        <div class="panel-value purple" id="hudActiveRank">INITIATE</div>
-    </section>
-    -->
     <div class="footer-left">
         <button class="footer-btn">▥</button>
         <button class="footer-btn">♟</button>
@@ -718,7 +552,7 @@ html, body {
         <button class="footer-btn">⏻</button>
     </div>
 
-    <!-- <button class="close-btn" onclick="minimizeHUD()">CLOSE HUD</button>-->
+    <button class="close-btn" type="button">CLOSE HUD</button>
 
     <div class="currency gold" id="hudCurrency">
         <span>💎 0</span><span>♦ 0</span><span>🔷 0</span>
@@ -748,8 +582,6 @@ html, body {
 
         <button class="menu-close" onclick="closeTitlesMenu()">CLOSE</button>
     </div>
-
-    <button class="restore-btn" id="restoreBtn" onclick="restoreHUD()">VO</button>
 
 </div>
 </div>
@@ -806,9 +638,9 @@ function updateHUDFromParams() {
     const tokens = parseInt(getParam("tokens", "0")) || 0;
     const max = parseInt(getParam("max", "100")) || 100;
     const notice = getParam("notice", "");
-    document.getElementById("hudNotifications").innerHTML = notice
-    ? notice.replaceAll("|", "<br>")
-    : "";
+
+    document.getElementById("hudNotifications").innerHTML =
+        notice ? notice.replaceAll("|", "<br>") : "";
 
     const percent = level >= max ? 100 : Math.min((xp / next) * 100, 100);
     const remaining = level >= max ? 0 : Math.max(next - xp, 0);
@@ -822,8 +654,6 @@ function updateHUDFromParams() {
     document.getElementById("hudXPFill").style.width = percent + "%";
     document.getElementById("hudXPPercent").textContent = Math.round(percent) + "%";
     document.getElementById("hudNextText").textContent = level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
-    document.getElementById("hudActiveTitle").textContent = title.toUpperCase();
-    document.getElementById("hudActiveRank").textContent = rank.toUpperCase();
     document.getElementById("menuCurrentTitle").textContent = title.toUpperCase();
     document.getElementById("hudCurrency").innerHTML = `<span>💎 ${tokens.toLocaleString()}</span><span>♦ 0</span><span>🔷 0</span>`;
 
@@ -840,7 +670,6 @@ function closeTitlesMenu() {
 }
 
 function selectTitle(title) {
-    document.getElementById("hudActiveTitle").textContent = title.toUpperCase();
     document.getElementById("menuCurrentTitle").textContent = title.toUpperCase();
     closeTitlesMenu();
 }
@@ -848,33 +677,6 @@ function selectTitle(title) {
 function selectRole(role) {
     document.getElementById("hudRole").textContent = cleanRole(role);
     closeTitlesMenu();
-}
-
-function minimizeHUD() {
-    if (window.location.href.indexOf("secondlife://") !== -1) {
-        window.location.href = "secondlife:///app/objectim/" + "close";
-    }
-
-    document.querySelectorAll(".hud > *").forEach(el => {
-        if (el.id !== "restoreBtn") {
-            el.style.display = "none";
-        }
-    });
-
-    document.getElementById("restoreBtn").style.display = "block";
-
-    // Notify LSL script in the HUD prim
-    if (window.location.protocol === "secondlife:" || window.location.href.indexOf("secondlife") !== -1) {
-        console.log("MINIMIZE_HUD");
-    }
-}
-
-function restoreHUD() {
-    document.querySelectorAll(".hud > *").forEach(el => {
-        if (el.id !== "restoreBtn") el.style.display = "";
-    });
-    document.getElementById("titlesMenu").style.display = "none";
-    document.getElementById("restoreBtn").style.display = "none";
 }
 
 window.addEventListener("resize", scaleHUD);
