@@ -522,6 +522,14 @@ html, body {
     font-size: 20px;
     color: #d4af37;
     cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.close-btn:hover {
+    color: #fff1b0;
+    border-color: #f0c95a;
+    box-shadow: 0 0 16px rgba(155,48,255,0.5);
+    transform: translateY(-2px);
 }
 
 .currency {
@@ -718,7 +726,7 @@ html, body {
         <button class="footer-btn">⏻</button>
     </div>
 
-    <!-- <button class="close-btn" onclick="minimizeHUD()">CLOSE HUD</button>-->
+    <button class="close-btn" type="button">CLOSE HUD</button>
 
     <div class="currency gold" id="hudCurrency">
         <span>💎 0</span><span>♦ 0</span><span>🔷 0</span>
@@ -851,14 +859,7 @@ function selectRole(role) {
 }
 
 function minimizeHUD() {
-    if (window.location.href.indexOf("secondlife://") !== -1) {
-        window.location.href = "secondlife:///app/objectim/" + "close";
-    }
-
-    document.querySelectorAll(".hud > *").forEach(el => {
-        if (el.id !== "restoreBtn") {
-            el.style.display = "none";
-        }
+}
     });
 
     document.getElementById("restoreBtn").style.display = "block";
