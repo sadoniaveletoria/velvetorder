@@ -263,66 +263,56 @@ html, body {
     letter-spacing: 2px;
 }
 
-.bond-box {
+.bond-compact {
     position: absolute;
-    top: 72px;
-    left: 38px;
-    width: 395px;
-    text-align: center;
+    top: 78px;
+    left: 35px;
+    width: 400px;
+    display: grid;
+    grid-template-columns: 1fr 60px;
+    align-items: center;
+    gap: 12px;
     z-index: 2;
 }
 
-.bond-title {
-    font-size: 20px;
-    letter-spacing: 2px;
-    margin-bottom: 10px;
+.bond-content {
+    display: flex;
+    flex-direction: column;
 }
 
-.bond-partner {
+.bond-compact-title {
     font-size: 18px;
-    letter-spacing: 1px;
-    margin-bottom: 10px;
-}
-
-.bond-level {
-    font-size: 16px;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
     margin-bottom: 8px;
+    text-align: left;
 }
 
-.bond-bar {
-    position: relative;
+.bond-compact-bar {
     width: 100%;
-    height: 18px;
-    border: 2px solid #8c6a12;
+    height: 14px;
+    border: 1px solid #8c6a12;
     background: #050406;
-    border-radius: 10px;
+    box-shadow:
+        inset 0 0 8px rgba(0,0,0,0.95),
+        0 0 8px rgba(155,48,255,0.15);
     overflow: hidden;
-    box-shadow: inset 0 0 12px rgba(0,0,0,0.9);
 }
 
-.bond-fill {
+.bond-compact-fill {
     width: 0%;
     height: 100%;
-    background: linear-gradient(90deg, #5b087d, #d936b8, #ff9ee8);
-    box-shadow: 0 0 14px rgba(255,79,195,0.75);
+    background: linear-gradient(
+        90deg,
+        #5b087d,
+        #d936b8,
+        #ff9ee8
+    );
+    box-shadow: 0 0 12px rgba(255,79,195,0.75);
 }
 
-.bond-percent {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff0fb;
-    font-size: 12px;
-    z-index: 2;
-}
-
-.bond-xp {
-    margin-top: 8px;
-    font-size: 14px;
-    letter-spacing: 1px;
+.bond-compact-percent {
+    font-size: 20px;
+    text-align: right;
 }
 
 .medallion {
@@ -579,20 +569,16 @@ html, body {
     <section class="panel large-panel">
         <div class="feature-title gold">FEATURE PANEL</div>
 
-        <div class="bond-box">
-            <div class="bond-title gold">PARTNER BOND</div>
-            <div class="bond-partner purple" id="hudBondPartner">NO ACTIVE PARTNER</div>
+        <div class="bond-compact">
+            <div class="bond-content">
+                <div class="bond-compact-title gold">PARTNER BOND</div>
 
-            <div class="bond-level gold">
-                BOND LEVEL <span id="hudBondLevel">1</span> / 10
+                <div class="bond-compact-bar">
+                    <div class="bond-compact-fill" id="hudBondFill"></div>
+                </div>
             </div>
 
-            <div class="bond-bar">
-                <div class="bond-fill" id="hudBondFill"></div>
-                <div class="bond-percent" id="hudBondPercent">0%</div>
-            </div>
-
-            <div class="bond-xp gold" id="hudBondXPText">0 / 100 Bond XP</div>
+            <div class="bond-compact-percent gold" id="hudBondPercent">0%</div>
         </div>
     </section>
 
@@ -742,14 +728,8 @@ function updateHUDFromParams() {
     document.getElementById("menuCurrentTitle").textContent = title.toUpperCase();
     document.getElementById("hudCurrency").innerHTML = `<span>💎 ${tokens.toLocaleString()}</span><span>♦ 0</span><span>🔷 0</span>`;
 
-    document.getElementById("hudBondPartner").textContent = bondPartner.toUpperCase();
-    document.getElementById("hudBondLevel").textContent = bondLevel;
     document.getElementById("hudBondFill").style.width = bondPercent + "%";
     document.getElementById("hudBondPercent").textContent = Math.round(bondPercent) + "%";
-    document.getElementById("hudBondXPText").textContent =
-        bondLevel >= 10
-            ? "MAX BOND LEVEL"
-            : bondXP.toLocaleString() + " / " + bondNext.toLocaleString() + " Bond XP";
 
     renderTitleButtons();
 }
