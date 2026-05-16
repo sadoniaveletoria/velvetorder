@@ -263,6 +263,68 @@ html, body {
     letter-spacing: 2px;
 }
 
+.bond-box {
+    position: absolute;
+    top: 72px;
+    left: 38px;
+    width: 395px;
+    text-align: center;
+    z-index: 2;
+}
+
+.bond-title {
+    font-size: 20px;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.bond-partner {
+    font-size: 18px;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+}
+
+.bond-level {
+    font-size: 16px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.bond-bar {
+    position: relative;
+    width: 100%;
+    height: 18px;
+    border: 2px solid #8c6a12;
+    background: #050406;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: inset 0 0 12px rgba(0,0,0,0.9);
+}
+
+.bond-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #5b087d, #d936b8, #ff9ee8);
+    box-shadow: 0 0 14px rgba(255,79,195,0.75);
+}
+
+.bond-percent {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff0fb;
+    font-size: 12px;
+    z-index: 2;
+}
+
+.bond-xp {
+    margin-top: 8px;
+    font-size: 14px;
+    letter-spacing: 1px;
+}
+
 .medallion {
     position: absolute;
     top: 515px;
@@ -516,6 +578,22 @@ html, body {
 
     <section class="panel large-panel">
         <div class="feature-title gold">FEATURE PANEL</div>
+
+        <div class="bond-box">
+            <div class="bond-title gold">PARTNER BOND</div>
+            <div class="bond-partner purple" id="hudBondPartner">NO ACTIVE PARTNER</div>
+
+            <div class="bond-level gold">
+                BOND LEVEL <span id="hudBondLevel">1</span> / 10
+            </div>
+
+            <div class="bond-bar">
+                <div class="bond-fill" id="hudBondFill"></div>
+                <div class="bond-percent" id="hudBondPercent">0%</div>
+            </div>
+
+            <div class="bond-xp gold" id="hudBondXPText">0 / 100 Bond XP</div>
+        </div>
     </section>
 
     <div class="medallion">
@@ -639,11 +717,18 @@ function updateHUDFromParams() {
     const max = parseInt(getParam("max", "100")) || 100;
     const notice = getParam("notice", "");
 
+    const bondPartner = getParam("bond_partner", "No Active Partner");
+    const bondLevel = parseInt(getParam("bond_level", "1")) || 1;
+    const bondXP = parseInt(getParam("bond_xp", "0")) || 0;
+    const bondNext = parseInt(getParam("bond_next", "100")) || 100;
+
     document.getElementById("hudNotifications").innerHTML =
         notice ? notice.replaceAll("|", "<br>") : "";
 
     const percent = level >= max ? 100 : Math.min((xp / next) * 100, 100);
     const remaining = level >= max ? 0 : Math.max(next - xp, 0);
+
+    const bondPercent = bondLevel >= 10 ? 100 : Math.min((bondXP / bondNext) * 100, 100);
 
     unlockedTitles = buildUnlockedTitles(role, level);
 
@@ -656,6 +741,15 @@ function updateHUDFromParams() {
     document.getElementById("hudNextText").textContent = level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
     document.getElementById("menuCurrentTitle").textContent = title.toUpperCase();
     document.getElementById("hudCurrency").innerHTML = `<span>💎 ${tokens.toLocaleString()}</span><span>♦ 0</span><span>🔷 0</span>`;
+
+    document.getElementById("hudBondPartner").textContent = bondPartner.toUpperCase();
+    document.getElementById("hudBondLevel").textContent = bondLevel;
+    document.getElementById("hudBondFill").style.width = bondPercent + "%";
+    document.getElementById("hudBondPercent").textContent = Math.round(bondPercent) + "%";
+    document.getElementById("hudBondXPText").textContent =
+        bondLevel >= 10
+            ? "MAX BOND LEVEL"
+            : bondXP.toLocaleString() + " / " + bondNext.toLocaleString() + " Bond XP";
 
     renderTitleButtons();
 }
