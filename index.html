@@ -651,6 +651,9 @@ html, body {
 </div>
 
 <script>
+const API_BASE = "https://api.velvetorder.duckdns.org";
+const API_SECRET = "jSDGBnYYqy08Hk4afpELPmzRkJTlfApR";
+
 let unlockedTitles = [];
 
 function scaleHUD() {
@@ -658,7 +661,7 @@ function scaleHUD() {
     document.querySelector(".hud").style.transform = "scale(" + scale + ")";
 }
 
-function getParam(name, fallback) {
+function getParam(name, fallback = "") {
     const params = new URLSearchParams(window.location.search);
     return params.get(name) || fallback;
 }
@@ -677,6 +680,7 @@ function buildUnlockedTitles(role, level) {
         submissive: [[1,"Initiate"],[10,"Attendant"],[20,"Pet"],[30,"Companion"],[40,"Service Bound"],[50,"Devoted"],[60,"Cherished"],[70,"Treasured"],[80,"Velvet Beloved"],[90,"Ascendant Submissive"],[100,"Eternal Devotion"]],
         switch: [[1,"Initiate"],[10,"Curious"],[20,"Adaptive"],[30,"Dual-Bonded"],[40,"Harmonized"],[50,"Versatile Elite"],[60,"Ascendant"],[70,"Velvet Balanced"],[80,"Twin Flame"],[90,"Ascendant Switch"],[100,"Eternal Balance"]]
     };
+
     const set = sets[(role || "switch").toLowerCase()] || sets.switch;
     return set.filter(t => level >= t[0]).map(t => t[1]);
 }
@@ -684,6 +688,7 @@ function buildUnlockedTitles(role, level) {
 function renderTitleButtons() {
     const box = document.getElementById("titleButtons");
     box.innerHTML = "";
+
     unlockedTitles.forEach(title => {
         const btn = document.createElement("button");
         btn.textContent = title.toUpperCase();
@@ -692,46 +697,86 @@ function renderTitleButtons() {
     });
 }
 
-function updateHUDFromParams() {
-    const role = getParam("role", "loading");
-    const rank = getParam("rank", "Initiate");
-    const level = parseInt(getParam("level", "1")) || 1;
-    const xp = parseInt(getParam("xp", "0")) || 0;
-    const next = parseInt(getParam("next", "250")) || 250;
-    const title = getParam("title", rank);
-    const tokens = parseInt(getParam("tokens", "0")) || 0;
-    const max = parseInt(getParam("max", "100")) || 100;
-    const notice = getParam("notice", "");
+function updateHUD(data) {
+    const role = data.role || "loading";
+    const rank = data.rank || "Initiate";
+    const level = parseInt(data.level || 1);
+    const xp = parseInt(data.xp || 0);
+    const next = parseInt(data.next_level_xp || 250);
+    const title = data.title || rank;
+    const tokens = parseInt(data.tokens || 0);
+    const prestige = parseInt(data.prestige || 0);
+    const max = parseInt(data.max_level || 100);
 
-    const bondPartner = getParam("bond_partner", "No Active Partner");
-    const bondLevel = parseInt(getParam("bond_level", "1")) || 1;
-    const bondXP = parseInt(getParam("bond_xp", "0")) || 0;
-    const bondNext = parseInt(getParam("bond_next", "100")) || 100;
+    let percent = 100;
 
-    document.getElementById("hudNotifications").innerHTML =
-        notice ? notice.replaceAll("|", "<br>") : "";
+    if (level < max && next > 0) {
+        percent = Math.min((xp / next) * 100, 100);
+    }
 
-    const percent = level >= max ? 100 : Math.min((xp / next) * 100, 100);
     const remaining = level >= max ? 0 : Math.max(next - xp, 0);
-
-    const bondPercent = bondLevel >= 10 ? 100 : Math.min((bondXP / bondNext) * 100, 100);
 
     unlockedTitles = buildUnlockedTitles(role, level);
 
     document.getElementById("hudRole").textContent = cleanRole(role);
     document.getElementById("hudRank").textContent = rank.toUpperCase();
     document.getElementById("hudLevel").textContent = level;
-    document.getElementById("hudXPText").textContent = xp.toLocaleString() + " / " + next.toLocaleString();
-    document.getElementById("hudXPFill").style.width = percent + "%";
-    document.getElementById("hudXPPercent").textContent = Math.round(percent) + "%";
-    document.getElementById("hudNextText").textContent = level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
-    document.getElementById("menuCurrentTitle").textContent = title.toUpperCase();
-    document.getElementById("hudCurrency").innerHTML = `<span>💎 ${tokens.toLocaleString()}</span><span>♦ 0</span><span>🔷 0</span>`;
+    document.getElementById("hudPrestige").textContent = prestige;
 
-    document.getElementById("hudBondFill").style.width = bondPercent + "%";
-    document.getElementById("hudBondPercent").textContent = Math.round(bondPercent) + "%";
+    document.getElementById("hudXPText").textContent =
+        xp.toLocaleString() + " / " + next.toLocaleString();
+
+    document.getElementById("hudXPFill").style.width = percent + "%";
+    document.getElementById("hudXPPercent").textContent =
+        Math.round(percent) + "%";
+
+    document.getElementById("hudNextText").textContent =
+        level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
+
+    document.getElementById("menuCurrentTitle").textContent =
+        title.toUpperCase();
+
+    document.getElementById("hudCurrency").innerHTML =
+        `<span>💎 ${tokens.toLocaleString()}</span><span>♦ 0</span><span>🔷 0</span>`;
 
     renderTitleButtons();
+}
+
+async function fetchProfile() {
+    const uuid = getParam("uuid");
+
+    if (!uuid) {
+        document.getElementById("hudNotifications").innerHTML =
+            "Missing avatar UUID.";
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_BASE}/api/user/${uuid}`,
+            {
+                headers: {
+                    "x-api-secret": API_SECRET
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+        }
+
+        const data = await response.json();
+
+        updateHUD(data);
+
+        document.getElementById("hudNotifications").innerHTML = "";
+    }
+    catch (err) {
+        console.error("Profile load failed:", err);
+
+        document.getElementById("hudNotifications").innerHTML =
+            "Unable to load profile data.";
+    }
 }
 
 function openTitlesMenu() {
@@ -744,19 +789,25 @@ function closeTitlesMenu() {
 }
 
 function selectTitle(title) {
-    document.getElementById("menuCurrentTitle").textContent = title.toUpperCase();
+    document.getElementById("menuCurrentTitle").textContent =
+        title.toUpperCase();
     closeTitlesMenu();
 }
 
 function selectRole(role) {
-    document.getElementById("hudRole").textContent = cleanRole(role);
+    document.getElementById("hudRole").textContent =
+        cleanRole(role);
     closeTitlesMenu();
 }
 
 window.addEventListener("resize", scaleHUD);
-window.addEventListener("load", () => {
+
+window.addEventListener("load", async () => {
     scaleHUD();
-    updateHUDFromParams();
+
+    await fetchProfile();
+
+    setInterval(fetchProfile, 30000);
 });
 </script>
 
