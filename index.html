@@ -263,6 +263,7 @@ html, body {
     letter-spacing: 2px;
 }
 
+/* Old bond compact classes kept for compatibility */
 .bond-compact {
     position: absolute;
     top: 78px;
@@ -301,18 +302,73 @@ html, body {
 .bond-compact-fill {
     width: 0%;
     height: 100%;
-    background: linear-gradient(
-        90deg,
-        #5b087d,
-        #d936b8,
-        #ff9ee8
-    );
+    background: linear-gradient(90deg, #5b087d, #d936b8, #ff9ee8);
     box-shadow: 0 0 12px rgba(255,79,195,0.75);
 }
 
 .bond-compact-percent {
     font-size: 20px;
     text-align: right;
+}
+
+/* New Partner Panel */
+.partner-panel-list {
+    position: absolute;
+    top: 72px;
+    left: 35px;
+    width: 400px;
+    z-index: 2;
+}
+
+.partner-card {
+    margin-bottom: 18px;
+}
+
+.partner-name {
+    font-size: 18px;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.partner-level {
+    font-size: 14px;
+    color: #c9aa69;
+    margin-bottom: 6px;
+    letter-spacing: 0.8px;
+}
+
+.partner-bar {
+    width: 100%;
+    height: 12px;
+    border: 1px solid #8c6a12;
+    background: #050406;
+    overflow: hidden;
+    box-shadow:
+        inset 0 0 8px rgba(0,0,0,0.95),
+        0 0 8px rgba(155,48,255,0.15);
+}
+
+.partner-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #5b087d, #d936b8, #ff9ee8);
+    box-shadow: 0 0 12px rgba(255,79,195,0.75);
+}
+
+.partner-percent {
+    font-size: 14px;
+    text-align: right;
+    margin-top: 2px;
+}
+
+.partner-empty {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 45px;
+    letter-spacing: 1.5px;
 }
 
 .medallion {
@@ -567,11 +623,14 @@ html, body {
     </section>
 
     <section class="panel large-panel">
-        <div class="feature-title gold">FEATURE PANEL</div>
+        <div class="feature-title gold">PARTNER PANEL</div>
 
         <div class="bond-compact">
             <div class="bond-content">
                 <div class="bond-compact-title gold">PARTNER BOND</div>
+
+                <div class="partner-panel-list" id="partnerPanelList">
+                    <div class="partner-empty gold">NO ACTIVE PARTNER</div>
 
                 <div class="bond-compact-bar">
                     <div class="bond-compact-fill" id="hudBondFill"></div>
