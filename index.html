@@ -742,6 +742,31 @@ function updateHUD(data) {
     renderTitleButtons();
 }
 
+function updateBondHUD(partners) {
+    if (!partners || partners.length === 0) {
+        document.getElementById("hudBondFill").style.width = "0%";
+        document.getElementById("hudBondPercent").textContent = "0%";
+        return;
+    }
+
+    const partner = partners[0];
+
+    const bondLevel = parseInt(partner.bond_level || 1);
+    const bondXP = parseInt(partner.bond_xp || 0);
+    const bondNext = parseInt(partner.bond_next_xp || 100);
+    const maxBondLevel = parseInt(partner.max_bond_level || 10);
+
+    let bondPercent = 100;
+
+    if (bondLevel < maxBondLevel && bondNext > 0) {
+        bondPercent = Math.min((bondXP / bondNext) * 100, 100);
+    }
+
+    document.getElementById("hudBondFill").style.width = bondPercent + "%";
+    document.getElementById("hudBondPercent").textContent =
+        Math.round(bondPercent) + "%";
+}
+
 async function fetchProfile() {
     const uuid = getParam("uuid");
 
@@ -779,6 +804,41 @@ async function fetchProfile() {
     }
 }
 
+async function fetchPartnerBond() {
+    const uuid = getParam("uuid");
+
+    if (!uuid) {
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_BASE}/api/partners/${uuid}`,
+            {
+                headers: {
+                    "x-api-secret": API_SECRET
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+        }
+
+        const data = await response.json();
+        updateBondHUD(data.partners || []);
+    }
+    catch (err) {
+        console.error("Partner bond load failed:", err);
+        updateBondHUD([]);
+    }
+}
+
+async function refreshHUDData() {
+    await fetchProfile();
+    await fetchPartnerBond();
+}
+
 function openTitlesMenu() {
     document.getElementById("titlesMenu").style.display = "block";
     renderTitleButtons();
@@ -805,9 +865,9 @@ window.addEventListener("resize", scaleHUD);
 window.addEventListener("load", async () => {
     scaleHUD();
 
-    await fetchProfile();
+    await refreshHUDData();
 
-    setInterval(fetchProfile, 30000);
+    setInterval(refreshHUDData, 30000);
 });
 </script>
 
