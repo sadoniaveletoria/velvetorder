@@ -852,6 +852,71 @@ async function fetchProfile() {
     }
 }
 
+function updatePartnerPanel(partners) {
+    const box = document.getElementById("partnerPanelList");
+    box.innerHTML = "";
+
+    if (!partners || partners.length === 0) {
+        box.innerHTML = '<div class="partner-empty gold">NO ACTIVE PARTNER</div>';
+        return;
+    }
+
+    partners.slice(0, 2).forEach(partner => {
+        const name = partner.sl_name || "Unknown Partner";
+        const bondLevel = parseInt(partner.bond_level || 1);
+        const bondXP = parseInt(partner.bond_xp || 0);
+        const bondNext = parseInt(partner.bond_next_xp || 100);
+
+        let percent = Math.min((bondXP / bondNext) * 100, 100);
+
+        box.innerHTML += `
+            <div class="partner-card">
+                <div class="partner-name gold">${name}</div>
+                <div class="partner-level">
+                    Bond Level ${bondLevel} · ${bondXP} / ${bondNext} XP
+                </div>
+
+                <div class="partner-bar">
+                    <div class="partner-fill" style="width:${percent}%"></div>
+                </div>
+
+                <div class="partner-percent gold">
+                    ${Math.round(percent)}%
+                </div>
+            </div>
+        `;
+    });
+}
+
+async function fetchPartnerBond() {
+    const uuid = getParam("uuid");
+
+    if (!uuid) return;
+
+    try {
+        const response = await fetch(
+            `${API_BASE}/api/partners/${uuid}`,
+            {
+                headers: {
+                    "x-api-secret": API_SECRET
+                }
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+        }
+
+        const data = await response.json();
+
+        updatePartnerPanel(data.partners || []);
+    }
+    catch (err) {
+        console.error("Partner bond load failed:", err);
+
+        updatePartnerPanel([]);
+    }
+}    
 async function fetchPartnerBond() {
     const uuid = getParam("uuid");
 
@@ -914,8 +979,10 @@ window.addEventListener("load", async () => {
     scaleHUD();
 
     await refreshHUDData();
+    await fetchPartnerBond();
 
     setInterval(refreshHUDData, 30000);
+    setInterval(fetchPartnerBond, 30000);
 });
 </script>
 
