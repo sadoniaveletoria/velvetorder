@@ -976,15 +976,10 @@ function selectRole(role) {
     closeTitlesMenu();
 }
 
-window.addEventListener("resize", scaleHUD);
-
-window.addEventListener("load", async () => {
-    async function refreshHUDData() {
-        await fetchProfile();
-        await fetchPartnerBond();
-    }
-
-window.addEventListener("resize", scaleHUD);
+async function refreshHUDData() {
+    await fetchProfile();
+    await fetchPartnerBond();
+}
 
 window.addEventListener("load", async () => {
     scaleHUD();
@@ -993,6 +988,8 @@ window.addEventListener("load", async () => {
 
     setInterval(refreshHUDData, 30000);
 });
+
+window.addEventListener("resize", scaleHUD);
 </script>
 
 </body>
