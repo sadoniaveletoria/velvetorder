@@ -978,10 +978,10 @@ window.addEventListener("resize", scaleHUD);
 window.addEventListener("load", async () => {
     scaleHUD();
 
-    await refreshHUDData();
+    await fetchProfile();
     await fetchPartnerBond();
 
-    setInterval(refreshHUDData, 30000);
+    setInterval(fetchProfile, 30000);
     setInterval(fetchPartnerBond, 30000);
 });
 </script>
