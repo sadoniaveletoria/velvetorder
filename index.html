@@ -979,13 +979,19 @@ function selectRole(role) {
 window.addEventListener("resize", scaleHUD);
 
 window.addEventListener("load", async () => {
+    async function refreshHUDData() {
+        await fetchProfile();
+        await fetchPartnerBond();
+    }
+
+window.addEventListener("resize", scaleHUD);
+
+window.addEventListener("load", async () => {
     scaleHUD();
 
-    await fetchProfile();
-    await fetchPartnerBond();
+    await refreshHUDData();
 
-    setInterval(fetchProfile, 30000);
-    setInterval(fetchPartnerBond, 30000);
+    setInterval(refreshHUDData, 30000);
 });
 </script>
 
