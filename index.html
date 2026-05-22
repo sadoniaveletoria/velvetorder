@@ -909,6 +909,8 @@ async function fetchPartnerBond() {
 
         const data = await response.json();
 
+        document.getElementById("partnerPanelList").innerHTML = "TEST: " + ((data.partners || []).length) + " partner(s)";
+
         updatePartnerPanel(data.partners || []);
     }
     catch (err) {
