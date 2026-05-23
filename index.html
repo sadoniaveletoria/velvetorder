@@ -790,31 +790,6 @@ function updateHUD(data) {
     renderTitleButtons();
 }
 
-function updateBondHUD(partners) {
-    if (!partners || partners.length === 0) {
-        document.getElementById("hudBondFill").style.width = "0%";
-        document.getElementById("hudBondPercent").textContent = "0%";
-        return;
-    }
-
-    const partner = partners[0];
-
-    const bondLevel = parseInt(partner.bond_level || 1);
-    const bondXP = parseInt(partner.bond_xp || 0);
-    const bondNext = parseInt(partner.bond_next_xp || 100);
-    const maxBondLevel = parseInt(partner.max_bond_level || 10);
-
-    let bondPercent = 100;
-
-    if (bondLevel < maxBondLevel && bondNext > 0) {
-        bondPercent = Math.min((bondXP / bondNext) * 100, 100);
-    }
-
-    document.getElementById("hudBondFill").style.width = bondPercent + "%";
-    document.getElementById("hudBondPercent").textContent =
-        Math.round(bondPercent) + "%";
-}
-
 async function fetchProfile() {
     const uuid = getParam("uuid");
 
@@ -825,28 +800,18 @@ async function fetchProfile() {
     }
 
     try {
-        const response = await fetch(
-            `${API_BASE}/api/user/${uuid}`,
-            {
-                headers: {
-                    "x-api-secret": API_SECRET
-                }
-            }
-        );
+        const response = await fetch(`${API_BASE}/api/user/${uuid}`, {
+            headers: { "x-api-secret": API_SECRET }
+        });
 
-        if (!response.ok) {
-            throw new Error("HTTP " + response.status);
-        }
+        if (!response.ok) throw new Error("HTTP " + response.status);
 
         const data = await response.json();
-
         updateHUD(data);
-
         document.getElementById("hudNotifications").innerHTML = "";
     }
     catch (err) {
         console.error("Profile load failed:", err);
-
         document.getElementById("hudNotifications").innerHTML =
             "Unable to load profile data.";
     }
@@ -866,23 +831,22 @@ function updatePartnerPanel(partners) {
         const bondLevel = parseInt(partner.bond_level || 1);
         const bondXP = parseInt(partner.bond_xp || 0);
         const bondNext = parseInt(partner.bond_next_xp || 100);
+        const maxBondLevel = parseInt(partner.max_bond_level || 10);
 
-        let percent = Math.min((bondXP / bondNext) * 100, 100);
+        let percent = 100;
+
+        if (bondLevel < maxBondLevel && bondNext > 0) {
+            percent = Math.min((bondXP / bondNext) * 100, 100);
+        }
 
         box.innerHTML += `
             <div class="partner-card">
                 <div class="partner-name gold">${name}</div>
-                <div class="partner-level">
-                    Bond Level ${bondLevel} · ${bondXP} / ${bondNext} XP
-                </div>
-
+                <div class="partner-level">Bond Level ${bondLevel} · ${bondXP} / ${bondNext} XP</div>
                 <div class="partner-bar">
                     <div class="partner-fill" style="width:${percent}%"></div>
                 </div>
-
-                <div class="partner-percent gold">
-                    ${Math.round(percent)}%
-                </div>
+                <div class="partner-percent gold">${Math.round(percent)}%</div>
             </div>
         `;
     });
@@ -890,65 +854,21 @@ function updatePartnerPanel(partners) {
 
 async function fetchPartnerBond() {
     const uuid = getParam("uuid");
-
     if (!uuid) return;
 
     try {
-        const response = await fetch(
-            `${API_BASE}/api/partners/${uuid}`,
-            {
-                headers: {
-                    "x-api-secret": API_SECRET
-                }
-            }
-        );
+        const response = await fetch(`${API_BASE}/api/partners/${uuid}`, {
+            headers: { "x-api-secret": API_SECRET }
+        });
 
-        if (!response.ok) {
-            throw new Error("HTTP " + response.status);
-        }
+        if (!response.ok) throw new Error("HTTP " + response.status);
 
         const data = await response.json();
-
-        document.getElementById("partnerPanelList").innerHTML =
-            '<div class="partner-card"><div class="partner-name gold">FOUND ' +
-            ((data.partners || []).length) +
-            ' PARTNER(S)</div></div>';
-
         updatePartnerPanel(data.partners || []);
     }
     catch (err) {
         console.error("Partner bond load failed:", err);
-
         updatePartnerPanel([]);
-    }
-}    
-async function fetchPartnerBond() {
-    const uuid = getParam("uuid");
-
-    if (!uuid) {
-        return;
-    }
-
-    try {
-        const response = await fetch(
-            `${API_BASE}/api/partners/${uuid}`,
-            {
-                headers: {
-                    "x-api-secret": API_SECRET
-                }
-            }
-        );
-
-        if (!response.ok) {
-            throw new Error("HTTP " + response.status);
-        }
-
-        const data = await response.json();
-        updateBondHUD(data.partners || []);
-    }
-    catch (err) {
-        console.error("Partner bond load failed:", err);
-        updateBondHUD([]);
     }
 }
 
@@ -967,20 +887,13 @@ function closeTitlesMenu() {
 }
 
 function selectTitle(title) {
-    document.getElementById("menuCurrentTitle").textContent =
-        title.toUpperCase();
+    document.getElementById("menuCurrentTitle").textContent = title.toUpperCase();
     closeTitlesMenu();
 }
 
 function selectRole(role) {
-    document.getElementById("hudRole").textContent =
-        cleanRole(role);
+    document.getElementById("hudRole").textContent = cleanRole(role);
     closeTitlesMenu();
-}
-
-async function refreshHUDData() {
-    await fetchProfile();
-    await fetchPartnerBond();
 }
 
 window.addEventListener("load", async () => {
