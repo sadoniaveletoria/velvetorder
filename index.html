@@ -909,8 +909,10 @@ async function fetchPartnerBond() {
 
         const data = await response.json();
 
-        document.getElementById("partnerPanelList").innerHTML = 
-            "TEST: " + ((data.partners || []).length) + " partner(s)";
+        document.getElementById("partnerPanelList").innerHTML =
+            '<div class="partner-card"><div class="partner-name gold">FOUND ' +
+            ((data.partners || []).length) +
+            ' PARTNER(S)</div></div>';
 
         updatePartnerPanel(data.partners || []);
     }
@@ -983,9 +985,7 @@ async function refreshHUDData() {
 
 window.addEventListener("load", async () => {
     scaleHUD();
-
     await refreshHUDData();
-
     setInterval(refreshHUDData, 30000);
 });
 
