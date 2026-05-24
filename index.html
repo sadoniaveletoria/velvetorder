@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Velvet Order HUD</title>
 
-<!--<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">-->
-<font-family: Georgia, "Times New Roman", serif;>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
 
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -589,7 +588,7 @@ html, body {
         </div>
 
         <div class="center-logo">
-            <!--<img src="VO_Crown_Logo.png" alt="VO Crown Logo">-->
+            <img src="VO_Crown_Logo.png" alt="VO Crown Logo">
         </div>
 
         <div class="xp-area">
@@ -897,13 +896,10 @@ function selectRole(role) {
     closeTitlesMenu();
 }
 
-window.addEventListener("load", () => {
+window.addEventListener("load", async () => {
     scaleHUD();
-
-    setTimeout(() => {
-        refreshHUDData();
-        setInterval(refreshHUDData, 60000);
-    }, 1500);
+    await refreshHUDData();
+    setInterval(refreshHUDData, 30000);
 });
 
 window.addEventListener("resize", scaleHUD);
