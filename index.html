@@ -897,10 +897,13 @@ function selectRole(role) {
     closeTitlesMenu();
 }
 
-window.addEventListener("load", async () => {
+window.addEventListener("load", () => {
     scaleHUD();
-    await refreshHUDData();
-    setInterval(refreshHUDData, 30000);
+
+    setTimeout(() => {
+        refreshHUDData();
+        setInterval(refreshHUDData, 60000);
+    }, 1500);
 });
 
 window.addEventListener("resize", scaleHUD);
