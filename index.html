@@ -626,7 +626,7 @@ html, body {
         <div class="feature-title gold">PARTNER PANEL</div>
 
         <div class="partner-panel-list" id="partnerPanelList">
-            <div class="partner-empty gold">NO ACTIVE PARTNER</div>
+            <div class="partner-empty gold">NO DONDED PARTNERS</div>
         </div>
     </section>
 
@@ -639,7 +639,7 @@ html, body {
         <div class="notifications-body" id="hudNotifications"></div>
     </section>
 
-    <div class="action-row">
+    <!--<div class="action-row">
         <button class="action-btn">KNEEL</button>
         <button class="action-btn">OBEY</button>
         <button class="action-btn">SERVE</button>
@@ -662,7 +662,7 @@ html, body {
         <button class="footer-btn">♪</button>
         <button class="footer-btn">?</button>
         <button class="footer-btn">⏻</button>
-    </div>
+    </div>-->
 
     <button class="close-btn" type="button">UPDATE HUD</button>
 
@@ -822,7 +822,7 @@ function updatePartnerPanel(partners) {
     box.innerHTML = "";
 
     if (!partners || partners.length === 0) {
-        box.innerHTML = '<div class="partner-empty gold">NO ACTIVE PARTNER</div>';
+        box.innerHTML = '<div class="partner-empty gold">NO BONDED PARTNERS</div>';
         return;
     }
 
