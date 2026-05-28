@@ -263,55 +263,6 @@ html, body {
     letter-spacing: 2px;
 }
 
-/* Old bond compact classes kept for compatibility */
-.bond-compact {
-    position: absolute;
-    top: 78px;
-    left: 35px;
-    width: 400px;
-    display: grid;
-    grid-template-columns: 1fr 60px;
-    align-items: center;
-    gap: 12px;
-    z-index: 2;
-}
-
-.bond-content {
-    display: flex;
-    flex-direction: column;
-}
-
-.bond-compact-title {
-    font-size: 18px;
-    letter-spacing: 2px;
-    margin-bottom: 8px;
-    text-align: left;
-}
-
-.bond-compact-bar {
-    width: 100%;
-    height: 14px;
-    border: 1px solid #8c6a12;
-    background: #050406;
-    box-shadow:
-        inset 0 0 8px rgba(0,0,0,0.95),
-        0 0 8px rgba(155,48,255,0.15);
-    overflow: hidden;
-}
-
-.bond-compact-fill {
-    width: 0%;
-    height: 100%;
-    background: linear-gradient(90deg, #5b087d, #d936b8, #ff9ee8);
-    box-shadow: 0 0 12px rgba(255,79,195,0.75);
-}
-
-.bond-compact-percent {
-    font-size: 20px;
-    text-align: right;
-}
-
-/* New Partner Panel */
 .partner-panel-list {
     position: absolute;
     top: 72px;
@@ -512,55 +463,6 @@ html, body {
     justify-content: space-around;
     font-size: 22px;
 }
-
-.titles-menu {
-    display: none;
-    position: absolute;
-    top: 245px;
-    left: 285px;
-    width: 670px;
-    height: 660px;
-    z-index: 5000;
-    background: rgba(4, 4, 6, 0.98);
-    border: 2px solid #8c6a12;
-    border-radius: 16px;
-    box-shadow: 0 0 35px rgba(155,48,255,0.55);
-    padding: 35px;
-    text-align: center;
-}
-
-.titles-menu-title {
-    font-size: 42px;
-    letter-spacing: 4px;
-    margin-bottom: 22px;
-}
-
-.titles-section {
-    border: 1px solid #8c6a12;
-    border-radius: 10px;
-    padding: 18px;
-    margin-bottom: 18px;
-}
-
-.title-buttons,
-.role-buttons {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-}
-
-.title-buttons button,
-.role-buttons button,
-.menu-close {
-    background: #080808;
-    border: 2px solid #8c6a12;
-    color: #d4af37;
-    border-radius: 8px;
-    min-height: 58px;
-    font-family: "Cinzel", serif;
-    font-size: 16px;
-    cursor: pointer;
-}
 </style>
 </head>
 
@@ -614,11 +516,11 @@ html, body {
 
     <section class="panel menu-panel">
         <div class="menu-grid">
-            <button class="menu-btn" onclick="openTitlesMenu()"><span class="menu-icon">♕</span>TITLES</button>
-            <button class="menu-btn"><span class="menu-icon">♡</span>PARTNER</button>
-            <button class="menu-btn"><span class="menu-icon">☆</span>EVENTS</button>
-            <button class="menu-btn"><span class="menu-icon">⚜</span>HOUSE</button>
-            <button class="menu-btn"><span class="menu-icon">⚙</span>SETTINGS</button>
+            <button class="menu-btn" type="button"><span class="menu-icon">♕</span>ROLES</button>
+            <button class="menu-btn" type="button"><span class="menu-icon">♡</span>PARTNER</button>
+            <button class="menu-btn" type="button"><span class="menu-icon">☆</span>EVENTS</button>
+            <button class="menu-btn" type="button"><span class="menu-icon">⚜</span>HOUSE</button>
+            <button class="menu-btn" type="button"><span class="menu-icon">⚙</span>SETTINGS</button>
         </div>
     </section>
 
@@ -626,7 +528,7 @@ html, body {
         <div class="feature-title gold">PARTNER PANEL</div>
 
         <div class="partner-panel-list" id="partnerPanelList">
-            <div class="partner-empty gold">NO DONDED PARTNERS</div>
+            <div class="partner-empty gold">NO BONDED PARTNERS</div>
         </div>
     </section>
 
@@ -639,7 +541,8 @@ html, body {
         <div class="notifications-body" id="hudNotifications"></div>
     </section>
 
-    <!--<div class="action-row">
+    <!--
+    <div class="action-row">
         <button class="action-btn">KNEEL</button>
         <button class="action-btn">OBEY</button>
         <button class="action-btn">SERVE</button>
@@ -662,7 +565,8 @@ html, body {
         <button class="footer-btn">♪</button>
         <button class="footer-btn">?</button>
         <button class="footer-btn">⏻</button>
-    </div>-->
+    </div>
+    -->
 
     <button class="close-btn" type="button">UPDATE HUD</button>
 
@@ -670,27 +574,12 @@ html, body {
         <span>💎 0</span><span>♦ 0</span><span>🔷 0</span>
     </div>
 
-    <div class="titles-menu" id="titlesMenu">
-        <div class="titles-menu-title purple">TITLES & ROLE</div>
-
-        <div class="titles-section">
-            <div class="gold">CURRENT TITLE</div><br>
-            <div class="purple" id="menuCurrentTitle">INITIATE</div>
-        </div>
-
-        <div class="titles-section">
-            <div class="gold">UNLOCKED TITLES</div><br>
-            <div class="title-buttons" id="titleButtons"></div>
-        </div>
-
 </div>
 </div>
 
 <script>
 const API_BASE = "https://api.velvetorder.duckdns.org";
 const API_SECRET = "jSDGBnYYqy08Hk4afpELPmzRkJTlfApR";
-
-let unlockedTitles = [];
 
 function scaleHUD() {
     const scale = Math.min(window.innerWidth / 1240, window.innerHeight / 1240);
@@ -704,33 +593,12 @@ function getParam(name, fallback = "") {
 
 function cleanRole(role) {
     role = (role || "loading").toLowerCase();
+
     if (role === "dominant") return "DOMINANT";
     if (role === "submissive") return "SUBMISSIVE";
     if (role === "switch") return "SWITCH";
+
     return "LOADING";
-}
-
-function buildUnlockedTitles(role, level) {
-    const sets = {
-        dominant: [[1,"Initiate"],[10,"Handler"],[20,"Trainer"],[30,"Keeper"],[40,"Owner"],[50,"Regent"],[60,"Sovereign"],[70,"High Sovereign"],[80,"Velvet Monarch"],[90,"Ascendant Dominant"],[100,"Eternal Sovereign"]],
-        submissive: [[1,"Initiate"],[10,"Attendant"],[20,"Pet"],[30,"Companion"],[40,"Service Bound"],[50,"Devoted"],[60,"Cherished"],[70,"Treasured"],[80,"Velvet Beloved"],[90,"Ascendant Submissive"],[100,"Eternal Devotion"]],
-        switch: [[1,"Initiate"],[10,"Curious"],[20,"Adaptive"],[30,"Dual-Bonded"],[40,"Harmonized"],[50,"Versatile Elite"],[60,"Ascendant"],[70,"Velvet Balanced"],[80,"Twin Flame"],[90,"Ascendant Switch"],[100,"Eternal Balance"]]
-    };
-
-    const set = sets[(role || "switch").toLowerCase()] || sets.switch;
-    return set.filter(t => level >= t[0]).map(t => t[1]);
-}
-
-function renderTitleButtons() {
-    const box = document.getElementById("titleButtons");
-    box.innerHTML = "";
-
-    unlockedTitles.forEach(title => {
-        const btn = document.createElement("button");
-        btn.textContent = title.toUpperCase();
-        btn.onclick = () => selectTitle(title);
-        box.appendChild(btn);
-    });
 }
 
 function updateHUD(data) {
@@ -739,7 +607,6 @@ function updateHUD(data) {
     const level = parseInt(data.level || 1);
     const xp = parseInt(data.xp || 0);
     const next = parseInt(data.next_level_xp || 250);
-    const title = data.title || rank;
     const tokens = parseInt(data.tokens || 0);
     const prestige = parseInt(data.prestige || 0);
     const max = parseInt(data.max_level || 100);
@@ -752,8 +619,6 @@ function updateHUD(data) {
 
     const remaining = level >= max ? 0 : Math.max(next - xp, 0);
 
-    unlockedTitles = buildUnlockedTitles(role, level);
-
     document.getElementById("hudRole").textContent = cleanRole(role);
     document.getElementById("hudRank").textContent = rank.toUpperCase();
     document.getElementById("hudLevel").textContent = level;
@@ -763,19 +628,15 @@ function updateHUD(data) {
         xp.toLocaleString() + " / " + next.toLocaleString();
 
     document.getElementById("hudXPFill").style.width = percent + "%";
+
     document.getElementById("hudXPPercent").textContent =
         Math.round(percent) + "%";
 
     document.getElementById("hudNextText").textContent =
         level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
 
-    document.getElementById("menuCurrentTitle").textContent =
-        title.toUpperCase();
-
     document.getElementById("hudCurrency").innerHTML =
         `<span>💎 ${tokens.toLocaleString()}</span><span>♦ 0</span><span>🔷 0</span>`;
-
-    renderTitleButtons();
 }
 
 async function fetchProfile() {
@@ -795,11 +656,13 @@ async function fetchProfile() {
         if (!response.ok) throw new Error("HTTP " + response.status);
 
         const data = await response.json();
+
         updateHUD(data);
         document.getElementById("hudNotifications").innerHTML = "";
     }
     catch (err) {
         console.error("Profile load failed:", err);
+
         document.getElementById("hudNotifications").innerHTML =
             "Unable to load profile data.";
     }
@@ -842,6 +705,7 @@ function updatePartnerPanel(partners) {
 
 async function fetchPartnerBond() {
     const uuid = getParam("uuid");
+
     if (!uuid) return;
 
     try {
@@ -852,10 +716,12 @@ async function fetchPartnerBond() {
         if (!response.ok) throw new Error("HTTP " + response.status);
 
         const data = await response.json();
+
         updatePartnerPanel(data.partners || []);
     }
     catch (err) {
         console.error("Partner bond load failed:", err);
+
         updatePartnerPanel([]);
     }
 }
@@ -863,25 +729,6 @@ async function fetchPartnerBond() {
 async function refreshHUDData() {
     await fetchProfile();
     await fetchPartnerBond();
-}
-
-function openTitlesMenu() {
-    document.getElementById("titlesMenu").style.display = "block";
-    renderTitleButtons();
-}
-
-function closeTitlesMenu() {
-    document.getElementById("titlesMenu").style.display = "none";
-}
-
-function selectTitle(title) {
-    document.getElementById("menuCurrentTitle").textContent = title.toUpperCase();
-    closeTitlesMenu();
-}
-
-function selectRole(role) {
-    document.getElementById("hudRole").textContent = cleanRole(role);
-    closeTitlesMenu();
 }
 
 window.addEventListener("load", async () => {
