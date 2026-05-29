@@ -263,6 +263,66 @@ html, body {
     letter-spacing: 2px;
 }
 
+.role-info-menu {
+    display: none;
+    position: absolute;
+    top: 300px;
+    left: 360px;
+    width: 520px;
+    height: 360px;
+    z-index: 6000;
+    background: rgba(4, 4, 6, 0.98);
+    border: 2px solid #8c6a12;
+    border-radius: 16px;
+    box-shadow: 0 0 35px rgba(155,48,255,0.55);
+    padding: 35px;
+    text-align: center;
+}
+
+.role-info-title {
+    font-size: 34px;
+    letter-spacing: 4px;
+    margin-bottom: 28px;
+}
+
+.role-info-current {
+    font-size: 42px;
+    letter-spacing: 3px;
+    margin-bottom: 22px;
+}
+
+.role-info-next {
+    font-size: 20px;
+    color: #c9aa69;
+    margin-bottom: 28px;
+}
+
+.role-info-note {
+    font-size: 17px;
+    line-height: 1.5;
+    color: #c9aa69;
+    margin-bottom: 28px;
+}
+
+.role-info-close {
+    background: #080808;
+    border: 2px solid #8c6a12;
+    color: #d4af37;
+    border-radius: 8px;
+    width: 180px;
+    height: 52px;
+    font-family: "Cinzel", serif;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.role-info-close:hover {
+    color: #fff1b0;
+    border-color: #f0c95a;
+    transform: translateY(-2px);
+    box-shadow: 0 0 16px rgba(155,48,255,0.5);
+}
+    
 .partner-panel-list {
     position: absolute;
     top: 72px;
@@ -516,7 +576,9 @@ html, body {
 
     <section class="panel menu-panel">
         <div class="menu-grid">
-            <button class="menu-btn" type="button"><span class="menu-icon">♕</span>ROLES</button>
+            <button class="menu-btn" type="button" onclick="showRoleInfo()">
+                <span class="menu-icon">♕</span>ROLES
+            </button>
             <button class="menu-btn" type="button"><span class="menu-icon">♡</span>PARTNER</button>
             <button class="menu-btn" type="button"><span class="menu-icon">☆</span>EVENTS</button>
             <button class="menu-btn" type="button"><span class="menu-icon">⚜</span>HOUSE</button>
@@ -574,12 +636,31 @@ html, body {
         <span>💎 0</span><span>♦ 0</span><span>🔷 0</span>
     </div>
 
+    <div class="role-info-menu" id="roleInfoMenu">
+        <div class="role-info-title purple">CURRENT ROLE</div>
+
+        <div class="role-info-current gold" id="roleInfoCurrent">LOADING</div>
+
+        <div class="role-info-next" id="roleInfoNext">
+            Next Rank: Loading
+        </div>
+
+        <div class="role-info-note">
+            Role changes are managed through the HUD menu.
+        </div>
+
+        <button class="role-info-close" type="button" onclick="closeRoleInfo()">CLOSE</button>
+    </div>
+    
 </div>
 </div>
 
 <script>
 const API_BASE = "https://api.velvetorder.duckdns.org";
 const API_SECRET = "jSDGBnYYqy08Hk4afpELPmzRkJTlfApR";
+
+let currentRole = "loading";
+let currentLevel = 1;
 
 function scaleHUD() {
     const scale = Math.min(window.innerWidth / 1240, window.innerHeight / 1240);
@@ -601,6 +682,46 @@ function cleanRole(role) {
     return "LOADING";
 }
 
+// =====================================
+// ROLE INFO POPUP FUNCTIONS
+// =====================================
+
+function getNextRankForRole(role, level) {
+    const sets = {
+        dominant: [[10,"Handler"],[20,"Trainer"],[30,"Keeper"],[40,"Owner"],[50,"Regent"],[60,"Sovereign"],[70,"High Sovereign"],[80,"Velvet Monarch"],[90,"Ascendant Dominant"],[100,"Eternal Sovereign"]],
+        submissive: [[10,"Attendant"],[20,"Pet"],[30,"Companion"],[40,"Service Bound"],[50,"Devoted"],[60,"Cherished"],[70,"Treasured"],[80,"Velvet Beloved"],[90,"Ascendant Submissive"],[100,"Eternal Devotion"]],
+        switch: [[10,"Curious"],[20,"Adaptive"],[30,"Dual-Bonded"],[40,"Harmonized"],[50,"Versatile Elite"],[60,"Ascendant"],[70,"Velvet Balanced"],[80,"Twin Flame"],[90,"Ascendant Switch"],[100,"Eternal Balance"]]
+    };
+
+    const set = sets[(role || "switch").toLowerCase()] || sets.switch;
+
+    for (let i = 0; i < set.length; i++) {
+        if (level < set[i][0]) {
+            return set[i][1] + " at Level " + set[i][0];
+        }
+    }
+
+    return "Max Rank Reached";
+}
+
+function showRoleInfo() {
+    document.getElementById("roleInfoCurrent").textContent =
+        cleanRole(currentRole);
+
+    document.getElementById("roleInfoNext").textContent =
+        "Next Rank: " + getNextRankForRole(currentRole, currentLevel);
+
+    document.getElementById("roleInfoMenu").style.display = "block";
+}
+
+function closeRoleInfo() {
+    document.getElementById("roleInfoMenu").style.display = "none";
+}
+
+// =====================================
+// EXISTING HUD FUNCTIONS CONTINUE
+// =====================================
+    
 function updateHUD(data) {
     const role = data.role || "loading";
     const rank = data.rank || "Initiate";
@@ -610,6 +731,9 @@ function updateHUD(data) {
     const tokens = parseInt(data.tokens || 0);
     const prestige = parseInt(data.prestige || 0);
     const max = parseInt(data.max_level || 100);
+
+    currentRole = role;
+    currentLevel = level;
 
     let percent = 100;
 
