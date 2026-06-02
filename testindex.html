@@ -232,9 +232,8 @@ html, body {
 }
 
 .menu-btn:hover,
-.action-btn:hover,
-.wear-btn:hover,
-.close-btn:hover {
+.close-btn:hover,
+.role-info-close:hover {
     color: #fff1b0;
     border-color: #f0c95a;
     transform: translateY(-2px);
@@ -263,66 +262,6 @@ html, body {
     letter-spacing: 2px;
 }
 
-.role-info-menu {
-    display: none;
-    position: absolute;
-    top: 300px;
-    left: 360px;
-    width: 520px;
-    height: 360px;
-    z-index: 6000;
-    background: rgba(4, 4, 6, 0.98);
-    border: 2px solid #8c6a12;
-    border-radius: 16px;
-    box-shadow: 0 0 35px rgba(155,48,255,0.55);
-    padding: 35px;
-    text-align: center;
-}
-
-.role-info-title {
-    font-size: 34px;
-    letter-spacing: 4px;
-    margin-bottom: 28px;
-}
-
-.role-info-current {
-    font-size: 42px;
-    letter-spacing: 3px;
-    margin-bottom: 22px;
-}
-
-.role-info-next {
-    font-size: 20px;
-    color: #c9aa69;
-    margin-bottom: 28px;
-}
-
-.role-info-note {
-    font-size: 17px;
-    line-height: 1.5;
-    color: #c9aa69;
-    margin-bottom: 28px;
-}
-
-.role-info-close {
-    background: #080808;
-    border: 2px solid #8c6a12;
-    color: #d4af37;
-    border-radius: 8px;
-    width: 180px;
-    height: 52px;
-    font-family: "Cinzel", serif;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.role-info-close:hover {
-    color: #fff1b0;
-    border-color: #f0c95a;
-    transform: translateY(-2px);
-    box-shadow: 0 0 16px rgba(155,48,255,0.5);
-}
-    
 .partner-panel-list {
     position: absolute;
     top: 72px;
@@ -331,9 +270,7 @@ html, body {
     z-index: 2;
 }
 
-.partner-card {
-    margin-bottom: 18px;
-}
+.partner-card { margin-bottom: 18px; }
 
 .partner-name {
     font-size: 18px;
@@ -418,79 +355,17 @@ html, body {
 }
 
 .notifications-body {
-    margin-top: 34px;
-    font-size: 18px;
-    line-height: 1.5;
+    margin-top: 28px;
+    font-size: 17px;
+    line-height: 1.55;
     color: #c9aa69;
     text-align: center;
 }
 
-.action-row {
-    position: absolute;
-    top: 800px;
-    left: 20px;
-    display: grid;
-    grid-template-columns: repeat(6, 82px);
-    gap: 10px;
-}
-
-.action-btn {
-    height: 72px;
-    background: linear-gradient(180deg, #120f14, #050406);
-    border: 2px solid #8c6a12;
-    border-radius: 9px;
-    color: #d4af37;
-    font-family: "Cinzel", serif;
-    font-size: 11px;
-    letter-spacing: 0.8px;
-    cursor: pointer;
-    transition: all 0.18s ease;
-    padding: 4px;
-    white-space: nowrap;
-}
-
-.wear-row {
-    position: absolute;
-    top: 800px;
-    right: 40px;
-    width: 430px;
-    display: grid;
-    grid-template-columns: repeat(4, 100px);
-    gap: 10px;
-    justify-content: center;
-}
-
-.wear-btn {
-    height: 58px;
-    background: linear-gradient(180deg, #120f14, #050406);
-    border: 2px solid #8c6a12;
-    border-radius: 10px;
-    color: #d4af37;
-    font-family: "Cinzel", serif;
-    font-size: 13px;
-    letter-spacing: 0.8px;
-    cursor: pointer;
-    transition: all 0.18s ease;
-    white-space: nowrap;
-}
-
-.footer-left {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    width: 460px;
-    height: 60px;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 6px;
-}
-
-.footer-btn {
-    background: #050406;
-    border: 2px solid #8c6a12;
-    border-radius: 8px;
-    color: #d4af37;
-    font-size: 24px;
+.activity-item {
+    margin-bottom: 8px;
+    color: #c9aa69;
+    text-shadow: 0 0 8px rgba(155,48,255,0.3);
 }
 
 .close-btn {
@@ -522,6 +397,60 @@ html, body {
     align-items: center;
     justify-content: space-around;
     font-size: 22px;
+}
+
+.role-info-menu {
+    display: none;
+    position: absolute;
+    top: 300px;
+    left: 360px;
+    width: 520px;
+    height: 360px;
+    z-index: 6000;
+    background: rgba(4, 4, 6, 0.98);
+    border: 2px solid #8c6a12;
+    border-radius: 16px;
+    box-shadow: 0 0 35px rgba(155,48,255,0.55);
+    padding: 35px;
+    text-align: center;
+}
+
+.role-info-title {
+    font-size: 34px;
+    letter-spacing: 4px;
+    margin-bottom: 28px;
+}
+
+.role-info-current {
+    font-size: 42px;
+    letter-spacing: 3px;
+    margin-bottom: 22px;
+}
+
+.role-info-next {
+    font-size: 20px;
+    color: #c9aa69;
+    margin-bottom: 28px;
+}
+
+.role-info-note {
+    font-size: 17px;
+    line-height: 1.5;
+    color: #c9aa69;
+    margin-bottom: 28px;
+}
+
+.role-info-close {
+    background: #080808;
+    border: 2px solid #8c6a12;
+    color: #d4af37;
+    border-radius: 8px;
+    width: 180px;
+    height: 52px;
+    font-family: "Cinzel", serif;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.18s ease;
 }
 </style>
 </head>
@@ -577,12 +506,21 @@ html, body {
     <section class="panel menu-panel">
         <div class="menu-grid">
             <button class="menu-btn" type="button" onclick="showRoleInfo()">
-                <span class="menu-icon">♕</span>ROLES
+                <span class="menu-icon">â™•</span>ROLES
             </button>
-            <button class="menu-btn" type="button"><span class="menu-icon">♡</span>PARTNER</button>
-            <button class="menu-btn" type="button"><span class="menu-icon">☆</span>EVENTS</button>
-            <button class="menu-btn" type="button"><span class="menu-icon">⚜</span>HOUSE</button>
-            <button class="menu-btn" type="button"><span class="menu-icon">⚙</span>SETTINGS</button>
+            <button class="menu-btn" type="button"><span class="menu-icon">â™¡</span>PARTNER</button>
+
+            <!-- Events button reserved for future release.
+            <button class="menu-btn" type="button"><span class="menu-icon">â˜†</span>EVENTS</button>
+            -->
+
+            <!-- House button reserved for future release.
+            <button class="menu-btn" type="button"><span class="menu-icon">âšœ</span>HOUSE</button>
+            -->
+
+            <!-- Settings button reserved for future release.
+            <button class="menu-btn" type="button"><span class="menu-icon">âš™</span>SETTINGS</button>
+            -->
         </div>
     </section>
 
@@ -599,59 +537,26 @@ html, body {
     </div>
 
     <section class="panel notifications-panel">
-        <div class="notifications-title gold">NOTIFICATIONS</div>
-        <div class="notifications-body" id="hudNotifications"></div>
+        <div class="notifications-title gold">ACTIVITY FEED</div>
+        <div class="notifications-body" id="hudNotifications">
+            <div class="activity-item">Waiting for live data...</div>
+        </div>
     </section>
-
-    <!--
-    <div class="action-row">
-        <button class="action-btn">KNEEL</button>
-        <button class="action-btn">OBEY</button>
-        <button class="action-btn">SERVE</button>
-        <button class="action-btn">PRAISE</button>
-        <button class="action-btn">BOND</button>
-        <button class="action-btn">REWARD</button>
-    </div>
-
-    <div class="wear-row">
-        <button class="wear-btn">WEAR</button>
-        <button class="wear-btn">UNWEAR</button>
-        <button class="wear-btn">LOCK</button>
-        <button class="wear-btn">UNLOCK</button>
-    </div>
-
-    <div class="footer-left">
-        <button class="footer-btn">▥</button>
-        <button class="footer-btn">♟</button>
-        <button class="footer-btn">✉</button>
-        <button class="footer-btn">♪</button>
-        <button class="footer-btn">?</button>
-        <button class="footer-btn">⏻</button>
-    </div>
-    -->
 
     <button class="close-btn" type="button">UPDATE HUD</button>
 
     <div class="currency gold" id="hudCurrency">
-        <span>💎 0</span><span>♦ 0</span><span>🔷 0</span>
+        <span>ðŸ’Ž 0</span><span>â™¦ 0</span><span>ðŸ”· 0</span>
     </div>
 
     <div class="role-info-menu" id="roleInfoMenu">
         <div class="role-info-title purple">CURRENT ROLE</div>
-
         <div class="role-info-current gold" id="roleInfoCurrent">LOADING</div>
-
-        <div class="role-info-next" id="roleInfoNext">
-            Next Rank: Loading
-        </div>
-
-        <div class="role-info-note">
-            Role changes are managed through the HUD menu.
-        </div>
-
+        <div class="role-info-next" id="roleInfoNext">Next Rank: Loading</div>
+        <div class="role-info-note">Role changes are managed through the HUD menu.</div>
         <button class="role-info-close" type="button" onclick="closeRoleInfo()">CLOSE</button>
     </div>
-    
+
 </div>
 </div>
 
@@ -661,6 +566,13 @@ const API_SECRET = "jSDGBnYYqy08Hk4afpELPmzRkJTlfApR";
 
 let currentRole = "loading";
 let currentLevel = 1;
+let activityFeed = [];
+let profileLoadedOnce = false;
+let partnerLoadedOnce = false;
+let lastSeenLevel = null;
+let lastSeenRank = "";
+let lastSeenRole = "";
+let lastPartnerSignature = "";
 
 function scaleHUD() {
     const scale = Math.min(window.innerWidth / 1240, window.innerHeight / 1240);
@@ -682,9 +594,17 @@ function cleanRole(role) {
     return "LOADING";
 }
 
-// =====================================
-// ROLE INFO POPUP FUNCTIONS
-// =====================================
+function addActivity(message) {
+    if (!message) return;
+
+    activityFeed.unshift(message);
+    activityFeed = activityFeed.slice(0, 4);
+
+    const box = document.getElementById("hudNotifications");
+    box.innerHTML = activityFeed
+        .map(item => `<div class="activity-item">${item}</div>`)
+        .join("");
+}
 
 function getNextRankForRole(role, level) {
     const sets = {
@@ -705,8 +625,7 @@ function getNextRankForRole(role, level) {
 }
 
 function showRoleInfo() {
-    document.getElementById("roleInfoCurrent").textContent =
-        cleanRole(currentRole);
+    document.getElementById("roleInfoCurrent").textContent = cleanRole(currentRole);
 
     document.getElementById("roleInfoNext").textContent =
         "Next Rank: " + getNextRankForRole(currentRole, currentLevel);
@@ -718,10 +637,6 @@ function closeRoleInfo() {
     document.getElementById("roleInfoMenu").style.display = "none";
 }
 
-// =====================================
-// EXISTING HUD FUNCTIONS CONTINUE
-// =====================================
-    
 function updateHUD(data) {
     const role = data.role || "loading";
     const rank = data.rank || "Initiate";
@@ -732,8 +647,25 @@ function updateHUD(data) {
     const prestige = parseInt(data.prestige || 0);
     const max = parseInt(data.max_level || 100);
 
+    if (profileLoadedOnce) {
+        if (lastSeenLevel !== null && level > lastSeenLevel) {
+            addActivity(`Level gained: ${level}`);
+        }
+
+        if (lastSeenRank && rank !== lastSeenRank) {
+            addActivity(`New rank: ${rank}`);
+        }
+
+        if (lastSeenRole && role !== lastSeenRole) {
+            addActivity(`Role changed: ${cleanRole(role)}`);
+        }
+    }
+
     currentRole = role;
     currentLevel = level;
+    lastSeenLevel = level;
+    lastSeenRank = rank;
+    lastSeenRole = role;
 
     let percent = 100;
 
@@ -760,15 +692,19 @@ function updateHUD(data) {
         level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
 
     document.getElementById("hudCurrency").innerHTML =
-        `<span>💎 ${tokens.toLocaleString()}</span><span>♦ 0</span><span>🔷 0</span>`;
+        `<span>ðŸ’Ž ${tokens.toLocaleString()}</span><span>â™¦ 0</span><span>ðŸ”· 0</span>`;
+
+    if (!profileLoadedOnce) {
+        profileLoadedOnce = true;
+        addActivity("Profile loaded.");
+    }
 }
 
 async function fetchProfile() {
     const uuid = getParam("uuid");
 
     if (!uuid) {
-        document.getElementById("hudNotifications").innerHTML =
-            "Missing avatar UUID.";
+        addActivity("Missing avatar UUID.");
         return;
     }
 
@@ -780,15 +716,11 @@ async function fetchProfile() {
         if (!response.ok) throw new Error("HTTP " + response.status);
 
         const data = await response.json();
-
         updateHUD(data);
-        document.getElementById("hudNotifications").innerHTML = "";
     }
     catch (err) {
         console.error("Profile load failed:", err);
-
-        document.getElementById("hudNotifications").innerHTML =
-            "Unable to load profile data.";
+        addActivity("Unable to load profile data.");
     }
 }
 
@@ -798,8 +730,19 @@ function updatePartnerPanel(partners) {
 
     if (!partners || partners.length === 0) {
         box.innerHTML = '<div class="partner-empty gold">NO BONDED PARTNERS</div>';
+
+        if (partnerLoadedOnce && lastPartnerSignature !== "none") {
+            addActivity("No bonded partners active.");
+        }
+
+        lastPartnerSignature = "none";
+        partnerLoadedOnce = true;
         return;
     }
+
+    const signature = partners
+        .map(p => `${p.partner_uuid || p.sl_name || "unknown"}:${p.bond_level || 1}:${p.bond_xp || 0}`)
+        .join("|");
 
     partners.slice(0, 2).forEach(partner => {
         const name = partner.sl_name || "Unknown Partner";
@@ -817,7 +760,7 @@ function updatePartnerPanel(partners) {
         box.innerHTML += `
             <div class="partner-card">
                 <div class="partner-name gold">${name}</div>
-                <div class="partner-level">Bond Level ${bondLevel} · ${bondXP} / ${bondNext} XP</div>
+                <div class="partner-level">Bond Level ${bondLevel} Â· ${bondXP} / ${bondNext} XP</div>
                 <div class="partner-bar">
                     <div class="partner-fill" style="width:${percent}%"></div>
                 </div>
@@ -825,6 +768,16 @@ function updatePartnerPanel(partners) {
             </div>
         `;
     });
+
+    if (!partnerLoadedOnce) {
+        addActivity("Partner panel loaded.");
+    }
+    else if (signature !== lastPartnerSignature) {
+        addActivity("Partner bond updated.");
+    }
+
+    lastPartnerSignature = signature;
+    partnerLoadedOnce = true;
 }
 
 async function fetchPartnerBond() {
@@ -840,12 +793,10 @@ async function fetchPartnerBond() {
         if (!response.ok) throw new Error("HTTP " + response.status);
 
         const data = await response.json();
-
         updatePartnerPanel(data.partners || []);
     }
     catch (err) {
         console.error("Partner bond load failed:", err);
-
         updatePartnerPanel([]);
     }
 }
