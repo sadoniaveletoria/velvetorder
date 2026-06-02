@@ -1,6 +1,868 @@
 <!DOCTYPE html>
-<html>
-<body style="background:black;color:gold;font-size:60px;">
-VELVET ORDER TEST
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Velvet Order HUD</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family: "Cinzel", Georgia, serif;
+}
+
+.hud-wrapper {
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+    overflow: hidden;
+    position: relative;
+}
+
+.hud {
+    position: absolute;
+    width: 1240px;
+    height: 1240px;
+    top: 50%;
+    left: 50%;
+    margin-left: -620px;
+    margin-top: -620px;
+    transform: scale(1);
+    transform-origin: center center;
+    background:
+        radial-gradient(circle at center, rgba(120, 25, 170, 0.18), transparent 36%),
+        linear-gradient(145deg, #050307, #0b0710 45%, #030203);
+    border: 3px solid #8c6a12;
+    box-shadow:
+        inset 0 0 70px rgba(155, 48, 255, 0.16),
+        inset 0 0 30px rgba(212, 175, 55, 0.18),
+        0 0 35px rgba(0,0,0,0.9);
+    color: #d4af37;
+    overflow: hidden;
+}
+
+.panel {
+    position: absolute;
+    background: linear-gradient(180deg, rgba(20,14,22,0.96), rgba(3,3,5,0.96));
+    border: 2px solid #8c6a12;
+    border-radius: 16px;
+    box-shadow:
+        inset 0 0 25px rgba(0,0,0,0.9),
+        inset 0 0 18px rgba(155,48,255,0.08),
+        0 0 12px rgba(212,175,55,0.12);
+}
+
+.panel::before {
+    content: "";
+    position: absolute;
+    inset: 8px;
+    border: 1px solid rgba(212,175,55,0.28);
+    border-radius: 12px;
+    pointer-events: none;
+}
+
+.gold {
+    background: linear-gradient(to bottom, #fff4b8 0%, #d4af37 45%, #7c5416 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.purple {
+    background: linear-gradient(to bottom, #f0b8ff 0%, #a735ff 45%, #4d0872 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.profile-panel {
+    left: 20px;
+    top: 20px;
+    width: 710px;
+    height: 455px;
+}
+
+.main-title {
+    position: absolute;
+    top: 36px;
+    width: 100%;
+    text-align: center;
+    font-size: 66px;
+    letter-spacing: 7px;
+    font-weight: 700;
+    background: linear-gradient(to bottom, #fffbe0 0%, #ffe89a 20%, #f4d86a 40%, #d4af37 60%, #b8860b 80%, #f7df78 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    position: absolute;
+    top: 114px;
+    width: 100%;
+    text-align: center;
+    font-size: 22px;
+    letter-spacing: 3px;
+    font-weight: 600;
+}
+
+.info-block { position: absolute; left: 58px; width: 190px; }
+.info-label { font-size: 20px; letter-spacing: 2px; }
+.info-value { margin-top: 4px; font-size: 30px; letter-spacing: 1px; }
+
+.role-block { top: 165px; }
+.rank-block { top: 255px; }
+.level-block { top: 345px; }
+
+#hudLevel { font-size: 60px; line-height: 0.9; }
+
+.center-logo {
+    position: absolute;
+    top: 150px;
+    left: 278px;
+    width: 190px;
+    height: 190px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.center-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter:
+        drop-shadow(0 0 16px rgba(212,175,55,0.85))
+        drop-shadow(0 0 26px rgba(155,48,255,0.45));
+}
+
+.xp-area {
+    position: absolute;
+    top: 158px;
+    right: 40px;
+    width: 185px;
+    text-align: center;
+}
+
+.xp-label { font-size: 22px; letter-spacing: 2px; }
+.xp-number { margin-top: 8px; font-size: 20px; }
+
+.xp-bar {
+    position: relative;
+    margin-top: 12px;
+    width: 185px;
+    height: 30px;
+    border: 2px solid #8c6a12;
+    background: #050406;
+    clip-path: polygon(8% 0%, 92% 0%, 100% 50%, 92% 100%, 8% 100%, 0% 50%);
+    overflow: hidden;
+}
+
+.xp-fill {
+    width: 0%;
+    height: 100%;
+    background: linear-gradient(90deg, #5b087d, #a735ff, #ec8bff);
+    box-shadow: 0 0 18px rgba(167,53,255,0.9);
+}
+
+.xp-percent {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff0ff;
+    font-size: 16px;
+    z-index: 2;
+}
+
+.next-xp { margin-top: 16px; font-size: 17px; line-height: 1.4; }
+
+.prestige {
+    position: absolute;
+    right: 74px;
+    top: 330px;
+    text-align: center;
+    font-size: 18px;
+}
+
+#hudPrestige { font-size: 42px; }
+
+.motto {
+    position: absolute;
+    bottom: 35px;
+    width: 100%;
+    text-align: center;
+    font-family: "Cormorant Garamond", serif;
+    font-style: italic;
+    font-size: 30px;
+}
+
+.menu-panel {
+    top: 20px;
+    right: 20px;
+    width: 475px;
+    height: 455px;
+    padding: 28px;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 190px);
+    grid-template-rows: repeat(3, 115px);
+    gap: 18px;
+    justify-content: center;
+}
+
+.menu-btn {
+    background: linear-gradient(180deg, rgba(19,16,18,0.95), rgba(5,5,7,0.95));
+    border: 2px solid #8c6a12;
+    border-radius: 12px;
+    color: #d4af37;
+    font-family: "Cinzel", serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    box-shadow: inset 0 0 14px rgba(0,0,0,0.85);
+}
+
+.menu-btn:hover,
+.action-btn:hover,
+.wear-btn:hover,
+.close-btn:hover {
+    color: #fff1b0;
+    border-color: #f0c95a;
+    transform: translateY(-2px);
+    box-shadow: 0 0 16px rgba(155,48,255,0.5);
+}
+
+.menu-icon {
+    display: block;
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.large-panel {
+    left: 20px;
+    top: 500px;
+    width: 470px;
+    height: 470px;
+}
+
+.feature-title {
+    position: absolute;
+    top: 24px;
+    width: 100%;
+    text-align: center;
+    font-size: 22px;
+    letter-spacing: 2px;
+}
+
+.role-info-menu {
+    display: none;
+    position: absolute;
+    top: 300px;
+    left: 360px;
+    width: 520px;
+    height: 360px;
+    z-index: 6000;
+    background: rgba(4, 4, 6, 0.98);
+    border: 2px solid #8c6a12;
+    border-radius: 16px;
+    box-shadow: 0 0 35px rgba(155,48,255,0.55);
+    padding: 35px;
+    text-align: center;
+}
+
+.role-info-title {
+    font-size: 34px;
+    letter-spacing: 4px;
+    margin-bottom: 28px;
+}
+
+.role-info-current {
+    font-size: 42px;
+    letter-spacing: 3px;
+    margin-bottom: 22px;
+}
+
+.role-info-next {
+    font-size: 20px;
+    color: #c9aa69;
+    margin-bottom: 28px;
+}
+
+.role-info-note {
+    font-size: 17px;
+    line-height: 1.5;
+    color: #c9aa69;
+    margin-bottom: 28px;
+}
+
+.role-info-close {
+    background: #080808;
+    border: 2px solid #8c6a12;
+    color: #d4af37;
+    border-radius: 8px;
+    width: 180px;
+    height: 52px;
+    font-family: "Cinzel", serif;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.role-info-close:hover {
+    color: #fff1b0;
+    border-color: #f0c95a;
+    transform: translateY(-2px);
+    box-shadow: 0 0 16px rgba(155,48,255,0.5);
+}
+    
+.partner-panel-list {
+    position: absolute;
+    top: 72px;
+    left: 35px;
+    width: 400px;
+    z-index: 2;
+}
+
+.partner-card {
+    margin-bottom: 18px;
+}
+
+.partner-name {
+    font-size: 18px;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.partner-level {
+    font-size: 14px;
+    color: #c9aa69;
+    margin-bottom: 6px;
+    letter-spacing: 0.8px;
+}
+
+.partner-bar {
+    width: 100%;
+    height: 12px;
+    border: 1px solid #8c6a12;
+    background: #050406;
+    overflow: hidden;
+    box-shadow:
+        inset 0 0 8px rgba(0,0,0,0.95),
+        0 0 8px rgba(155,48,255,0.15);
+}
+
+.partner-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #5b087d, #d936b8, #ff9ee8);
+    box-shadow: 0 0 12px rgba(255,79,195,0.75);
+}
+
+.partner-percent {
+    font-size: 14px;
+    text-align: right;
+    margin-top: 2px;
+}
+
+.partner-empty {
+    text-align: center;
+    font-size: 18px;
+    margin-top: 45px;
+    letter-spacing: 1.5px;
+}
+
+.medallion {
+    position: absolute;
+    top: 515px;
+    left: 505px;
+    width: 260px;
+    height: 260px;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.medallion img {
+    width: 75%;
+    height: 75%;
+    object-fit: contain;
+    filter:
+        drop-shadow(0 0 18px rgba(212,175,55,0.8))
+        drop-shadow(0 0 28px rgba(155,48,255,0.5));
+}
+
+.notifications-panel {
+    top: 500px;
+    right: 20px;
+    width: 470px;
+    height: 275px;
+    padding: 28px;
+}
+
+.notifications-title {
+    text-align: center;
+    font-size: 24px;
+    letter-spacing: 2px;
+}
+
+.notifications-body {
+    margin-top: 34px;
+    font-size: 18px;
+    line-height: 1.5;
+    color: #c9aa69;
+    text-align: center;
+}
+
+.action-row {
+    position: absolute;
+    top: 800px;
+    left: 20px;
+    display: grid;
+    grid-template-columns: repeat(6, 82px);
+    gap: 10px;
+}
+
+.action-btn {
+    height: 72px;
+    background: linear-gradient(180deg, #120f14, #050406);
+    border: 2px solid #8c6a12;
+    border-radius: 9px;
+    color: #d4af37;
+    font-family: "Cinzel", serif;
+    font-size: 11px;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    padding: 4px;
+    white-space: nowrap;
+}
+
+.wear-row {
+    position: absolute;
+    top: 800px;
+    right: 40px;
+    width: 430px;
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    gap: 10px;
+    justify-content: center;
+}
+
+.wear-btn {
+    height: 58px;
+    background: linear-gradient(180deg, #120f14, #050406);
+    border: 2px solid #8c6a12;
+    border-radius: 10px;
+    color: #d4af37;
+    font-family: "Cinzel", serif;
+    font-size: 13px;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+}
+
+.footer-left {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 460px;
+    height: 60px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+}
+
+.footer-btn {
+    background: #050406;
+    border: 2px solid #8c6a12;
+    border-radius: 8px;
+    color: #d4af37;
+    font-size: 24px;
+}
+
+.close-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 520px;
+    width: 220px;
+    height: 60px;
+    background: #050406;
+    border: 2px solid #8c6a12;
+    border-radius: 10px;
+    font-family: "Cinzel", serif;
+    font-size: 20px;
+    color: #d4af37;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.currency {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 455px;
+    height: 60px;
+    border: 2px solid #8c6a12;
+    border-radius: 10px;
+    background: #050406;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 22px;
+}
+</style>
+</head>
+
+<body>
+<div class="hud-wrapper">
+<div class="hud" id="hud">
+
+    <section class="panel profile-panel">
+        <div class="main-title">VELVET ORDER</div>
+        <div class="subtitle gold">ROLE PROGRESSION HUD</div>
+
+        <div class="info-block role-block">
+            <div class="info-label gold">ROLE</div>
+            <div class="info-value purple" id="hudRole">LOADING</div>
+        </div>
+
+        <div class="info-block rank-block">
+            <div class="info-label gold">RANK</div>
+            <div class="info-value purple" id="hudRank">INITIATE</div>
+        </div>
+
+        <div class="info-block level-block">
+            <div class="info-label gold">LEVEL</div>
+            <div class="info-value purple" id="hudLevel">1</div>
+        </div>
+
+        <div class="center-logo">
+            <img src="VO_Crown_Logo.png" alt="VO Crown Logo">
+        </div>
+
+        <div class="xp-area">
+            <div class="xp-label gold">XP</div>
+            <div class="xp-number gold" id="hudXPText">0 / 250</div>
+            <div class="xp-bar">
+                <div class="xp-fill" id="hudXPFill"></div>
+                <div class="xp-percent" id="hudXPPercent">0%</div>
+            </div>
+            <div class="next-xp gold">
+                NEXT LEVEL<br>
+                <span id="hudNextText">+250 XP</span>
+            </div>
+        </div>
+
+        <div class="prestige gold">
+            PRESTIGE<br>
+            <span class="purple" id="hudPrestige">0</span>
+        </div>
+
+        <div class="motto gold">Power. Devotion. Respect.</div>
+    </section>
+
+    <section class="panel menu-panel">
+        <div class="menu-grid">
+            <button class="menu-btn" type="button" onclick="showRoleInfo()">
+                <span class="menu-icon">♕</span>ROLES
+            </button>
+            <button class="menu-btn" type="button"><span class="menu-icon">♡</span>PARTNER</button>
+            <button class="menu-btn" type="button"><span class="menu-icon">☆</span>EVENTS</button>
+            <button class="menu-btn" type="button"><span class="menu-icon">⚜</span>HOUSE</button>
+            <button class="menu-btn" type="button"><span class="menu-icon">⚙</span>SETTINGS</button>
+        </div>
+    </section>
+
+    <section class="panel large-panel">
+        <div class="feature-title gold">PARTNER PANEL</div>
+
+        <div class="partner-panel-list" id="partnerPanelList">
+            <div class="partner-empty gold">NO BONDED PARTNERS</div>
+        </div>
+    </section>
+
+    <div class="medallion">
+        <img src="VO_Crown_Logo.png" alt="VO Crown Logo">
+    </div>
+
+    <section class="panel notifications-panel">
+        <div class="notifications-title gold">NOTIFICATIONS</div>
+        <div class="notifications-body" id="hudNotifications"></div>
+    </section>
+
+    <!--
+    <div class="action-row">
+        <button class="action-btn">KNEEL</button>
+        <button class="action-btn">OBEY</button>
+        <button class="action-btn">SERVE</button>
+        <button class="action-btn">PRAISE</button>
+        <button class="action-btn">BOND</button>
+        <button class="action-btn">REWARD</button>
+    </div>
+
+    <div class="wear-row">
+        <button class="wear-btn">WEAR</button>
+        <button class="wear-btn">UNWEAR</button>
+        <button class="wear-btn">LOCK</button>
+        <button class="wear-btn">UNLOCK</button>
+    </div>
+
+    <div class="footer-left">
+        <button class="footer-btn">▥</button>
+        <button class="footer-btn">♟</button>
+        <button class="footer-btn">✉</button>
+        <button class="footer-btn">♪</button>
+        <button class="footer-btn">?</button>
+        <button class="footer-btn">⏻</button>
+    </div>
+    -->
+
+    <button class="close-btn" type="button">UPDATE HUD</button>
+
+    <div class="currency gold" id="hudCurrency">
+        <span>💎 0</span><span>♦ 0</span><span>🔷 0</span>
+    </div>
+
+    <div class="role-info-menu" id="roleInfoMenu">
+        <div class="role-info-title purple">CURRENT ROLE</div>
+
+        <div class="role-info-current gold" id="roleInfoCurrent">LOADING</div>
+
+        <div class="role-info-next" id="roleInfoNext">
+            Next Rank: Loading
+        </div>
+
+        <div class="role-info-note">
+            Role changes are managed through the HUD menu.
+        </div>
+
+        <button class="role-info-close" type="button" onclick="closeRoleInfo()">CLOSE</button>
+    </div>
+    
+</div>
+</div>
+
+<script>
+const API_BASE = "https://api.velvetorder.duckdns.org";
+const API_SECRET = "jSDGBnYYqy08Hk4afpELPmzRkJTlfApR";
+
+let currentRole = "loading";
+let currentLevel = 1;
+
+function scaleHUD() {
+    const scale = Math.min(window.innerWidth / 1240, window.innerHeight / 1240);
+    document.querySelector(".hud").style.transform = "scale(" + scale + ")";
+}
+
+function getParam(name, fallback = "") {
+    const params = new URLSearchParams(window.location.search);
+    return params.get(name) || fallback;
+}
+
+function cleanRole(role) {
+    role = (role || "loading").toLowerCase();
+
+    if (role === "dominant") return "DOMINANT";
+    if (role === "submissive") return "SUBMISSIVE";
+    if (role === "switch") return "SWITCH";
+
+    return "LOADING";
+}
+
+// =====================================
+// ROLE INFO POPUP FUNCTIONS
+// =====================================
+
+function getNextRankForRole(role, level) {
+    const sets = {
+        dominant: [[10,"Handler"],[20,"Trainer"],[30,"Keeper"],[40,"Owner"],[50,"Regent"],[60,"Sovereign"],[70,"High Sovereign"],[80,"Velvet Monarch"],[90,"Ascendant Dominant"],[100,"Eternal Sovereign"]],
+        submissive: [[10,"Attendant"],[20,"Pet"],[30,"Companion"],[40,"Service Bound"],[50,"Devoted"],[60,"Cherished"],[70,"Treasured"],[80,"Velvet Beloved"],[90,"Ascendant Submissive"],[100,"Eternal Devotion"]],
+        switch: [[10,"Curious"],[20,"Adaptive"],[30,"Dual-Bonded"],[40,"Harmonized"],[50,"Versatile Elite"],[60,"Ascendant"],[70,"Velvet Balanced"],[80,"Twin Flame"],[90,"Ascendant Switch"],[100,"Eternal Balance"]]
+    };
+
+    const set = sets[(role || "switch").toLowerCase()] || sets.switch;
+
+    for (let i = 0; i < set.length; i++) {
+        if (level < set[i][0]) {
+            return set[i][1] + " at Level " + set[i][0];
+        }
+    }
+
+    return "Max Rank Reached";
+}
+
+function showRoleInfo() {
+    document.getElementById("roleInfoCurrent").textContent =
+        cleanRole(currentRole);
+
+    document.getElementById("roleInfoNext").textContent =
+        "Next Rank: " + getNextRankForRole(currentRole, currentLevel);
+
+    document.getElementById("roleInfoMenu").style.display = "block";
+}
+
+function closeRoleInfo() {
+    document.getElementById("roleInfoMenu").style.display = "none";
+}
+
+// =====================================
+// EXISTING HUD FUNCTIONS CONTINUE
+// =====================================
+    
+function updateHUD(data) {
+    const role = data.role || "loading";
+    const rank = data.rank || "Initiate";
+    const level = parseInt(data.level || 1);
+    const xp = parseInt(data.xp || 0);
+    const next = parseInt(data.next_level_xp || 250);
+    const tokens = parseInt(data.tokens || 0);
+    const prestige = parseInt(data.prestige || 0);
+    const max = parseInt(data.max_level || 100);
+
+    currentRole = role;
+    currentLevel = level;
+
+    let percent = 100;
+
+    if (level < max && next > 0) {
+        percent = Math.min((xp / next) * 100, 100);
+    }
+
+    const remaining = level >= max ? 0 : Math.max(next - xp, 0);
+
+    document.getElementById("hudRole").textContent = cleanRole(role);
+    document.getElementById("hudRank").textContent = rank.toUpperCase();
+    document.getElementById("hudLevel").textContent = level;
+    document.getElementById("hudPrestige").textContent = prestige;
+
+    document.getElementById("hudXPText").textContent =
+        xp.toLocaleString() + " / " + next.toLocaleString();
+
+    document.getElementById("hudXPFill").style.width = percent + "%";
+
+    document.getElementById("hudXPPercent").textContent =
+        Math.round(percent) + "%";
+
+    document.getElementById("hudNextText").textContent =
+        level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
+
+    document.getElementById("hudCurrency").innerHTML =
+        `<span>💎 ${tokens.toLocaleString()}</span><span>♦ 0</span><span>🔷 0</span>`;
+}
+
+async function fetchProfile() {
+    const uuid = getParam("uuid");
+
+    if (!uuid) {
+        document.getElementById("hudNotifications").innerHTML =
+            "Missing avatar UUID.";
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/api/user/${uuid}`, {
+            headers: { "x-api-secret": API_SECRET }
+        });
+
+        if (!response.ok) throw new Error("HTTP " + response.status);
+
+        const data = await response.json();
+
+        updateHUD(data);
+        document.getElementById("hudNotifications").innerHTML = "";
+    }
+    catch (err) {
+        console.error("Profile load failed:", err);
+
+        document.getElementById("hudNotifications").innerHTML =
+            "Unable to load profile data.";
+    }
+}
+
+function updatePartnerPanel(partners) {
+    const box = document.getElementById("partnerPanelList");
+    box.innerHTML = "";
+
+    if (!partners || partners.length === 0) {
+        box.innerHTML = '<div class="partner-empty gold">NO BONDED PARTNERS</div>';
+        return;
+    }
+
+    partners.slice(0, 2).forEach(partner => {
+        const name = partner.sl_name || "Unknown Partner";
+        const bondLevel = parseInt(partner.bond_level || 1);
+        const bondXP = parseInt(partner.bond_xp || 0);
+        const bondNext = parseInt(partner.bond_next_xp || 100);
+        const maxBondLevel = parseInt(partner.max_bond_level || 10);
+
+        let percent = 100;
+
+        if (bondLevel < maxBondLevel && bondNext > 0) {
+            percent = Math.min((bondXP / bondNext) * 100, 100);
+        }
+
+        box.innerHTML += `
+            <div class="partner-card">
+                <div class="partner-name gold">${name}</div>
+                <div class="partner-level">Bond Level ${bondLevel} · ${bondXP} / ${bondNext} XP</div>
+                <div class="partner-bar">
+                    <div class="partner-fill" style="width:${percent}%"></div>
+                </div>
+                <div class="partner-percent gold">${Math.round(percent)}%</div>
+            </div>
+        `;
+    });
+}
+
+async function fetchPartnerBond() {
+    const uuid = getParam("uuid");
+
+    if (!uuid) return;
+
+    try {
+        const response = await fetch(`${API_BASE}/api/partners/${uuid}`, {
+            headers: { "x-api-secret": API_SECRET }
+        });
+
+        if (!response.ok) throw new Error("HTTP " + response.status);
+
+        const data = await response.json();
+
+        updatePartnerPanel(data.partners || []);
+    }
+    catch (err) {
+        console.error("Partner bond load failed:", err);
+
+        updatePartnerPanel([]);
+    }
+}
+
+async function refreshHUDData() {
+    await fetchProfile();
+    await fetchPartnerBond();
+}
+
+window.addEventListener("load", async () => {
+    scaleHUD();
+    await refreshHUDData();
+    setInterval(refreshHUDData, 30000);
+});
+
+window.addEventListener("resize", scaleHUD);
+</script>
+
 </body>
 </html>
