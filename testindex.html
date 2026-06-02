@@ -506,20 +506,20 @@ html, body {
     <section class="panel menu-panel">
         <div class="menu-grid">
             <button class="menu-btn" type="button" onclick="showRoleInfo()">
-                <span class="menu-icon">â™•</span>ROLES
+                <span class="menu-icon">♕</span>ROLES
             </button>
-            <button class="menu-btn" type="button"><span class="menu-icon">â™¡</span>PARTNER</button>
+            <button class="menu-btn" type="button"><span class="menu-icon">♡</span>PARTNER</button>
 
             <!-- Events button reserved for future release.
-            <button class="menu-btn" type="button"><span class="menu-icon">â˜†</span>EVENTS</button>
+            <button class="menu-btn" type="button"><span class="menu-icon">☆</span>EVENTS</button>
             -->
 
             <!-- House button reserved for future release.
-            <button class="menu-btn" type="button"><span class="menu-icon">âšœ</span>HOUSE</button>
+            <button class="menu-btn" type="button"><span class="menu-icon">⚜</span>HOUSE</button>
             -->
 
             <!-- Settings button reserved for future release.
-            <button class="menu-btn" type="button"><span class="menu-icon">âš™</span>SETTINGS</button>
+            <button class="menu-btn" type="button"><span class="menu-icon">⚙</span>SETTINGS</button>
             -->
         </div>
     </section>
@@ -546,7 +546,7 @@ html, body {
     <button class="close-btn" type="button">UPDATE HUD</button>
 
     <div class="currency gold" id="hudCurrency">
-        <span>ðŸ’Ž 0</span><span>â™¦ 0</span><span>ðŸ”· 0</span>
+        <span>💎 0</span><span>♦ 0</span><span>🔷 0</span>
     </div>
 
     <div class="role-info-menu" id="roleInfoMenu">
@@ -692,7 +692,7 @@ function updateHUD(data) {
         level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
 
     document.getElementById("hudCurrency").innerHTML =
-        `<span>ðŸ’Ž ${tokens.toLocaleString()}</span><span>â™¦ 0</span><span>ðŸ”· 0</span>`;
+        `<span>💎 ${tokens.toLocaleString()}</span><span>♦ 0</span><span>🔷 0</span>`;
 
     if (!profileLoadedOnce) {
         profileLoadedOnce = true;
@@ -760,7 +760,7 @@ function updatePartnerPanel(partners) {
         box.innerHTML += `
             <div class="partner-card">
                 <div class="partner-name gold">${name}</div>
-                <div class="partner-level">Bond Level ${bondLevel} Â· ${bondXP} / ${bondNext} XP</div>
+                <div class="partner-level">Bond Level ${bondLevel} · ${bondXP} / ${bondNext} XP</div>
                 <div class="partner-bar">
                     <div class="partner-fill" style="width:${percent}%"></div>
                 </div>
