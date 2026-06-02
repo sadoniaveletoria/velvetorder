@@ -246,6 +246,29 @@ html, body {
     margin-bottom: 10px;
 }
 
+.role-image-btn {
+    background-image: url("VO_ROLE_BUTTON.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+
+    width: 190px;
+    height: 115px;
+
+    border: none;
+    background-color: transparent;
+
+    text-indent: -9999px;
+    overflow: hidden;
+
+    box-shadow: none;
+}
+
+.role-image-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+}
+
 .large-panel {
     left: 20px;
     top: 500px;
@@ -505,8 +528,11 @@ html, body {
 
     <section class="panel menu-panel">
         <div class="menu-grid">
-            <button class="menu-btn" type="button" onclick="showRoleInfo()">
-                <span class="menu-icon">♕</span>ROLES
+            <button
+                class="menu-btn role-image-btn"
+                type="button"
+                onclick="showRoleInfo()">
+                ROLES
             </button>
             <button class="menu-btn" type="button"><span class="menu-icon">♡</span>PARTNER</button>
 
