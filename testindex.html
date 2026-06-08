@@ -809,6 +809,73 @@ function updatePartnerPanel(partners) {
     partnerLoadedOnce = true;
 }
 
+async function fetchMatchInterests() {
+    const uuid = getParam("uuid");
+
+    if (!uuid) return;
+
+    try {
+        const response = await fetch(`${API_BASE}/api/matchmaking/interests/${uuid}`, {
+            headers: { "x-api-secret": API_SECRET }
+        });
+
+        if (!response.ok) return;
+
+        const data = await response.json();
+
+        if (!data.interests || data.interests.length === 0) {
+            return;
+        }
+
+        const box = document.getElementById("hudNotifications");
+
+        box.innerHTML = data.interests.map(i => `
+            <div class="activity-item">
+                💜 Match Interest<br>
+                <b>${i.sender_name || "Someone"}</b> is interested in matching.<br>
+                ${i.role ? "Role: " + i.role + "<br>" : ""}
+                ${i.relationship_type ? "Seeking: " + i.relationship_type + "<br>" : ""}
+
+                <button onclick="respondMatchInterest(${i.id}, true)">Accept</button>
+                <button onclick="respondMatchInterest(${i.id}, false)">Decline</button>
+                <br>
+                <a href="secondlife:///app/agent/${i.sender_uuid}/about">View Profile</a>
+            </div>
+        `).join("");
+    }
+    catch (err) {
+        console.error("Match interests failed:", err);
+    }
+}
+
+async function respondMatchInterest(interestId, accepted) {
+    const uuid = getParam("uuid");
+
+    try {
+        const response = await fetch(`${API_BASE}/api/matchmaking/respond`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-secret": API_SECRET
+            },
+            body: JSON.stringify({
+                interest_id: interestId,
+                target_uuid: uuid,
+                accepted: accepted
+            })
+        });
+
+        if (response.ok) {
+            addActivity(accepted ? "Match interest accepted." : "Match interest declined.");
+            await fetchMatchInterests();
+        }
+    }
+    catch (err) {
+        console.error("Respond match interest failed:", err);
+        addActivity("Unable to respond to match interest.");
+    }
+}
+    
 async function fetchPartnerBond() {
     const uuid = getParam("uuid");
 
@@ -833,6 +900,7 @@ async function fetchPartnerBond() {
 async function refreshHUDData() {
     await fetchProfile();
     await fetchPartnerBond();
+    await fetchMatchInterests();
 }
 
 window.addEventListener("load", async () => {
