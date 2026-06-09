@@ -628,7 +628,23 @@ let lastSeenRank       = "";
 let lastSeenRole       = "";
 let lastPartnerSignature = "";
 let lastMatchSignature   = "";
-let dismissedMatches     = new Set();
+// Persisted in localStorage so dismissed cards survive page reloads
+function loadDismissedMatches() {
+    try {
+        const uuid = getParam("uuid");
+        if (!uuid) return new Set();
+        const stored = localStorage.getItem("vo_dismissed_matches_" + uuid);
+        return stored ? new Set(JSON.parse(stored)) : new Set();
+    } catch(e) { return new Set(); }
+}
+function saveDismissedMatches(set) {
+    try {
+        const uuid = getParam("uuid");
+        if (!uuid) return;
+        localStorage.setItem("vo_dismissed_matches_" + uuid, JSON.stringify([...set]));
+    } catch(e) {}
+}
+let dismissedMatches = loadDismissedMatches();
 
 function scaleHUD() {
     const scale = Math.min(window.innerWidth / 1240, window.innerHeight / 1240);
@@ -1008,6 +1024,7 @@ async function respondMatchInterest(interestId, accepted) {
 // Tracks lastMatchSignature so new matches trigger an activity feed notification.
 function dismissMatch(matchUUID) {
     dismissedMatches.add(matchUUID);
+    saveDismissedMatches(dismissedMatches);
     const card = document.querySelector(`[data-match-uuid="${matchUUID}"]`);
     if (card) card.remove();
 }
@@ -1057,8 +1074,10 @@ async function fetchMatches() {
             card.className = "activity-item match-card";
             card.setAttribute("data-match-uuid", m.match_uuid);
             card.innerHTML =
-                `<span style="float:right;cursor:pointer;opacity:0.5;font-size:13px;" ` +
-                `onclick="dismissMatch('${m.match_uuid}')">✕</span>` +
+                `<button onclick="dismissMatch('${m.match_uuid}')" ` +
+                `style="float:right;cursor:pointer;font-size:11px;padding:2px 7px;` +
+                `background:transparent;border:1px solid #8c6a12;color:#c9aa69;` +
+                `border-radius:4px;font-family:inherit;">Dismiss</button>` +
                 `💜 <b>MATCH</b> · <a href="${profileURL}" style="color:#f0c95a;">${m.sl_name}</a><br>` +
                 (role || relType ? `<span style="font-size:12px;opacity:0.8;">${role}${relType}</span>` : "");
 
@@ -1134,6 +1153,9 @@ window.addEventListener("load", async () => {
 
     // Live XP tick: run once immediately after profile loads so the
     // display is current right away, then every 10 seconds after that.
+    // Re-load dismissed matches now that uuid param is available
+    dismissedMatches = loadDismissedMatches();
+
     await tickLiveXP();
     setInterval(tickLiveXP, LIVE_REFRESH_MS);
 });
