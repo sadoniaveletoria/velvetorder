@@ -661,7 +661,7 @@ function addActivity(message) {
     // they are standalone DOM elements, not in the activityFeed array,
     // so we collect them, rebuild the feed, then re-prepend them.
     const pinnedCards = Array.from(
-        box.querySelectorAll(".match-card, .match-interest-card")
+        box.querySelectorAll("[data-match-uuid], [data-interest-id]")
     );
 
     // Rebuild only the activity items
@@ -765,10 +765,7 @@ function updateHUD(data) {
     document.getElementById("hudCurrency").innerHTML =
         `<span>💎 ${tokens.toLocaleString()}</span><span>♦ 0</span><span>🔷 0</span>`;
 
-    if (!profileLoadedOnce) {
-        profileLoadedOnce = true;
-        addActivity("Profile loaded.");
-    }
+    profileLoadedOnce = true;
 }
 
 // ----------------------------------------------------------------
@@ -913,10 +910,7 @@ function updatePartnerPanel(partners) {
         `;
     });
 
-    if (!partnerLoadedOnce) {
-        addActivity("Partner panel loaded.");
-    }
-    else if (signature !== lastPartnerSignature) {
+    if (partnerLoadedOnce && signature !== lastPartnerSignature) {
         addActivity("Partner bond updated.");
     }
 
@@ -1044,23 +1038,25 @@ async function fetchMatches() {
         const feed = document.getElementById("hudNotifications");
 
         // Remove any previously rendered match cards so we don't duplicate on refresh
-        feed.querySelectorAll(".match-card").forEach(el => el.remove());
-
         if (matches.length === 0) return;
 
-        const matchHTML = matches.map(m => {
+        // Insert only new match cards — skip any already in the feed
+        matches.forEach(m => {
+            if (feed.querySelector(`[data-match-uuid="${m.match_uuid}"]`)) return;
+
             const profileURL = `secondlife:///app/agent/${m.match_uuid}/about`;
-            const role       = m.role              ? `Role: ${m.role} · `              : "";
-            const relType    = m.relationship_type ? `${m.relationship_type}`           : "";
+            const role       = m.role              ? `Role: ${m.role} · ` : "";
+            const relType    = m.relationship_type ? m.relationship_type  : "";
 
-            return `<div class="activity-item match-card">
-                💜 <b>MATCH</b> · <a href="${profileURL}" style="color:#f0c95a;">${m.sl_name}</a><br>
-                <span style="font-size:12px;opacity:0.8;">${role}${relType}</span>
-            </div>`;
-        }).join("");
+            const card = document.createElement("div");
+            card.className = "activity-item match-card";
+            card.setAttribute("data-match-uuid", m.match_uuid);
+            card.innerHTML =
+                `💜 <b>MATCH</b> · <a href="${profileURL}" style="color:#f0c95a;">${m.sl_name}</a><br>` +
+                `<span style="font-size:12px;opacity:0.8;">${role}${relType}</span>`;
 
-        // Prepend match cards so they sit at the top of the feed
-        feed.insertAdjacentHTML("afterbegin", matchHTML);
+            feed.insertAdjacentElement("afterbegin", card);
+        });
         // Drain any queued match notifications for this user (e.g. sender side)
         try {
             const nRes = await fetch(`${API_BASE}/api/matchmaking/notifications/${uuid}`, {
@@ -1118,7 +1114,7 @@ window.addEventListener("load", async () => {
             const cachedProfile = localStorage.getItem("vo_profile_cache_" + uuid);
             if (cachedProfile) {
                 updateHUD(JSON.parse(cachedProfile));
-                addActivity("Loaded cached profile.");
+
             }
         } catch (e) {
             console.warn("Cached profile read failed:", e);
