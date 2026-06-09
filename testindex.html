@@ -592,6 +592,7 @@ html, body {
 <script>
 const API_BASE = "https://api.velvetorder.duckdns.org";
 const API_SECRET = "jSDGBnYYqy08Hk4afpELPmzRkJTlfApR";
+const HUD_REFRESH_MS = 300000;
 
 let currentRole = "loading";
 let currentLevel = 1;
@@ -745,6 +746,15 @@ async function fetchProfile() {
         if (!response.ok) throw new Error("HTTP " + response.status);
 
         const data = await response.json();
+
+        // Keep the latest profile data cached locally in the MOAP page.
+        // The HUD uses this cached data between 5-minute API refreshes.
+        try {
+            localStorage.setItem("vo_profile_cache_" + uuid, JSON.stringify(data));
+        } catch (e) {
+            console.warn("Local profile cache failed:", e);
+        }
+
         updateHUD(data);
     }
     catch (err) {
@@ -905,8 +915,24 @@ async function refreshHUDData() {
 
 window.addEventListener("load", async () => {
     scaleHUD();
+
+    const uuid = getParam("uuid");
+    if (uuid) {
+        try {
+            const cachedProfile = localStorage.getItem("vo_profile_cache_" + uuid);
+            if (cachedProfile) {
+                updateHUD(JSON.parse(cachedProfile));
+                addActivity("Loaded cached profile.");
+            }
+        } catch (e) {
+            console.warn("Cached profile read failed:", e);
+        }
+    }
+
     await refreshHUDData();
-    setInterval(refreshHUDData, 30000);
+
+    // Refresh from the API every 5 minutes instead of every 30 seconds.
+    setInterval(refreshHUDData, HUD_REFRESH_MS);
 });
 
 window.addEventListener("resize", scaleHUD);
