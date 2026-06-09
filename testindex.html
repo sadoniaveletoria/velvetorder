@@ -604,6 +604,7 @@ let lastSeenLevel      = null;
 let lastSeenRank       = "";
 let lastSeenRole       = "";
 let lastPartnerSignature = "";
+let lastMatchSignature   = "";
 
 function scaleHUD() {
     const scale = Math.min(window.innerWidth / 1240, window.innerHeight / 1240);
@@ -886,7 +887,6 @@ function updatePartnerPanel(partners) {
 
 async function fetchMatchInterests() {
     const uuid = getParam("uuid");
-
     if (!uuid) return;
 
     try {
@@ -898,25 +898,23 @@ async function fetchMatchInterests() {
 
         const data = await response.json();
 
-        if (!data.interests || data.interests.length === 0) {
-            return;
-        }
+        if (!data.interests || data.interests.length === 0) return;
 
-        const box = document.getElementById("hudNotifications");
+        // Inject pending interests into the activity feed so they don't
+        // clobber the main match panel.
+        data.interests.forEach(i => {
+            const senderName = i.sender_name || "Someone";
+            const profileURL = `secondlife:///app/agent/${i.sender_uuid}/about`;
 
-        box.innerHTML = data.interests.map(i => `
-            <div class="activity-item">
-                💜 Match Interest<br>
-                <b>${i.sender_name || "Someone"}</b> is interested in matching.<br>
-                ${i.role ? "Role: " + i.role + "<br>" : ""}
-                ${i.relationship_type ? "Seeking: " + i.relationship_type + "<br>" : ""}
+            const html =
+                `💜 <a href="${profileURL}">${senderName}</a> is interested in matching.` +
+                (i.role              ? ` Role: ${i.role}.`                     : "") +
+                (i.relationship_type ? ` Seeking: ${i.relationship_type}.`     : "") +
+                ` <button onclick="respondMatchInterest(${i.id}, true)">Accept</button>` +
+                ` <button onclick="respondMatchInterest(${i.id}, false)">Decline</button>`;
 
-                <button onclick="respondMatchInterest(${i.id}, true)">Accept</button>
-                <button onclick="respondMatchInterest(${i.id}, false)">Decline</button>
-                <br>
-                <a href="secondlife:///app/agent/${i.sender_uuid}/about">View Profile</a>
-            </div>
-        `).join("");
+            addActivity(html);
+        });
     }
     catch (err) {
         console.error("Match interests failed:", err);
@@ -940,14 +938,96 @@ async function respondMatchInterest(interestId, accepted) {
             })
         });
 
-        if (response.ok) {
-            addActivity(accepted ? "Match interest accepted." : "Match interest declined.");
-            await fetchMatchInterests();
+        if (!response.ok) return;
+
+        const result = await response.json();
+
+        if (accepted && result.matched_name) {
+            const profileURL = `secondlife:///app/agent/${result.match_uuid}/about`;
+            addActivity(`✨ NEW MATCH! <a href="${profileURL}">${result.matched_name}</a>`);
+        } else {
+            addActivity("Match interest declined.");
         }
+
+        // Refresh both the interest feed and the matches panel
+        await fetchMatchInterests();
+        await fetchMatches();
     }
     catch (err) {
         console.error("Respond match interest failed:", err);
         addActivity("Unable to respond to match interest.");
+    }
+}
+
+// Fetch confirmed matches and render them in the large panel with SL profile links.
+// Tracks lastMatchSignature so new matches trigger an activity feed notification.
+async function fetchMatches() {
+    const uuid = getParam("uuid");
+    if (!uuid) return;
+
+    try {
+        const response = await fetch(`${API_BASE}/api/matchmaking/matches/${uuid}`, {
+            headers: { "x-api-secret": API_SECRET }
+        });
+
+        if (!response.ok) return;
+
+        const data = await response.json();
+        const matches = data.matches || [];
+
+        const signature = matches.map(m => m.match_uuid).join("|");
+
+        // Notify activity feed when a new match appears (e.g. other person accepted)
+        if (lastMatchSignature !== "" && signature !== lastMatchSignature) {
+            const prev = new Set(lastMatchSignature.split("|"));
+            matches.forEach(m => {
+                if (!prev.has(m.match_uuid)) {
+                    const profileURL = `secondlife:///app/agent/${m.match_uuid}/about`;
+                    addActivity(`✨ NEW MATCH! <a href="${profileURL}">${m.sl_name}</a>`);
+                }
+            });
+        }
+
+        lastMatchSignature = signature;
+
+        // Matches go into the activity/notification feed, not the partner panel
+        const feed = document.getElementById("hudNotifications");
+
+        // Remove any previously rendered match cards so we don't duplicate on refresh
+        feed.querySelectorAll(".match-card").forEach(el => el.remove());
+
+        if (matches.length === 0) return;
+
+        const matchHTML = matches.map(m => {
+            const profileURL = `secondlife:///app/agent/${m.match_uuid}/about`;
+            const role       = m.role              ? `Role: ${m.role} · `              : "";
+            const relType    = m.relationship_type ? `${m.relationship_type}`           : "";
+
+            return `<div class="activity-item match-card">
+                💜 <b>MATCH</b> · <a href="${profileURL}" style="color:#f0c95a;">${m.sl_name}</a><br>
+                <span style="font-size:12px;opacity:0.8;">${role}${relType}</span>
+            </div>`;
+        }).join("");
+
+        // Prepend match cards so they sit at the top of the feed
+        feed.insertAdjacentHTML("afterbegin", matchHTML);
+        // Drain any queued match notifications for this user (e.g. sender side)
+        try {
+            const nRes = await fetch(`${API_BASE}/api/matchmaking/notifications/${uuid}`, {
+                headers: { "x-api-secret": API_SECRET }
+            });
+
+            if (nRes.ok) {
+                const nData = await nRes.json();
+                (nData.notifications || []).forEach(n => {
+                    const profileURL = `secondlife:///app/agent/${n.matchedUUID}/about`;
+                    addActivity(`✨ NEW MATCH! <a href="${profileURL}">${n.matchedName}</a> accepted your interest.`);
+                });
+            }
+        } catch (_) {}
+    }
+    catch (err) {
+        console.error("fetchMatches failed:", err);
     }
 }
     
@@ -976,6 +1056,7 @@ async function refreshHUDData() {
     await fetchProfile();
     await fetchPartnerBond();
     await fetchMatchInterests();
+    await fetchMatches();
 }
 
 window.addEventListener("load", async () => {
@@ -998,7 +1079,9 @@ window.addEventListener("load", async () => {
     await refreshHUDData();
     setInterval(refreshHUDData, API_REFRESH_MS);
 
-    // Live XP display tick every 10 seconds — reads URL params only, no API call.
+    // Live XP tick: run once immediately after profile loads so the
+    // display is current right away, then every 10 seconds after that.
+    await tickLiveXP();
     setInterval(tickLiveXP, LIVE_REFRESH_MS);
 });
 
