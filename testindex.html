@@ -628,6 +628,7 @@ let lastSeenRank       = "";
 let lastSeenRole       = "";
 let lastPartnerSignature = "";
 let lastMatchSignature   = "";
+let dismissedMatches     = new Set();
 
 function scaleHUD() {
     const scale = Math.min(window.innerWidth / 1240, window.innerHeight / 1240);
@@ -1005,6 +1006,12 @@ async function respondMatchInterest(interestId, accepted) {
 
 // Fetch confirmed matches and render them in the large panel with SL profile links.
 // Tracks lastMatchSignature so new matches trigger an activity feed notification.
+function dismissMatch(matchUUID) {
+    dismissedMatches.add(matchUUID);
+    const card = document.querySelector(`[data-match-uuid="${matchUUID}"]`);
+    if (card) card.remove();
+}
+
 async function fetchMatches() {
     const uuid = getParam("uuid");
     if (!uuid) return;
@@ -1034,14 +1041,12 @@ async function fetchMatches() {
 
         lastMatchSignature = signature;
 
-        // Matches go into the activity/notification feed, not the partner panel
+        // Insert a dismissable match card for each confirmed match.
+        // Skips any already shown or manually dismissed by the user.
         const feed = document.getElementById("hudNotifications");
 
-        // Remove any previously rendered match cards so we don't duplicate on refresh
-        if (matches.length === 0) return;
-
-        // Insert only new match cards — skip any already in the feed
         matches.forEach(m => {
+            if (dismissedMatches.has(m.match_uuid)) return;
             if (feed.querySelector(`[data-match-uuid="${m.match_uuid}"]`)) return;
 
             const profileURL = `secondlife:///app/agent/${m.match_uuid}/about`;
@@ -1052,8 +1057,10 @@ async function fetchMatches() {
             card.className = "activity-item match-card";
             card.setAttribute("data-match-uuid", m.match_uuid);
             card.innerHTML =
+                `<span style="float:right;cursor:pointer;opacity:0.5;font-size:13px;" ` +
+                `onclick="dismissMatch('${m.match_uuid}')">✕</span>` +
                 `💜 <b>MATCH</b> · <a href="${profileURL}" style="color:#f0c95a;">${m.sl_name}</a><br>` +
-                `<span style="font-size:12px;opacity:0.8;">${role}${relType}</span>`;
+                (role || relType ? `<span style="font-size:12px;opacity:0.8;">${role}${relType}</span>` : "");
 
             feed.insertAdjacentElement("afterbegin", card);
         });
