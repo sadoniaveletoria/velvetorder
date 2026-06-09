@@ -590,18 +590,19 @@ html, body {
 </div>
 
 <script>
-const API_BASE = "https://api.velvetorder.duckdns.org";
-const API_SECRET = "jSDGBnYYqy08Hk4afpELPmzRkJTlfApR";
-const HUD_REFRESH_MS = 300000;
+const API_BASE        = "https://api.velvetorder.duckdns.org";
+const API_SECRET      = "jSDGBnYYqy08Hk4afpELPmzRkJTlfApR";
+const API_REFRESH_MS  = 300000;  // 5 min — full API poll
+const LIVE_REFRESH_MS = 10000;   // 10 sec — local XP param poll (no API call)
 
-let currentRole = "loading";
+let currentRole  = "loading";
 let currentLevel = 1;
 let activityFeed = [];
-let profileLoadedOnce = false;
-let partnerLoadedOnce = false;
-let lastSeenLevel = null;
-let lastSeenRank = "";
-let lastSeenRole = "";
+let profileLoadedOnce  = false;
+let partnerLoadedOnce  = false;
+let lastSeenLevel      = null;
+let lastSeenRank       = "";
+let lastSeenRole       = "";
 let lastPartnerSignature = "";
 
 function scaleHUD() {
@@ -728,6 +729,57 @@ function updateHUD(data) {
         profileLoadedOnce = true;
         addActivity("Profile loaded.");
     }
+}
+
+// ----------------------------------------------------------------
+// LIVE XP TICK  (runs every 10s, zero API calls)
+// The HUD LSL script encodes the current running total into the
+// MOAP page URL as params: ?xp=N&level=N&nextxp=N&rank=...&live=1
+// We read those here and update just the XP bar elements.
+// ----------------------------------------------------------------
+function tickLiveXP() {
+    const params = new URLSearchParams(window.location.search);
+
+    // Only act when the HUD script has pushed a live update
+    if (params.get("live") !== "1") return;
+
+    const xp     = parseInt(params.get("xp")    || 0);
+    const level  = parseInt(params.get("level") || currentLevel);
+    const nextXP = parseInt(params.get("nextxp")|| 250);
+    const rank   = params.get("rank") || "";
+    const role   = params.get("role") || currentRole;
+    const max    = 100;
+
+    let percent = 100;
+    if (level < max && nextXP > 0)
+        percent = Math.min((xp / nextXP) * 100, 100);
+
+    const remaining = level >= max ? 0 : Math.max(nextXP - xp, 0);
+
+    document.getElementById("hudXPText").textContent =
+        xp.toLocaleString() + " / " + nextXP.toLocaleString();
+
+    document.getElementById("hudXPFill").style.width = percent + "%";
+
+    document.getElementById("hudXPPercent").textContent =
+        Math.round(percent) + "%";
+
+    document.getElementById("hudNextText").textContent =
+        level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
+
+    // Also update level/rank if they changed (e.g. level-up mid-session)
+    if (level !== currentLevel) {
+        currentLevel = level;
+        document.getElementById("hudLevel").textContent = level;
+        addActivity("Level gained: " + level);
+    }
+
+    if (rank && rank !== lastSeenRank && lastSeenRank !== "") {
+        addActivity("New rank: " + rank);
+    }
+
+    if (rank)  { lastSeenRank  = rank;  document.getElementById("hudRank").textContent = rank.toUpperCase(); }
+    if (role)  { currentRole   = role; }
 }
 
 async function fetchProfile() {
@@ -929,10 +981,12 @@ window.addEventListener("load", async () => {
         }
     }
 
+    // Full API refresh on load, then every 5 minutes.
     await refreshHUDData();
+    setInterval(refreshHUDData, API_REFRESH_MS);
 
-    // Refresh from the API every 5 minutes instead of every 30 seconds.
-    setInterval(refreshHUDData, HUD_REFRESH_MS);
+    // Live XP display tick every 10 seconds — reads URL params only, no API call.
+    setInterval(tickLiveXP, LIVE_REFRESH_MS);
 });
 
 window.addEventListener("resize", scaleHUD);
