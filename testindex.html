@@ -370,28 +370,51 @@ html, body {
     top: 500px;
     right: 20px;
     width: 470px;
-    height: 275px;
+    height: 470px;
     padding: 28px;
+    display: flex;
+    flex-direction: column;
 }
 
 .notifications-title {
     text-align: center;
     font-size: 24px;
     letter-spacing: 2px;
+    flex-shrink: 0;
 }
 
 .notifications-body {
-    margin-top: 28px;
-    font-size: 17px;
-    line-height: 1.55;
+    margin-top: 18px;
+    font-size: 16px;
+    line-height: 1.6;
     color: #c9aa69;
-    text-align: center;
+    text-align: left;
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: #8c6a12 transparent;
+}
+
+.notifications-body::-webkit-scrollbar {
+    width: 5px;
+}
+
+.notifications-body::-webkit-scrollbar-thumb {
+    background: #8c6a12;
+    border-radius: 4px;
 }
 
 .activity-item {
-    margin-bottom: 8px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(140,106,18,0.2);
     color: #c9aa69;
     text-shadow: 0 0 8px rgba(155,48,255,0.3);
+}
+
+.activity-item:last-child {
+    border-bottom: none;
 }
 
 .close-btn {
@@ -630,12 +653,28 @@ function addActivity(message) {
     if (!message) return;
 
     activityFeed.unshift(message);
-    activityFeed = activityFeed.slice(0, 4);
+    activityFeed = activityFeed.slice(0, 20);
 
     const box = document.getElementById("hudNotifications");
-    box.innerHTML = activityFeed
+
+    // Preserve pinned cards (match interests and confirmed matches) —
+    // they are standalone DOM elements, not in the activityFeed array,
+    // so we collect them, rebuild the feed, then re-prepend them.
+    const pinnedCards = Array.from(
+        box.querySelectorAll(".match-card, .match-interest-card")
+    );
+
+    // Rebuild only the activity items
+    const feedItems = activityFeed
         .map(item => `<div class="activity-item">${item}</div>`)
         .join("");
+
+    box.innerHTML = feedItems;
+
+    // Re-prepend pinned cards in their original order
+    pinnedCards.reverse().forEach(card => box.insertAdjacentElement("afterbegin", card));
+
+    box.scrollTop = 0;
 }
 
 function getNextRankForRole(role, level) {
@@ -897,23 +936,33 @@ async function fetchMatchInterests() {
         if (!response.ok) return;
 
         const data = await response.json();
+        const box  = document.getElementById("hudNotifications");
 
         if (!data.interests || data.interests.length === 0) return;
 
-        // Inject pending interests into the activity feed so they don't
-        // clobber the main match panel.
         data.interests.forEach(i => {
+            // Skip if this interest card is already in the feed
+            if (box.querySelector(`[data-interest-id="${i.id}"]`)) return;
+
             const senderName = i.sender_name || "Someone";
             const profileURL = `secondlife:///app/agent/${i.sender_uuid}/about`;
 
-            const html =
-                `💜 <a href="${profileURL}">${senderName}</a> is interested in matching.` +
-                (i.role              ? ` Role: ${i.role}.`                     : "") +
-                (i.relationship_type ? ` Seeking: ${i.relationship_type}.`     : "") +
-                ` <button onclick="respondMatchInterest(${i.id}, true)">Accept</button>` +
+            const detail =
+                (i.role              ? ` · Role: ${i.role}`              : "") +
+                (i.relationship_type ? ` · ${i.relationship_type}`       : "");
+
+            const card = document.createElement("div");
+            card.className = "activity-item match-interest-card";
+            card.setAttribute("data-interest-id", i.id);
+            card.innerHTML =
+                `💜 <a href="${profileURL}" style="color:#f0c95a;">${senderName}</a>` +
+                ` is interested in matching.` +
+                (detail ? `<br><span style="font-size:13px;opacity:0.8;">${detail}</span>` : "") +
+                `<br><button onclick="respondMatchInterest(${i.id}, true)">Accept</button>` +
                 ` <button onclick="respondMatchInterest(${i.id}, false)">Decline</button>`;
 
-            addActivity(html);
+            // Prepend so interest cards sit at the top
+            box.insertAdjacentElement("afterbegin", card);
         });
     }
     catch (err) {
@@ -923,6 +972,10 @@ async function fetchMatchInterests() {
 
 async function respondMatchInterest(interestId, accepted) {
     const uuid = getParam("uuid");
+
+    // Remove the card from the feed immediately so it doesn't linger
+    const card = document.querySelector(`[data-interest-id="${interestId}"]`);
+    if (card) card.remove();
 
     try {
         const response = await fetch(`${API_BASE}/api/matchmaking/respond`, {
@@ -945,13 +998,10 @@ async function respondMatchInterest(interestId, accepted) {
         if (accepted && result.matched_name) {
             const profileURL = `secondlife:///app/agent/${result.match_uuid}/about`;
             addActivity(`✨ NEW MATCH! <a href="${profileURL}">${result.matched_name}</a>`);
+            await fetchMatches();
         } else {
             addActivity("Match interest declined.");
         }
-
-        // Refresh both the interest feed and the matches panel
-        await fetchMatchInterests();
-        await fetchMatches();
     }
     catch (err) {
         console.error("Respond match interest failed:", err);
