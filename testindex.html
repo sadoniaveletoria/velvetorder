@@ -732,54 +732,67 @@ function updateHUD(data) {
 }
 
 // ----------------------------------------------------------------
-// LIVE XP TICK  (runs every 10s, zero API calls)
-// The HUD LSL script encodes the current running total into the
-// MOAP page URL as params: ?xp=N&level=N&nextxp=N&rank=...&live=1
-// We read those here and update just the XP bar elements.
+// LIVE XP TICK  (runs every 10s)
+// Polls /api/user/xp-live which is an in-memory store on the
+// server — no DB read or write.  The HUD LSL script POSTs the
+// current running total there every time it receives furniture XP.
 // ----------------------------------------------------------------
-function tickLiveXP() {
-    const params = new URLSearchParams(window.location.search);
+async function tickLiveXP() {
+    const uuid = getParam("uuid");
+    if (!uuid) return;
 
-    // Only act when the HUD script has pushed a live update
-    if (params.get("live") !== "1") return;
+    try {
+        const response = await fetch(`${API_BASE}/api/user/xp-live/${uuid}`, {
+            headers: { "x-api-secret": API_SECRET }
+        });
 
-    const xp     = parseInt(params.get("xp")    || 0);
-    const level  = parseInt(params.get("level") || currentLevel);
-    const nextXP = parseInt(params.get("nextxp")|| 250);
-    const rank   = params.get("rank") || "";
-    const role   = params.get("role") || currentRole;
-    const max    = 100;
+        // 404 just means no live data yet (not sitting on furniture) — ignore silently
+        if (!response.ok) return;
 
-    let percent = 100;
-    if (level < max && nextXP > 0)
-        percent = Math.min((xp / nextXP) * 100, 100);
+        const data = await response.json();
 
-    const remaining = level >= max ? 0 : Math.max(nextXP - xp, 0);
+        const xp     = parseInt(data.live_xp      || 0);
+        const level  = parseInt(data.level         || currentLevel);
+        const nextXP = parseInt(data.next_level_xp || 250);
+        const rank   = data.rank || "";
+        const role   = data.role || currentRole;
+        const max    = 100;
 
-    document.getElementById("hudXPText").textContent =
-        xp.toLocaleString() + " / " + nextXP.toLocaleString();
+        let percent = 100;
+        if (level < max && nextXP > 0)
+            percent = Math.min((xp / nextXP) * 100, 100);
 
-    document.getElementById("hudXPFill").style.width = percent + "%";
+        const remaining = level >= max ? 0 : Math.max(nextXP - xp, 0);
 
-    document.getElementById("hudXPPercent").textContent =
-        Math.round(percent) + "%";
+        document.getElementById("hudXPText").textContent =
+            xp.toLocaleString() + " / " + nextXP.toLocaleString();
 
-    document.getElementById("hudNextText").textContent =
-        level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
+        document.getElementById("hudXPFill").style.width = percent + "%";
 
-    // Also update level/rank if they changed (e.g. level-up mid-session)
-    if (level !== currentLevel) {
-        currentLevel = level;
-        document.getElementById("hudLevel").textContent = level;
-        addActivity("Level gained: " + level);
+        document.getElementById("hudXPPercent").textContent =
+            Math.round(percent) + "%";
+
+        document.getElementById("hudNextText").textContent =
+            level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
+
+        // Detect level-up or rank change mid-session
+        if (level !== currentLevel) {
+            currentLevel = level;
+            document.getElementById("hudLevel").textContent = level;
+            addActivity("Level gained: " + level);
+        }
+
+        if (rank && rank !== lastSeenRank && lastSeenRank !== "") {
+            addActivity("New rank: " + rank);
+        }
+
+        if (rank) { lastSeenRank = rank; document.getElementById("hudRank").textContent = rank.toUpperCase(); }
+        if (role) { currentRole  = role; }
+
+    } catch (err) {
+        // Non-fatal — live display just won't update this tick
+        console.warn("tickLiveXP failed:", err);
     }
-
-    if (rank && rank !== lastSeenRank && lastSeenRank !== "") {
-        addActivity("New rank: " + rank);
-    }
-
-    if (rank)  { lastSeenRank  = rank;  document.getElementById("hudRank").textContent = rank.toUpperCase(); }
-    if (role)  { currentRole   = role; }
 }
 
 async function fetchProfile() {
