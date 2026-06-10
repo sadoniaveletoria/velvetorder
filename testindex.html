@@ -1047,11 +1047,27 @@ async function respondMatchInterest(interestId, accepted) {
 
 // Fetch confirmed matches and render them in the large panel with SL profile links.
 // Tracks lastMatchSignature so new matches trigger an activity feed notification.
-function dismissMatch(matchUUID) {
-    dismissedMatches.add(matchUUID);
-    saveDismissedMatches(dismissedMatches);
+async function dismissMatch(matchUUID) {
+    // Remove from DOM immediately
     const card = document.querySelector(`[data-match-uuid="${matchUUID}"]`);
     if (card) card.remove();
+
+    // Persist server-side so it never comes back after page reload or HUD reattach
+    const uuid = getParam("uuid");
+    if (!uuid) return;
+
+    try {
+        await fetch(`${API_BASE}/api/matchmaking/dismiss`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-secret": API_SECRET
+            },
+            body: JSON.stringify({ user_uuid: uuid, match_uuid: matchUUID })
+        });
+    } catch(e) {
+        console.warn("Dismiss failed:", e);
+    }
 }
 
 async function fetchMatches() {
