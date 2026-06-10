@@ -1075,18 +1075,10 @@ async function fetchMatches() {
 
         const signature = matches.map(m => m.match_uuid).join("|");
 
-        // Only fire NEW MATCH notification for genuinely new matches never seen before
-        matches.forEach(m => {
-            if (!seenMatchNotifs.has(m.match_uuid)) {
-                seenMatchNotifs.add(m.match_uuid);
-                markMatchNotifSeen(m.match_uuid);
-                const profileURL = `secondlife:///app/agent/${m.match_uuid}/about`;
-                addActivity(`✨ NEW MATCH! <a href="${profileURL}">${m.sl_name}</a>`);
-            }
-        });
+        // Match cards are shown via the dismissable card below.
+        // NEW MATCH notifications only fire when you actively accept in this session.
 
         lastMatchSignature = signature;
-        try { localStorage.setItem("vo_match_sig_" + uuid, signature); } catch(e) {}
 
         // Insert a dismissable match card for each confirmed match.
         // Skips any already shown or manually dismissed by the user.
@@ -1113,31 +1105,7 @@ async function fetchMatches() {
 
             feed.insertAdjacentElement("afterbegin", card);
         });
-        // Drain any queued match notifications for this user (e.g. sender side)
-        // Use localStorage to track which notifications have already been shown
-        try {
-            const nRes = await fetch(`${API_BASE}/api/matchmaking/notifications/${uuid}`, {
-                headers: { "x-api-secret": API_SECRET }
-            });
 
-            if (nRes.ok) {
-                const nData = await nRes.json();
-                const shownKey = "vo_shown_notifs_" + uuid;
-                let shownNotifs;
-                try { shownNotifs = new Set(JSON.parse(localStorage.getItem(shownKey) || "[]")); }
-                catch(e) { shownNotifs = new Set(); }
-
-                (nData.notifications || []).forEach(n => {
-                    if (seenMatchNotifs.has(n.matchedUUID)) return;
-                    seenMatchNotifs.add(n.matchedUUID);
-                    markMatchNotifSeen(n.matchedUUID);
-                    const profileURL = `secondlife:///app/agent/${n.matchedUUID}/about`;
-                    addActivity(`✨ NEW MATCH! <a href="${profileURL}">${n.matchedName}</a> accepted your interest.`);
-                });
-
-                try { localStorage.setItem(shownKey, JSON.stringify([...shownNotifs])); } catch(e) {}
-            }
-        } catch (_) {}
     }
     catch (err) {
         console.error("fetchMatches failed:", err);
