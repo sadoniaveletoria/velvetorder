@@ -1147,15 +1147,14 @@ window.addEventListener("load", async () => {
         }
     }
 
+    // Load dismissed matches before anything renders so cards stay gone
+    dismissedMatches = loadDismissedMatches();
+
     // Full API refresh on load, then every 5 minutes.
     await refreshHUDData();
     setInterval(refreshHUDData, API_REFRESH_MS);
 
-    // Live XP tick: run once immediately after profile loads so the
-    // display is current right away, then every 10 seconds after that.
-    // Re-load dismissed matches now that uuid param is available
-    dismissedMatches = loadDismissedMatches();
-
+    // Live XP tick every 10 seconds — no API call
     await tickLiveXP();
     setInterval(tickLiveXP, LIVE_REFRESH_MS);
 });
