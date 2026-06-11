@@ -1092,9 +1092,28 @@ async function fetchMatches() {
         const signature = matches.map(m => m.match_uuid).join("|");
 
         // Match cards are shown via the dismissable card below.
-        // NEW MATCH notifications only fire when you actively accept in this session.
+        // NEW MATCH notifications only fire when you actively accept in this session,
+        // OR when the server drain below detects the other person accepted you.
 
         lastMatchSignature = signature;
+
+        // Drain server-side queued notifications (fires when the OTHER person
+        // accepted your interest). Gated by seenMatchNotifs so shows only once.
+        try {
+            const nRes = await fetch(`${API_BASE}/api/matchmaking/notifications/${uuid}`, {
+                headers: { "x-api-secret": API_SECRET }
+            });
+            if (nRes.ok) {
+                const nData = await nRes.json();
+                (nData.notifications || []).forEach(n => {
+                    if (seenMatchNotifs.has(n.matchedUUID)) return;
+                    seenMatchNotifs.add(n.matchedUUID);
+                    markMatchNotifSeen(n.matchedUUID);
+                    const profileURL = `secondlife:///app/agent/${n.matchedUUID}/about`;
+                    addActivity(`✨ NEW MATCH! <a href="${profileURL}">${n.matchedName}</a> accepted your interest.`);
+                });
+            }
+        } catch(_) {}
 
         // Insert a dismissable match card for each confirmed match.
         // Skips any already shown or manually dismissed by the user.
