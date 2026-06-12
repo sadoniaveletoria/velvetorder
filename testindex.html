@@ -1070,6 +1070,15 @@ async function dismissMatch(matchUUID) {
     }
 }
 
+function formatRelType(val) {
+    if (!val) return "";
+    if (val === "ds")        return "D/s";
+    if (val === "longterm")  return "Long Term";
+    if (val === "shortterm") return "Short Term";
+    if (val === "anything")  return "Anything";
+    return val;
+}
+
 async function fetchMatches() {
     const uuid = getParam("uuid");
     if (!uuid) return;
@@ -1125,7 +1134,7 @@ async function fetchMatches() {
 
             const profileURL = `secondlife:///app/agent/${m.match_uuid}/about`;
             const role       = m.role              ? `Role: ${m.role} · ` : "";
-            const relType    = m.relationship_type ? m.relationship_type  : "";
+            const relType    = formatRelType(m.relationship_type);
 
             const card = document.createElement("div");
             card.className = "activity-item match-card";
