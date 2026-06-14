@@ -1029,11 +1029,11 @@ async function respondMatchInterest(interestId, accepted) {
 
         if (accepted && result.matched_name) {
             const profileURL = `secondlife:///app/agent/${result.match_uuid}/about`;
-            if (!seenMatchNotifs.has(result.match_uuid)) {
-                seenMatchNotifs.add(result.match_uuid);
-                markMatchNotifSeen(result.match_uuid);
-                addActivity(`✨ NEW MATCH! <a href="${profileURL}">${result.matched_name}</a>`);
-            }
+            // Always show — acceptor just clicked Accept so this is always new
+            addActivity(`✨ NEW MATCH! You accepted <a href="${profileURL}">${result.matched_name}</a>'s interest.`);
+            // Mark seen so the drain doesn't double-fire for the acceptor
+            seenMatchNotifs.add(result.match_uuid);
+            markMatchNotifSeen(result.match_uuid);
             await fetchMatches();
         } else {
             addActivity("Match interest declined.");
@@ -1048,26 +1048,22 @@ async function respondMatchInterest(interestId, accepted) {
 // Fetch confirmed matches and render them in the large panel with SL profile links.
 // Tracks lastMatchSignature so new matches trigger an activity feed notification.
 async function dismissMatch(matchUUID) {
-    // Remove from DOM immediately
+    // Remove the card from the feed
     const card = document.querySelector(`[data-match-uuid="${matchUUID}"]`);
     if (card) card.remove();
 
-    // Persist server-side so it never comes back after page reload or HUD reattach
+    // Record the dismissal server-side (matchmaking_dismissed table).
+    // This only hides the feed card — the match itself is untouched and
+    // still appears in My Matches via the LSL menu.
     const uuid = getParam("uuid");
     if (!uuid) return;
-
     try {
         await fetch(`${API_BASE}/api/matchmaking/dismiss`, {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "x-api-secret": API_SECRET
-            },
+            headers: { "Content-Type": "application/json", "x-api-secret": API_SECRET },
             body: JSON.stringify({ user_uuid: uuid, match_uuid: matchUUID })
         });
-    } catch(e) {
-        console.warn("Dismiss failed:", e);
-    }
+    } catch(e) { console.warn("Dismiss failed:", e); }
 }
 
 function formatRelType(val) {
@@ -1083,10 +1079,19 @@ async function fetchMatches() {
     const uuid = getParam("uuid");
     if (!uuid) return;
 
-    // Reload all persistent state from localStorage on every call
-    dismissedMatches   = loadDismissedMatches();
+    // Load dismissed match UUIDs from the server so dismissed cards
+    // stay hidden after page reload or HUD reattach — no localStorage needed.
     seenMatchNotifs    = loadSeenMatchNotifs();
     lastMatchSignature = localStorage.getItem("vo_match_sig_" + uuid) || "";
+    try {
+        const dRes = await fetch(`${API_BASE}/api/matchmaking/dismissed/${uuid}`, {
+            headers: { "x-api-secret": API_SECRET }
+        });
+        if (dRes.ok) {
+            const dData = await dRes.json();
+            dismissedMatches = new Set(dData.dismissed || []);
+        }
+    } catch(e) { dismissedMatches = new Set(); }
 
     try {
         const response = await fetch(`${API_BASE}/api/matchmaking/matches/${uuid}`, {
@@ -1114,12 +1119,12 @@ async function fetchMatches() {
             });
             if (nRes.ok) {
                 const nData = await nRes.json();
-                (nData.notifications || []).forEach(n => {
-                    if (seenMatchNotifs.has(n.matchedUUID)) return;
-                    seenMatchNotifs.add(n.matchedUUID);
-                    markMatchNotifSeen(n.matchedUUID);
+                (nData.notifications || []).forEach(async n => {
+                    // Server drains (deletes) this entry so it only arrives once —
+                    // no need for seenMatchNotifs gate here
                     const profileURL = `secondlife:///app/agent/${n.matchedUUID}/about`;
                     addActivity(`✨ NEW MATCH! <a href="${profileURL}">${n.matchedName}</a> accepted your interest.`);
+                    await fetchMatches();
                 });
             }
         } catch(_) {}
