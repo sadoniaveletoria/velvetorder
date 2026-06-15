@@ -30,10 +30,12 @@ html, body {
     position: absolute;
     width: 1240px;
     height: 1240px;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
+    margin-left: -620px;
+    margin-top: -620px;
     transform: scale(1);
-    transform-origin: top left;
+    transform-origin: center center;
     background:
         radial-gradient(circle at center, rgba(120, 25, 170, 0.18), transparent 36%),
         linear-gradient(145deg, #050307, #0b0710 45%, #030203);
@@ -674,16 +676,8 @@ function markMatchNotifSeen(matchUUID) {
 let seenMatchNotifs = new Set(); // populated in fetchMatches
 
 function scaleHUD() {
-    const w     = window.innerWidth  || 1024;
-    const h     = window.innerHeight || 1024;
-    const scale = Math.min(w / 1240, h / 1240);
-    const scaled = 1240 * scale;
-    const hud   = document.querySelector(".hud");
-    // Scale from top-left then offset to centre in the viewport
-    hud.style.transform       = "scale(" + scale + ")";
-    hud.style.transformOrigin = "top left";
-    hud.style.top             = Math.max(0, (h - scaled) / 2) + "px";
-    hud.style.left            = Math.max(0, (w - scaled) / 2) + "px";
+    const scale = Math.min(window.innerWidth / 1240, window.innerHeight / 1240);
+    document.querySelector(".hud").style.transform = "scale(" + scale + ")";
 }
 
 function getParam(name, fallback = "") {
@@ -1286,7 +1280,6 @@ window.addEventListener("load", async () => {
 });
 
 window.addEventListener("resize", scaleHUD);
-document.addEventListener("DOMContentLoaded", scaleHUD);
 </script>
 
 </body>
