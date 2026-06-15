@@ -577,10 +577,10 @@ html, body {
     </section>
 
     <section class="panel large-panel">
-        <div class="feature-title gold">BOND PARTNERS</div>
+        <div class="feature-title gold">PARTNER PANEL</div>
 
         <div class="partner-panel-list" id="partnerPanelList">
-            <div class="partner-empty gold">NO BOND PARTNERS</div>
+            <div class="partner-empty gold">NO BONDED PARTNERS</div>
         </div>
     </section>
 
@@ -590,14 +590,6 @@ html, body {
 
     <section class="panel notifications-panel">
         <div class="notifications-title gold">ACTIVITY FEED</div>
-                <div style="text-align:center;margin-top:8px;">
-                    <button id="lookingToggle"
-                        style="background:transparent;border:1px solid #8c6a12;color:#8c6a12;
-                               font-family:inherit;font-size:12px;padding:3px 10px;
-                               border-radius:4px;cursor:pointer;letter-spacing:1px;">
-                        Looking: --
-                    </button>
-                </div>
         <div class="notifications-body" id="hudNotifications">
             <div class="activity-item">Waiting for live data...</div>
         </div>
@@ -812,30 +804,6 @@ function updateHUD(data) {
         `<span>💎 ${tokens.toLocaleString()}</span><span>♦ 0</span><span>🔷 0</span>`;
 
     profileLoadedOnce = true;
-
-    // Wire up looking toggle from profile data
-    try {
-        const uuid = getParam("uuid");
-        if (uuid) {
-            const pRes = await fetch(`${API_BASE}/api/matchmaking/profile/${uuid}`, {
-                headers: { "x-api-secret": API_SECRET }
-            });
-            if (pRes.ok) {
-                const pData = await pRes.json();
-                const looking = pData.looking !== undefined ? pData.looking : null;
-                const btn = document.getElementById("lookingToggle");
-                if (btn && looking !== null) {
-                    btn.textContent = looking ? "Looking: ON" : "Looking: OFF";
-                    btn.style.color = looking ? "#a735ff" : "#8c6a12";
-                    btn.onclick     = () => toggleLooking(!!looking);
-                } else if (btn) {
-                    btn.textContent = "Set Up Matchmaking";
-                    btn.style.color = "#8c6a12";
-                    btn.onclick     = () => addActivity("Use Partners > Find Match to set up your matchmaking profile.");
-                }
-            }
-        }
-    } catch(e) {}
 }
 
 // ----------------------------------------------------------------
@@ -940,7 +908,7 @@ function updatePartnerPanel(partners) {
     box.innerHTML = "";
 
     if (!partners || partners.length === 0) {
-        box.innerHTML = '<div class="partner-empty gold">NO BOND PARTNERS</div>';
+        box.innerHTML = '<div class="partner-empty gold">NO BONDED PARTNERS</div>';
 
         if (partnerLoadedOnce && lastPartnerSignature !== "none") {
 
@@ -1098,31 +1066,6 @@ async function dismissMatch(matchUUID) {
     } catch(e) { console.warn("Dismiss failed:", e); }
 }
 
-async function toggleLooking(currentlyLooking) {
-    const uuid = getParam("uuid");
-    if (!uuid) return;
-
-    const newVal = !currentlyLooking;
-
-    try {
-        const res = await fetch(`${API_BASE}/api/matchmaking/looking`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "x-api-secret": API_SECRET },
-            body: JSON.stringify({ user_uuid: uuid, looking: newVal })
-        });
-
-        if (res.ok) {
-            const btn = document.getElementById("lookingToggle");
-            if (btn) {
-                btn.textContent    = newVal ? "Looking: ON" : "Looking: OFF";
-                btn.style.color    = newVal ? "#a735ff" : "#8c6a12";
-                btn.onclick        = () => toggleLooking(newVal);
-            }
-            addActivity(newVal ? "💜 You are now visible to matchmaking." : "Matchmaking visibility turned off.");
-        }
-    } catch(e) { console.warn("Toggle looking failed:", e); }
-}
-
 function formatRelType(val) {
     if (!val) return "";
     if (val === "ds")        return "D/s";
@@ -1177,14 +1120,11 @@ async function fetchMatches() {
             if (nRes.ok) {
                 const nData = await nRes.json();
                 (nData.notifications || []).forEach(async n => {
+                    // Server drains (deletes) this entry so it only arrives once —
+                    // no need for seenMatchNotifs gate here
                     const profileURL = `secondlife:///app/agent/${n.matchedUUID}/about`;
-                    // Differentiate: accepted match vs new compatible profile notification
-                    if (n.type === "accepted") {
-                        addActivity(`✨ NEW MATCH! <a href="${profileURL}">${n.matchedName}</a> accepted your interest.`);
-                        await fetchMatches();
-                    } else {
-                        addActivity(`💜 NEW COMPATIBLE PROFILE! <a href="${profileURL}">${n.matchedName}</a> is looking for a match.`);
-                    }
+                    addActivity(`✨ NEW MATCH! <a href="${profileURL}">${n.matchedName}</a> accepted your interest.`);
+                    await fetchMatches();
                 });
             }
         } catch(_) {}
@@ -1201,8 +1141,6 @@ async function fetchMatches() {
             const role       = m.role              ? `Role: ${m.role} · ` : "";
             const relType    = formatRelType(m.relationship_type);
 
-            const score    = m.score ? `<span style="color:#a735ff;font-size:12px;"> · ${m.score}% compatible</span>` : "";
-
             const card = document.createElement("div");
             card.className = "activity-item match-card";
             card.setAttribute("data-match-uuid", m.match_uuid);
@@ -1211,7 +1149,7 @@ async function fetchMatches() {
                 `style="float:right;cursor:pointer;font-size:11px;padding:2px 7px;` +
                 `background:transparent;border:1px solid #8c6a12;color:#c9aa69;` +
                 `border-radius:4px;font-family:inherit;">Dismiss</button>` +
-                `💜 <b>MATCH</b> · <a href="${profileURL}" style="color:#f0c95a;">${m.sl_name}</a>${score}<br>` +
+                `💜 <b>MATCH</b> · <a href="${profileURL}" style="color:#f0c95a;">${m.sl_name}</a><br>` +
                 (role || relType ? `<span style="font-size:12px;opacity:0.8;">${role}${relType}</span>` : "");
 
             feed.insertAdjacentElement("afterbegin", card);
