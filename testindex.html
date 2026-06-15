@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=1240, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Velvet Order HUD</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
@@ -676,8 +676,17 @@ function markMatchNotifSeen(matchUUID) {
 let seenMatchNotifs = new Set(); // populated in fetchMatches
 
 function scaleHUD() {
-    const scale = Math.min(window.innerWidth / 1240, window.innerHeight / 1240);
-    document.querySelector(".hud").style.transform = "scale(" + scale + ")";
+    // SL MOAP browser renders at PRIM_MEDIA_WIDTH_PIXELS x PRIM_MEDIA_HEIGHT_PIXELS (1024x1024)
+    // The HUD canvas is 1240x1240, so scale to fit within the browser viewport
+    const w = window.innerWidth  || 1024;
+    const h = window.innerHeight || 1024;
+    const scale = Math.min(w / 1240, h / 1240);
+    const hud = document.querySelector(".hud");
+    hud.style.transform       = "scale(" + scale + ")";
+    hud.style.transformOrigin = "top left";
+    hud.style.position        = "absolute";
+    hud.style.top             = "0";
+    hud.style.left            = "0";
 }
 
 function getParam(name, fallback = "") {
@@ -1280,6 +1289,7 @@ window.addEventListener("load", async () => {
 });
 
 window.addEventListener("resize", scaleHUD);
+document.addEventListener("DOMContentLoaded", scaleHUD);
 </script>
 
 </body>
