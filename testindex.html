@@ -666,6 +666,7 @@ let activityFeed       = [];
 let profileLoadedOnce  = false;
 let partnerLoadedOnce  = false;
 let lastSeenLevel      = null;
+let notifiedLevel      = null;  // tracks which level we already announced
 let lastSeenRank       = "";
 let lastSeenRole       = "";
 let lastPartnerSignature = "";
@@ -770,7 +771,7 @@ function updateHUD(data) {
     const max      = parseInt(data.max_level || 100);
 
     if (profileLoadedOnce) {
-        if (lastSeenLevel !== null && level > lastSeenLevel) addActivity(`Level gained: ${level}`);
+        if (lastSeenLevel !== null && level > lastSeenLevel && level !== notifiedLevel) { addActivity(`✨ Level gained: ${level}`); notifiedLevel = level; }
         if (lastSeenRank && rank !== lastSeenRank)           addActivity(`New rank: ${rank}`);
         if (lastSeenRole && role !== lastSeenRole)           addActivity(`Role changed: ${cleanRole(role)}`);
     }
@@ -893,7 +894,7 @@ async function tickLiveXP() {
         if (level !== currentLevel) {
             currentLevel = level;
             document.getElementById("hudLevel").textContent = level;
-            addActivity("Level gained: " + level);
+            if (level !== notifiedLevel) { addActivity("✨ Level gained: " + level); notifiedLevel = level; }
         }
         if (rank && rank !== lastSeenRank && lastSeenRank !== "") addActivity("New rank: " + rank);
         if (rank) { lastSeenRank = rank; document.getElementById("hudRank").textContent = rank.toUpperCase(); }
