@@ -624,11 +624,15 @@ html, body {
 
     <section class="panel notifications-panel">
         <div class="notifications-title gold">ACTIVITY FEED</div>
-        <div style="text-align:center;margin-top:8px;">
+        <div style="text-align:center;margin-top:10px;margin-bottom:4px;">
             <button id="lookingToggle"
-                style="background:transparent;border:1px solid #8c6a12;color:#8c6a12;
-                       font-family:inherit;font-size:12px;padding:3px 10px;
-                       border-radius:4px;cursor:pointer;letter-spacing:1px;">
+                style="background:linear-gradient(180deg,rgba(28,18,32,0.97),rgba(8,5,10,0.97));
+                       border:1px solid #8c6a12;
+                       font-family:'Cinzel',serif;font-size:14px;letter-spacing:2px;
+                       padding:6px 18px;border-radius:6px;cursor:pointer;
+                       background-clip:text;
+                       color:#d4af37;
+                       transition:all 0.18s ease;">
                 Looking: --
             </button>
         </div>
@@ -811,7 +815,8 @@ function updateHUD(data) {
                 if (!btn) return;
                 if (looking !== null) {
                     btn.textContent = looking ? "Looking: ON" : "Looking: OFF";
-                    btn.style.color = looking ? "#a735ff" : "#8c6a12";
+                    btn.style.color = looking ? "#f0c95a" : "#8c6a12";
+                    btn.style.borderColor = looking ? "#d4af37" : "#8c6a12";
                     btn.onclick     = () => toggleLooking(!!looking);
                 } else {
                     btn.textContent = "Set Up Matchmaking";
@@ -858,7 +863,8 @@ async function toggleLooking(currentlyLooking) {
             const btn = document.getElementById("lookingToggle");
             if (btn) {
                 btn.textContent = newVal ? "Looking: ON" : "Looking: OFF";
-                btn.style.color = newVal ? "#a735ff" : "#8c6a12";
+                btn.style.color = newVal ? "#f0c95a" : "#8c6a12";
+                btn.style.borderColor = newVal ? "#d4af37" : "#8c6a12";
                 btn.onclick     = () => toggleLooking(newVal);
             }
             addActivity(newVal ? "💜 You are now visible to matchmaking." : "Matchmaking visibility turned off.");
