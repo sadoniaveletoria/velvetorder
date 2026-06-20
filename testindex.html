@@ -525,6 +525,59 @@ html, body {
     margin-bottom: 28px;
 }
 
+.partner-info-menu {
+    display: none;
+    position: absolute;
+    top: 300px;
+    left: 360px;
+    width: 520px;
+    min-height: 360px;
+    z-index: 6000;
+    background: rgba(4, 4, 6, 0.98);
+    border: 2px solid #8c6a12;
+    border-radius: 16px;
+    box-shadow: 0 0 35px rgba(155,48,255,0.55);
+    padding: 35px;
+    text-align: center;
+}
+
+.partner-info-title {
+    font-size: 28px;
+    letter-spacing: 4px;
+    margin-bottom: 24px;
+    color: #d4af37;
+}
+
+.partner-card {
+    background: rgba(155,48,255,0.06);
+    border: 1px solid rgba(140,106,18,0.4);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.partner-card-name {
+    font-family: "Cinzel", serif;
+    font-size: 16px;
+    color: #f0c95a;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+}
+
+.partner-card-bond {
+    font-size: 13px;
+    color: #c9aa69;
+    letter-spacing: 1px;
+}
+
+.partner-empty {
+    font-size: 18px;
+    color: #8c6a12;
+    margin: 30px 0;
+    letter-spacing: 2px;
+}
+
 .role-info-close {
     background: #080808;
     border: 2px solid #8c6a12;
@@ -599,7 +652,7 @@ html, body {
                 <span class="vo-btn-label">ROLES</span>
                 <span class="vo-btn-sub">progression</span>
             </button>
-            <button class="vo-btn" type="button" id="partnerBtn">
+            <button class="vo-btn" type="button" id="partnerBtn" onclick="showPartnerInfo()">
                 <span class="vo-btn-corner tl"></span>
                 <span class="vo-btn-corner tr"></span>
                 <span class="vo-btn-corner bl"></span>
@@ -645,6 +698,12 @@ html, body {
 
     <div class="currency gold" id="hudCurrency">
         <span>💎 0</span><span>♦ 0</span><span>🔷 0</span>
+    </div>
+
+    <div class="partner-info-menu" id="partnerInfoMenu">
+        <div class="partner-info-title purple">BOND PARTNERS</div>
+        <div id="partnerInfoList"></div>
+        <button class="role-info-close" type="button" onclick="closePartnerInfo()" style="margin-top:16px;">CLOSE</button>
     </div>
 
     <div class="role-info-menu" id="roleInfoMenu">
@@ -753,6 +812,39 @@ function getNextRankForRole(role, level) {
         if (level < set[i][0]) return set[i][1] + " at Level " + set[i][0];
     }
     return "Max Rank Reached";
+}
+
+function showPartnerInfo() {
+    const list = document.getElementById("partnerInfoList");
+    list.innerHTML = "";
+
+    const partners = window._lastPartners || [];
+
+    if (partners.length === 0) {
+        list.innerHTML = "<div class='partner-empty'>NO BOND PARTNERS</div>";
+    } else {
+        partners.forEach(p => {
+            const bondPct = p.bond_next_xp > 0
+                ? Math.round((p.bond_xp / p.bond_next_xp) * 100) : 100;
+            const card = document.createElement("div");
+            card.className = "partner-card";
+            card.innerHTML =
+                "<div class='partner-card-name'>" + (p.sl_name || "Unknown") + "</div>" +
+                "<div class='partner-card-bond'>" +
+                    "Bond Level " + p.bond_level +
+                    " &nbsp;·&nbsp; " +
+                    p.bond_xp + " / " + p.bond_next_xp + " XP" +
+                    " &nbsp;·&nbsp; " + bondPct + "%" +
+                "</div>";
+            list.appendChild(card);
+        });
+    }
+
+    document.getElementById("partnerInfoMenu").style.display = "block";
+}
+
+function closePartnerInfo() {
+    document.getElementById("partnerInfoMenu").style.display = "none";
 }
 
 function showRoleInfo() {
@@ -1100,6 +1192,7 @@ async function fetchPartnerBond() {
         });
         if (!response.ok) throw new Error("HTTP " + response.status);
         const data = await response.json();
+        window._lastPartners = data.partners || [];
         updatePartnerPanel(data.partners || []);
     } catch(err) { updatePartnerPanel([]); }
 }
