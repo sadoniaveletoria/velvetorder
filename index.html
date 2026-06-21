@@ -212,39 +212,105 @@ html, body {
 
 .menu-grid {
     display: grid;
-    grid-template-columns: repeat(2, 190px);
-    grid-template-rows: repeat(3, 115px);
+    grid-template-columns: repeat(2, 220px);
+    grid-template-rows: repeat(3, 135px);
     gap: 18px;
     justify-content: center;
 }
 
-.menu-btn {
-    background: linear-gradient(180deg, rgba(19,16,18,0.95), rgba(5,5,7,0.95));
-    border: 2px solid #8c6a12;
-    border-radius: 12px;
-    color: #d4af37;
-    font-family: "Cinzel", serif;
-    font-size: 16px;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.18s ease;
-    box-shadow: inset 0 0 14px rgba(0,0,0,0.85);
-}
-
-.menu-btn:hover,
-.action-btn:hover,
-.wear-btn:hover,
-.close-btn:hover {
+.close-btn:hover,
+.role-info-close:hover {
     color: #fff1b0;
     border-color: #f0c95a;
     transform: translateY(-2px);
     box-shadow: 0 0 16px rgba(155,48,255,0.5);
 }
 
-.menu-icon {
-    display: block;
-    font-size: 42px;
-    margin-bottom: 10px;
+.vo-btn {
+    position: relative;
+    background: linear-gradient(160deg, #120d18 0%, #0a0610 50%, #160e1e 100%);
+    border: 1px solid #8c6a12;
+    border-radius: 14px;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.2s ease;
+}
+
+.vo-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+    padding: 1px;
+    background: linear-gradient(135deg, #d4af37 0%, #7c5416 40%, #2a1a06 60%, #8c6a12 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+.vo-btn::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent);
+}
+
+.vo-btn-corner {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-color: #d4af37;
+    border-style: solid;
+    opacity: 0.6;
+}
+.vo-btn-corner.tl { top: 6px; left: 6px; border-width: 1px 0 0 1px; border-radius: 3px 0 0 0; }
+.vo-btn-corner.tr { top: 6px; right: 6px; border-width: 1px 1px 0 0; border-radius: 0 3px 0 0; }
+.vo-btn-corner.bl { bottom: 6px; left: 6px; border-width: 0 0 1px 1px; border-radius: 0 0 0 3px; }
+.vo-btn-corner.br { bottom: 6px; right: 6px; border-width: 0 1px 1px 0; border-radius: 0 0 3px 0; }
+
+.vo-btn-glyph {
+    font-size: 28px;
+    line-height: 1;
+    background: linear-gradient(to bottom, #fff8d0 0%, #d4af37 50%, #8c6a12 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 8px rgba(212,175,55,0.4));
+}
+
+.vo-btn-label {
+    font-family: "Cinzel", Georgia, serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    background: linear-gradient(to bottom, #fff8d0 0%, #d4af37 55%, #9a7220 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.vo-btn-sub {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(180,140,60,0.55);
+    text-transform: uppercase;
+    margin-top: -6px;
+}
+
+.vo-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(155,48,255,0.25), 0 0 20px rgba(212,175,55,0.12);
+    border-color: #d4af37;
+}
+
+.vo-btn:hover .vo-btn-corner {
+    opacity: 1;
 }
 
 .large-panel {
@@ -263,66 +329,6 @@ html, body {
     letter-spacing: 2px;
 }
 
-.role-info-menu {
-    display: none;
-    position: absolute;
-    top: 300px;
-    left: 360px;
-    width: 520px;
-    height: 360px;
-    z-index: 6000;
-    background: rgba(4, 4, 6, 0.98);
-    border: 2px solid #8c6a12;
-    border-radius: 16px;
-    box-shadow: 0 0 35px rgba(155,48,255,0.55);
-    padding: 35px;
-    text-align: center;
-}
-
-.role-info-title {
-    font-size: 34px;
-    letter-spacing: 4px;
-    margin-bottom: 28px;
-}
-
-.role-info-current {
-    font-size: 42px;
-    letter-spacing: 3px;
-    margin-bottom: 22px;
-}
-
-.role-info-next {
-    font-size: 20px;
-    color: #c9aa69;
-    margin-bottom: 28px;
-}
-
-.role-info-note {
-    font-size: 17px;
-    line-height: 1.5;
-    color: #c9aa69;
-    margin-bottom: 28px;
-}
-
-.role-info-close {
-    background: #080808;
-    border: 2px solid #8c6a12;
-    color: #d4af37;
-    border-radius: 8px;
-    width: 180px;
-    height: 52px;
-    font-family: "Cinzel", serif;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-.role-info-close:hover {
-    color: #fff1b0;
-    border-color: #f0c95a;
-    transform: translateY(-2px);
-    box-shadow: 0 0 16px rgba(155,48,255,0.5);
-}
-    
 .partner-panel-list {
     position: absolute;
     top: 72px;
@@ -331,9 +337,7 @@ html, body {
     z-index: 2;
 }
 
-.partner-card {
-    margin-bottom: 18px;
-}
+.partner-card { margin-bottom: 18px; }
 
 .partner-name {
     font-size: 18px;
@@ -407,91 +411,47 @@ html, body {
     top: 500px;
     right: 20px;
     width: 470px;
-    height: 275px;
+    height: 470px;
     padding: 28px;
+    display: flex;
+    flex-direction: column;
 }
 
 .notifications-title {
     text-align: center;
     font-size: 24px;
     letter-spacing: 2px;
+    flex-shrink: 0;
 }
 
 .notifications-body {
-    margin-top: 34px;
-    font-size: 18px;
-    line-height: 1.5;
+    margin-top: 18px;
+    font-size: 16px;
+    line-height: 1.6;
     color: #c9aa69;
-    text-align: center;
+    text-align: left;
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 6px;
+    scrollbar-width: thin;
+    scrollbar-color: #8c6a12 transparent;
 }
 
-.action-row {
-    position: absolute;
-    top: 800px;
-    left: 20px;
-    display: grid;
-    grid-template-columns: repeat(6, 82px);
-    gap: 10px;
+.notifications-body::-webkit-scrollbar { width: 5px; }
+.notifications-body::-webkit-scrollbar-thumb {
+    background: #8c6a12;
+    border-radius: 4px;
 }
 
-.action-btn {
-    height: 72px;
-    background: linear-gradient(180deg, #120f14, #050406);
-    border: 2px solid #8c6a12;
-    border-radius: 9px;
-    color: #d4af37;
-    font-family: "Cinzel", serif;
-    font-size: 11px;
-    letter-spacing: 0.8px;
-    cursor: pointer;
-    transition: all 0.18s ease;
-    padding: 4px;
-    white-space: nowrap;
+.activity-item {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(140,106,18,0.2);
+    color: #c9aa69;
+    text-shadow: 0 0 8px rgba(155,48,255,0.3);
 }
 
-.wear-row {
-    position: absolute;
-    top: 800px;
-    right: 40px;
-    width: 430px;
-    display: grid;
-    grid-template-columns: repeat(4, 100px);
-    gap: 10px;
-    justify-content: center;
-}
-
-.wear-btn {
-    height: 58px;
-    background: linear-gradient(180deg, #120f14, #050406);
-    border: 2px solid #8c6a12;
-    border-radius: 10px;
-    color: #d4af37;
-    font-family: "Cinzel", serif;
-    font-size: 13px;
-    letter-spacing: 0.8px;
-    cursor: pointer;
-    transition: all 0.18s ease;
-    white-space: nowrap;
-}
-
-.footer-left {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    width: 460px;
-    height: 60px;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 6px;
-}
-
-.footer-btn {
-    background: #050406;
-    border: 2px solid #8c6a12;
-    border-radius: 8px;
-    color: #d4af37;
-    font-size: 24px;
-}
+.activity-item:last-child { border-bottom: none; }
 
 .close-btn {
     position: absolute;
@@ -522,6 +482,113 @@ html, body {
     align-items: center;
     justify-content: space-around;
     font-size: 22px;
+}
+
+.role-info-menu {
+    display: none;
+    position: absolute;
+    top: 300px;
+    left: 360px;
+    width: 520px;
+    height: 360px;
+    z-index: 6000;
+    background: rgba(4, 4, 6, 0.98);
+    border: 2px solid #8c6a12;
+    border-radius: 16px;
+    box-shadow: 0 0 35px rgba(155,48,255,0.55);
+    padding: 35px;
+    text-align: center;
+}
+
+.role-info-title {
+    font-size: 34px;
+    letter-spacing: 4px;
+    margin-bottom: 28px;
+}
+
+.role-info-current {
+    font-size: 42px;
+    letter-spacing: 3px;
+    margin-bottom: 22px;
+}
+
+.role-info-next {
+    font-size: 20px;
+    color: #c9aa69;
+    margin-bottom: 28px;
+}
+
+.role-info-note {
+    font-size: 17px;
+    line-height: 1.5;
+    color: #c9aa69;
+    margin-bottom: 28px;
+}
+
+.partner-info-menu {
+    display: none;
+    position: absolute;
+    top: 300px;
+    left: 360px;
+    width: 520px;
+    min-height: 360px;
+    z-index: 6000;
+    background: rgba(4, 4, 6, 0.98);
+    border: 2px solid #8c6a12;
+    border-radius: 16px;
+    box-shadow: 0 0 35px rgba(155,48,255,0.55);
+    padding: 35px;
+    text-align: center;
+}
+
+.partner-info-title {
+    font-size: 28px;
+    letter-spacing: 4px;
+    margin-bottom: 24px;
+    color: #d4af37;
+}
+
+.partner-card {
+    background: rgba(155,48,255,0.06);
+    border: 1px solid rgba(140,106,18,0.4);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.partner-card-name {
+    font-family: "Cinzel", serif;
+    font-size: 16px;
+    color: #f0c95a;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+}
+
+.partner-card-bond {
+    font-size: 13px;
+    color: #c9aa69;
+    letter-spacing: 1px;
+}
+
+.partner-empty {
+    font-size: 18px;
+    color: #8c6a12;
+    margin: 30px 0;
+    letter-spacing: 2px;
+}
+
+.role-info-close {
+    background: #080808;
+    border: 2px solid #8c6a12;
+    color: #d4af37;
+    border-radius: 8px;
+    width: 180px;
+    height: 52px;
+    font-family: "Cinzel", serif;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.18s ease;
 }
 </style>
 </head>
@@ -576,21 +643,31 @@ html, body {
 
     <section class="panel menu-panel">
         <div class="menu-grid">
-            <button class="menu-btn" type="button" onclick="showRoleInfo()">
-                <span class="menu-icon">♕</span>ROLES
+            <button class="vo-btn" type="button" onclick="showRoleInfo()">
+                <span class="vo-btn-corner tl"></span>
+                <span class="vo-btn-corner tr"></span>
+                <span class="vo-btn-corner bl"></span>
+                <span class="vo-btn-corner br"></span>
+                <span class="vo-btn-glyph">⚜</span>
+                <span class="vo-btn-label">ROLES</span>
+                <span class="vo-btn-sub">progression</span>
             </button>
-            <button class="menu-btn" type="button"><span class="menu-icon">♡</span>PARTNER</button>
-            <button class="menu-btn" type="button"><span class="menu-icon">☆</span>EVENTS</button>
-            <button class="menu-btn" type="button"><span class="menu-icon">⚜</span>HOUSE</button>
-            <button class="menu-btn" type="button"><span class="menu-icon">⚙</span>SETTINGS</button>
+            <button class="vo-btn" type="button" id="partnerBtn" onclick="showPartnerInfo()">
+                <span class="vo-btn-corner tl"></span>
+                <span class="vo-btn-corner tr"></span>
+                <span class="vo-btn-corner bl"></span>
+                <span class="vo-btn-corner br"></span>
+                <span class="vo-btn-glyph">♥</span>
+                <span class="vo-btn-label">PARTNER</span>
+                <span class="vo-btn-sub">bonds &amp; matches</span>
+            </button>
         </div>
     </section>
 
     <section class="panel large-panel">
-        <div class="feature-title gold">PARTNER PANEL</div>
-
+        <div class="feature-title gold">BOND PARTNERS</div>
         <div class="partner-panel-list" id="partnerPanelList">
-            <div class="partner-empty gold">NO BONDED PARTNERS</div>
+            <div class="partner-empty gold">NO BOND PARTNERS</div>
         </div>
     </section>
 
@@ -599,68 +676,100 @@ html, body {
     </div>
 
     <section class="panel notifications-panel">
-        <div class="notifications-title gold">NOTIFICATIONS</div>
-        <div class="notifications-body" id="hudNotifications"></div>
+        <div class="notifications-title gold">ACTIVITY FEED</div>
+        <div style="text-align:center;margin-top:10px;margin-bottom:4px;">
+            <button id="lookingToggle"
+                style="background:linear-gradient(180deg,rgba(28,18,32,0.97),rgba(8,5,10,0.97));
+                       border:1px solid #8c6a12;
+                       font-family:'Cinzel',serif;font-size:14px;letter-spacing:2px;
+                       padding:6px 18px;border-radius:6px;cursor:pointer;
+                       background-clip:text;
+                       color:#d4af37;
+                       transition:all 0.18s ease;">
+                Looking: --
+            </button>
+        </div>
+        <div class="notifications-body" id="hudNotifications">
+            <div class="activity-item">Waiting for live data...</div>
+        </div>
     </section>
 
-    <!--
-    <div class="action-row">
-        <button class="action-btn">KNEEL</button>
-        <button class="action-btn">OBEY</button>
-        <button class="action-btn">SERVE</button>
-        <button class="action-btn">PRAISE</button>
-        <button class="action-btn">BOND</button>
-        <button class="action-btn">REWARD</button>
-    </div>
-
-    <div class="wear-row">
-        <button class="wear-btn">WEAR</button>
-        <button class="wear-btn">UNWEAR</button>
-        <button class="wear-btn">LOCK</button>
-        <button class="wear-btn">UNLOCK</button>
-    </div>
-
-    <div class="footer-left">
-        <button class="footer-btn">▥</button>
-        <button class="footer-btn">♟</button>
-        <button class="footer-btn">✉</button>
-        <button class="footer-btn">♪</button>
-        <button class="footer-btn">?</button>
-        <button class="footer-btn">⏻</button>
-    </div>
-    -->
-
-    <button class="close-btn" type="button">UPDATE HUD</button>
+    <button class="close-btn" type="button" onclick="checkForUpdate()">UPDATE HUD</button>
 
     <div class="currency gold" id="hudCurrency">
         <span>💎 0</span><span>♦ 0</span><span>🔷 0</span>
     </div>
 
+    <div class="partner-info-menu" id="partnerInfoMenu">
+        <div class="partner-info-title purple">YOUR MATCHES</div>
+        <div id="partnerInfoList"></div>
+        <button class="role-info-close" type="button" onclick="closePartnerInfo()" style="margin-top:16px;">CLOSE</button>
+    </div>
+
     <div class="role-info-menu" id="roleInfoMenu">
         <div class="role-info-title purple">CURRENT ROLE</div>
-
         <div class="role-info-current gold" id="roleInfoCurrent">LOADING</div>
-
-        <div class="role-info-next" id="roleInfoNext">
-            Next Rank: Loading
-        </div>
-
-        <div class="role-info-note">
-            Role changes are managed through the HUD menu.
-        </div>
-
+        <div class="role-info-next" id="roleInfoNext">Next Rank: Loading</div>
+        <div class="role-info-note">Role changes are managed through the HUD menu.</div>
         <button class="role-info-close" type="button" onclick="closeRoleInfo()">CLOSE</button>
     </div>
-    
+
 </div>
 </div>
 
 <script>
-const API_BASE = "https://api.velvetorder.duckdns.org";
-const API_SECRET = "jSDGBnYYqy08Hk4afpELPmzRkJTlfApR";
+const API_BASE        = "https://api.velvetorder.duckdns.org";
+const API_SECRET      = "jSDGBnYYqy08Hk4afpELPmzRkJTlfApR";
+const API_REFRESH_MS  = 300000;
+const LIVE_REFRESH_MS = 10000;
 
-let currentRole = "loading";
-let currentLevel = 1;
+let currentRole        = "loading";
+let currentLevel       = 1;
+let activityFeed       = [];
+let profileLoadedOnce  = false;
+let partnerLoadedOnce  = false;
+let lastSeenLevel      = null;
+let notifiedLevel      = null;  // tracks which level we already announced
+let lastSeenRank       = "";
+let lastSeenRole       = "";
+let lastPartnerSignature = "";
+let lastMatchSignature   = "";
+
+function loadDismissedMatches() {
+    try {
+        const uuid = getParam("uuid");
+        if (!uuid) return new Set();
+        const stored = localStorage.getItem("vo_dismissed_matches_" + uuid);
+        return stored ? new Set(JSON.parse(stored)) : new Set();
+    } catch(e) { return new Set(); }
+}
+function saveDismissedMatches(set) {
+    try {
+        const uuid = getParam("uuid");
+        if (!uuid) return;
+        localStorage.setItem("vo_dismissed_matches_" + uuid, JSON.stringify([...set]));
+    } catch(e) {}
+}
+let dismissedMatches = new Set();
+
+function loadSeenMatchNotifs() {
+    try {
+        const uuid = getParam("uuid");
+        if (!uuid) return new Set();
+        const stored = localStorage.getItem("vo_seen_match_notifs_" + uuid);
+        return stored ? new Set(JSON.parse(stored)) : new Set();
+    } catch(e) { return new Set(); }
+}
+function markMatchNotifSeen(matchUUID) {
+    try {
+        const uuid = getParam("uuid");
+        if (!uuid) return;
+        const set = loadSeenMatchNotifs();
+        set.add(matchUUID);
+        localStorage.setItem("vo_seen_match_notifs_" + uuid, JSON.stringify([...set]));
+    } catch(e) {}
+}
+let seenMatchNotifs = new Set();
 
 function scaleHUD() {
     const scale = Math.min(window.innerWidth / 1240, window.innerHeight / 1240);
@@ -674,191 +783,451 @@ function getParam(name, fallback = "") {
 
 function cleanRole(role) {
     role = (role || "loading").toLowerCase();
-
-    if (role === "dominant") return "DOMINANT";
+    if (role === "dominant")   return "DOMINANT";
     if (role === "submissive") return "SUBMISSIVE";
-    if (role === "switch") return "SWITCH";
-
+    if (role === "switch")     return "SWITCH";
     return "LOADING";
 }
 
-// =====================================
-// ROLE INFO POPUP FUNCTIONS
-// =====================================
+function addActivity(message) {
+    if (!message) return;
+    activityFeed.unshift(message);
+    activityFeed = activityFeed.slice(0, 20);
+
+    const box = document.getElementById("hudNotifications");
+    const pinnedCards = Array.from(box.querySelectorAll("[data-match-uuid], [data-interest-id]"));
+    box.innerHTML = activityFeed.map(item => `<div class="activity-item">${item}</div>`).join("");
+    pinnedCards.reverse().forEach(card => box.insertAdjacentElement("afterbegin", card));
+    box.scrollTop = 0;
+}
 
 function getNextRankForRole(role, level) {
     const sets = {
-        dominant: [[10,"Handler"],[20,"Trainer"],[30,"Keeper"],[40,"Owner"],[50,"Regent"],[60,"Sovereign"],[70,"High Sovereign"],[80,"Velvet Monarch"],[90,"Ascendant Dominant"],[100,"Eternal Sovereign"]],
+        dominant:   [[10,"Handler"],[20,"Trainer"],[30,"Keeper"],[40,"Owner"],[50,"Regent"],[60,"Sovereign"],[70,"High Sovereign"],[80,"Velvet Monarch"],[90,"Ascendant Dominant"],[100,"Eternal Sovereign"]],
         submissive: [[10,"Attendant"],[20,"Pet"],[30,"Companion"],[40,"Service Bound"],[50,"Devoted"],[60,"Cherished"],[70,"Treasured"],[80,"Velvet Beloved"],[90,"Ascendant Submissive"],[100,"Eternal Devotion"]],
-        switch: [[10,"Curious"],[20,"Adaptive"],[30,"Dual-Bonded"],[40,"Harmonized"],[50,"Versatile Elite"],[60,"Ascendant"],[70,"Velvet Balanced"],[80,"Twin Flame"],[90,"Ascendant Switch"],[100,"Eternal Balance"]]
+        switch:     [[10,"Curious"],[20,"Adaptive"],[30,"Dual-Bonded"],[40,"Harmonized"],[50,"Versatile Elite"],[60,"Ascendant"],[70,"Velvet Balanced"],[80,"Twin Flame"],[90,"Ascendant Switch"],[100,"Eternal Balance"]]
     };
-
     const set = sets[(role || "switch").toLowerCase()] || sets.switch;
-
     for (let i = 0; i < set.length; i++) {
-        if (level < set[i][0]) {
-            return set[i][1] + " at Level " + set[i][0];
-        }
+        if (level < set[i][0]) return set[i][1] + " at Level " + set[i][0];
     }
-
     return "Max Rank Reached";
 }
 
-function showRoleInfo() {
-    document.getElementById("roleInfoCurrent").textContent =
-        cleanRole(currentRole);
+function showPartnerInfo() {
+    const list = document.getElementById("partnerInfoList");
+    list.innerHTML = "";
 
-    document.getElementById("roleInfoNext").textContent =
-        "Next Rank: " + getNextRankForRole(currentRole, currentLevel);
+    const matches = window._lastMatches || [];
 
-    document.getElementById("roleInfoMenu").style.display = "block";
+    if (matches.length === 0) {
+        list.innerHTML = "<div class='partner-empty'>NO MATCHES YET</div>";
+    } else {
+        matches.forEach(m => {
+            const roleLabel = m.role
+                ? m.role.charAt(0).toUpperCase() + m.role.slice(1) : "";
+            const typeLabel = {ds:"D/s", longterm:"Long Term",
+                shortterm:"Short Term", anything:"Anything"}[m.relationship_type] || "";
+            const card = document.createElement("div");
+            card.className = "partner-card";
+            card.innerHTML =
+                "<div class='partner-card-name'>" + (m.sl_name || "Unknown") + "</div>" +
+                "<div class='partner-card-bond'>" +
+                    (roleLabel ? roleLabel : "") +
+                    (typeLabel ? " &nbsp;·&nbsp; " + typeLabel : "") +
+                "</div>" +
+                "<div style='margin-top:8px;'>" +
+                    "<a href='secondlife:///app/agent/" + m.match_uuid + "/about' " +
+                    "style='color:#a78bfa;font-size:12px;letter-spacing:1px;text-decoration:none;' " +
+                    "target='_blank'>View Profile →</a>" +
+                "</div>";
+            list.appendChild(card);
+        });
+    }
+
+    document.getElementById("partnerInfoMenu").style.display = "block";
 }
 
+function closePartnerInfo() {
+    document.getElementById("partnerInfoMenu").style.display = "none";
+}
+
+function showRoleInfo() {
+    document.getElementById("roleInfoCurrent").textContent = cleanRole(currentRole);
+    document.getElementById("roleInfoNext").textContent = "Next Rank: " + getNextRankForRole(currentRole, currentLevel);
+    document.getElementById("roleInfoMenu").style.display = "block";
+}
 function closeRoleInfo() {
     document.getElementById("roleInfoMenu").style.display = "none";
 }
 
-// =====================================
-// EXISTING HUD FUNCTIONS CONTINUE
-// =====================================
-    
 function updateHUD(data) {
-    const role = data.role || "loading";
-    const rank = data.rank || "Initiate";
-    const level = parseInt(data.level || 1);
-    const xp = parseInt(data.xp || 0);
-    const next = parseInt(data.next_level_xp || 250);
-    const tokens = parseInt(data.tokens || 0);
+    const role     = data.role || "loading";
+    const rank     = data.rank || "Initiate";
+    const level    = parseInt(data.level || 1);
+    const xp       = parseInt(data.xp || 0);
+    const next     = parseInt(data.next_level_xp || 250);
+    const tokens   = parseInt(data.tokens || 0);
     const prestige = parseInt(data.prestige || 0);
-    const max = parseInt(data.max_level || 100);
+    const max      = parseInt(data.max_level || 100);
 
-    currentRole = role;
-    currentLevel = level;
-
-    let percent = 100;
-
-    if (level < max && next > 0) {
-        percent = Math.min((xp / next) * 100, 100);
+    if (profileLoadedOnce) {
+        if (lastSeenLevel !== null && level > lastSeenLevel && level !== notifiedLevel) { addActivity(`✨ Level gained: ${level}`); notifiedLevel = level; }
+        if (lastSeenRank && rank !== lastSeenRank)           addActivity(`New rank: ${rank}`);
+        if (lastSeenRole && role !== lastSeenRole)           addActivity(`Role changed: ${cleanRole(role)}`);
     }
 
+    currentRole  = role;
+    currentLevel = level;
+    lastSeenLevel = level;
+    lastSeenRank  = rank;
+    lastSeenRole  = role;
+
+    let percent = 100;
+    if (level < max && next > 0) percent = Math.min((xp / next) * 100, 100);
     const remaining = level >= max ? 0 : Math.max(next - xp, 0);
 
-    document.getElementById("hudRole").textContent = cleanRole(role);
-    document.getElementById("hudRank").textContent = rank.toUpperCase();
-    document.getElementById("hudLevel").textContent = level;
+    document.getElementById("hudRole").textContent    = cleanRole(role);
+    document.getElementById("hudRank").textContent    = rank.toUpperCase();
+    document.getElementById("hudLevel").textContent   = level;
     document.getElementById("hudPrestige").textContent = prestige;
+    document.getElementById("hudXPText").textContent  = xp.toLocaleString() + " / " + next.toLocaleString();
+    document.getElementById("hudXPFill").style.width  = percent + "%";
+    document.getElementById("hudXPPercent").textContent = Math.round(percent) + "%";
+    document.getElementById("hudNextText").textContent = level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
+    document.getElementById("hudCurrency").innerHTML  = `<span>💎 ${tokens.toLocaleString()}</span><span>♦ 0</span><span>🔷 0</span>`;
 
-    document.getElementById("hudXPText").textContent =
-        xp.toLocaleString() + " / " + next.toLocaleString();
+    profileLoadedOnce = true;
 
-    document.getElementById("hudXPFill").style.width = percent + "%";
+    // Wire up looking toggle from profile data
+    try {
+        const uuid = getParam("uuid");
+        if (uuid) {
+            fetch(`${API_BASE}/api/matchmaking/profile/${uuid}`, {
+                headers: { "x-api-secret": API_SECRET }
+            }).then(r => r.ok ? r.json() : null).then(pData => {
+                if (!pData) return;
+                const looking = pData.looking !== undefined ? pData.looking : null;
+                const btn = document.getElementById("lookingToggle");
+                if (!btn) return;
+                if (looking !== null) {
+                    btn.textContent = looking ? "Looking: ON" : "Looking: OFF";
+                    btn.style.color = looking ? "#f0c95a" : "#8c6a12";
+                    btn.style.borderColor = looking ? "#d4af37" : "#8c6a12";
+                    btn.onclick     = () => toggleLooking(!!looking);
+                } else {
+                    btn.textContent = "Set Up Matchmaking";
+                    btn.onclick     = () => addActivity("Use Partners > Find Match to set up your matchmaking profile.");
+                }
+            }).catch(() => {});
+        }
+    } catch(e) {}
+}
 
-    document.getElementById("hudXPPercent").textContent =
-        Math.round(percent) + "%";
+async function checkForUpdate() {
+    const uuid = getParam("uuid");
+    if (!uuid) return;
+    try {
+        const res = await fetch(`${API_BASE}/api/hud/version`, {
+            headers: { "x-api-secret": API_SECRET }
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const latest = data.latest_version || "";
+        const current = "1.5";
+        if (latest && latest !== current) {
+            addActivity(`⚠️ HUD update available! Your version: ${current} · Latest: ${latest}`);
+            addActivity(data.update_message || "Please contact the creator for an update.");
+        } else {
+            addActivity("✅ HUD is up to date (v" + current + ").");
+        }
+    } catch(e) {
+        addActivity("Unable to check for updates.");
+    }
+}
 
-    document.getElementById("hudNextText").textContent =
-        level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
+async function toggleLooking(currentlyLooking) {
+    const uuid = getParam("uuid");
+    if (!uuid) return;
+    const newVal = !currentlyLooking;
+    try {
+        const res = await fetch(`${API_BASE}/api/matchmaking/looking`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-api-secret": API_SECRET },
+            body: JSON.stringify({ user_uuid: uuid, looking: newVal })
+        });
+        if (res.ok) {
+            const btn = document.getElementById("lookingToggle");
+            if (btn) {
+                btn.textContent = newVal ? "Looking: ON" : "Looking: OFF";
+                btn.style.color = newVal ? "#f0c95a" : "#8c6a12";
+                btn.style.borderColor = newVal ? "#d4af37" : "#8c6a12";
+                btn.onclick     = () => toggleLooking(newVal);
+            }
+            addActivity(newVal ? "💜 You are now visible to matchmaking." : "Matchmaking visibility turned off.");
+        }
+    } catch(e) {}
+}
 
-    document.getElementById("hudCurrency").innerHTML =
-        `<span>💎 ${tokens.toLocaleString()}</span><span>♦ 0</span><span>🔷 0</span>`;
+async function tickLiveXP() {
+    const uuid = getParam("uuid");
+    if (!uuid) return;
+    try {
+        const response = await fetch(`${API_BASE}/api/user/xp-live/${uuid}`, {
+            headers: { "x-api-secret": API_SECRET }
+        });
+        if (!response.ok) return;
+        const data   = await response.json();
+        const xp     = parseInt(data.live_xp      || 0);
+        const level  = parseInt(data.level         || currentLevel);
+        const nextXP = parseInt(data.next_level_xp || 250);
+        const rank   = data.rank || "";
+        const role   = data.role || currentRole;
+        const max    = 100;
+
+        let percent = 100;
+        if (level < max && nextXP > 0) percent = Math.min((xp / nextXP) * 100, 100);
+        const remaining = level >= max ? 0 : Math.max(nextXP - xp, 0);
+
+        document.getElementById("hudXPText").textContent    = xp.toLocaleString() + " / " + nextXP.toLocaleString();
+        document.getElementById("hudXPFill").style.width    = percent + "%";
+        document.getElementById("hudXPPercent").textContent = Math.round(percent) + "%";
+        document.getElementById("hudNextText").textContent  = level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
+
+        if (level !== currentLevel) {
+            currentLevel = level;
+            document.getElementById("hudLevel").textContent = level;
+            if (level !== notifiedLevel) { addActivity("✨ Level gained: " + level); notifiedLevel = level; }
+        }
+        if (rank && rank !== lastSeenRank && lastSeenRank !== "") addActivity("New rank: " + rank);
+        if (rank) { lastSeenRank = rank; document.getElementById("hudRank").textContent = rank.toUpperCase(); }
+        if (role) { currentRole  = role; }
+    } catch(err) {}
 }
 
 async function fetchProfile() {
     const uuid = getParam("uuid");
-
-    if (!uuid) {
-        document.getElementById("hudNotifications").innerHTML =
-            "Missing avatar UUID.";
-        return;
-    }
-
+    if (!uuid) { addActivity("Missing avatar UUID."); return; }
     try {
         const response = await fetch(`${API_BASE}/api/user/${uuid}`, {
             headers: { "x-api-secret": API_SECRET }
         });
-
         if (!response.ok) throw new Error("HTTP " + response.status);
-
         const data = await response.json();
-
+        try { localStorage.setItem("vo_profile_cache_" + uuid, JSON.stringify(data)); } catch(e) {}
         updateHUD(data);
-        document.getElementById("hudNotifications").innerHTML = "";
-    }
-    catch (err) {
+    } catch(err) {
         console.error("Profile load failed:", err);
-
-        document.getElementById("hudNotifications").innerHTML =
-            "Unable to load profile data.";
+        addActivity("Unable to load profile data.");
     }
 }
 
 function updatePartnerPanel(partners) {
     const box = document.getElementById("partnerPanelList");
     box.innerHTML = "";
-
     if (!partners || partners.length === 0) {
-        box.innerHTML = '<div class="partner-empty gold">NO BONDED PARTNERS</div>';
+        box.innerHTML = '<div class="partner-empty gold">NO BOND PARTNERS</div>';
+        lastPartnerSignature = "none";
+        partnerLoadedOnce    = true;
         return;
     }
-
+    const signature = partners.map(p => `${p.partner_uuid||p.sl_name||"unknown"}:${p.bond_level||1}:${p.bond_xp||0}`).join("|");
     partners.slice(0, 2).forEach(partner => {
-        const name = partner.sl_name || "Unknown Partner";
+        const name      = partner.sl_name || "Unknown Partner";
         const bondLevel = parseInt(partner.bond_level || 1);
-        const bondXP = parseInt(partner.bond_xp || 0);
-        const bondNext = parseInt(partner.bond_next_xp || 100);
-        const maxBondLevel = parseInt(partner.max_bond_level || 10);
-
+        const bondXP    = parseInt(partner.bond_xp || 0);
+        const bondNext  = parseInt(partner.bond_next_xp || 100);
+        const maxBond   = parseInt(partner.max_bond_level || 10);
         let percent = 100;
-
-        if (bondLevel < maxBondLevel && bondNext > 0) {
-            percent = Math.min((bondXP / bondNext) * 100, 100);
-        }
-
+        if (bondLevel < maxBond && bondNext > 0) percent = Math.min((bondXP / bondNext) * 100, 100);
         box.innerHTML += `
             <div class="partner-card">
                 <div class="partner-name gold">${name}</div>
                 <div class="partner-level">Bond Level ${bondLevel} · ${bondXP} / ${bondNext} XP</div>
-                <div class="partner-bar">
-                    <div class="partner-fill" style="width:${percent}%"></div>
-                </div>
+                <div class="partner-bar"><div class="partner-fill" style="width:${percent}%"></div></div>
                 <div class="partner-percent gold">${Math.round(percent)}%</div>
-            </div>
-        `;
+            </div>`;
     });
+    if (partnerLoadedOnce && signature !== lastPartnerSignature) addActivity("Partner bond updated.");
+    lastPartnerSignature = signature;
+    partnerLoadedOnce    = true;
+}
+
+async function fetchMatchInterests() {
+    const uuid = getParam("uuid");
+    if (!uuid) return;
+    try {
+        const response = await fetch(`${API_BASE}/api/matchmaking/interests/${uuid}`, {
+            headers: { "x-api-secret": API_SECRET }
+        });
+        if (!response.ok) return;
+        const data = await response.json();
+        const box  = document.getElementById("hudNotifications");
+        if (!data.interests || data.interests.length === 0) return;
+        data.interests.forEach(i => {
+            if (box.querySelector(`[data-interest-id="${i.id}"]`)) return;
+            const senderName = i.sender_name || "Someone";
+            const profileURL = `secondlife:///app/agent/${i.sender_uuid}/about`;
+            const detail = (i.role ? ` · Role: ${i.role}` : "") + (i.relationship_type ? ` · ${i.relationship_type}` : "");
+            const card = document.createElement("div");
+            card.className = "activity-item match-interest-card";
+            card.setAttribute("data-interest-id", i.id);
+            card.innerHTML =
+                `💜 <a href="${profileURL}" style="color:#f0c95a;">${senderName}</a> is interested in matching.` +
+                (detail ? `<br><span style="font-size:13px;opacity:0.8;">${detail}</span>` : "") +
+                `<br><button onclick="respondMatchInterest(${i.id}, true)">Accept</button>` +
+                ` <button onclick="respondMatchInterest(${i.id}, false)">Decline</button>`;
+            box.insertAdjacentElement("afterbegin", card);
+        });
+    } catch(err) {}
+}
+
+async function respondMatchInterest(interestId, accepted) {
+    const uuid = getParam("uuid");
+    const card = document.querySelector(`[data-interest-id="${interestId}"]`);
+    if (card) card.remove();
+    try {
+        const response = await fetch(`${API_BASE}/api/matchmaking/respond`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-api-secret": API_SECRET },
+            body: JSON.stringify({ interest_id: interestId, target_uuid: uuid, accepted: accepted })
+        });
+        if (!response.ok) return;
+        const result = await response.json();
+        if (accepted && result.matched_name) {
+            const profileURL = `secondlife:///app/agent/${result.match_uuid}/about`;
+            addActivity(`✨ NEW MATCH! You accepted <a href="${profileURL}">${result.matched_name}</a>'s interest.`);
+            seenMatchNotifs.add(result.match_uuid);
+            markMatchNotifSeen(result.match_uuid);
+            await fetchMatches();
+        } else {
+            addActivity("Match interest declined.");
+        }
+    } catch(err) { addActivity("Unable to respond to match interest."); }
+}
+
+async function dismissMatch(matchUUID) {
+    const card = document.querySelector(`[data-match-uuid="${matchUUID}"]`);
+    if (card) card.remove();
+    const uuid = getParam("uuid");
+    if (!uuid) return;
+    try {
+        await fetch(`${API_BASE}/api/matchmaking/dismiss`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-api-secret": API_SECRET },
+            body: JSON.stringify({ user_uuid: uuid, match_uuid: matchUUID })
+        });
+    } catch(e) {}
+}
+
+function formatRelType(val) {
+    if (!val) return "";
+    if (val === "ds")        return "D/s";
+    if (val === "longterm")  return "Long Term";
+    if (val === "shortterm") return "Short Term";
+    if (val === "anything")  return "Anything";
+    return val;
+}
+
+async function fetchMatches() {
+    const uuid = getParam("uuid");
+    if (!uuid) return;
+
+    dismissedMatches   = new Set();
+    seenMatchNotifs    = loadSeenMatchNotifs();
+    lastMatchSignature = localStorage.getItem("vo_match_sig_" + uuid) || "";
+
+    try {
+        const dRes = await fetch(`${API_BASE}/api/matchmaking/dismissed/${uuid}`, {
+            headers: { "x-api-secret": API_SECRET }
+        });
+        if (dRes.ok) { const d = await dRes.json(); dismissedMatches = new Set(d.dismissed || []); }
+    } catch(e) {}
+
+    try {
+        const response = await fetch(`${API_BASE}/api/matchmaking/matches/${uuid}`, {
+            headers: { "x-api-secret": API_SECRET }
+        });
+        if (!response.ok) return;
+        const data    = await response.json();
+        const matches = data.matches || [];
+        window._lastMatches = matches;
+        const signature = matches.map(m => m.match_uuid).join("|");
+        lastMatchSignature = signature;
+
+        // Drain server notifications
+        try {
+            const nRes = await fetch(`${API_BASE}/api/matchmaking/notifications/${uuid}`, {
+                headers: { "x-api-secret": API_SECRET }
+            });
+            if (nRes.ok) {
+                const nData = await nRes.json();
+                for (const n of (nData.notifications || [])) {
+                    const profileURL = `secondlife:///app/agent/${n.matchedUUID}/about`;
+                    addActivity(`✨ NEW MATCH! <a href="${profileURL}">${n.matchedName}</a> accepted your interest.`);
+                }
+            }
+        } catch(_) {}
+
+        const feed = document.getElementById("hudNotifications");
+        matches.forEach(m => {
+            if (dismissedMatches.has(m.match_uuid)) return;
+            if (feed.querySelector(`[data-match-uuid="${m.match_uuid}"]`)) return;
+            const profileURL = `secondlife:///app/agent/${m.match_uuid}/about`;
+            const role    = m.role ? `Role: ${m.role} · ` : "";
+            const relType = formatRelType(m.relationship_type);
+            const score   = m.score ? `<span style="color:#a735ff;font-size:12px;"> · ${m.score}% compatible</span>` : "";
+            const card = document.createElement("div");
+            card.className = "activity-item match-card";
+            card.setAttribute("data-match-uuid", m.match_uuid);
+            card.innerHTML =
+                `<button onclick="dismissMatch('${m.match_uuid}')" style="float:right;cursor:pointer;font-size:11px;padding:2px 7px;background:transparent;border:1px solid #8c6a12;color:#c9aa69;border-radius:4px;font-family:inherit;">Dismiss</button>` +
+                `💜 <b>MATCH</b> · <a href="${profileURL}" style="color:#f0c95a;">${m.sl_name}</a>${score}<br>` +
+                (role || relType ? `<span style="font-size:12px;opacity:0.8;">${role}${relType}</span>` : "");
+            feed.insertAdjacentElement("afterbegin", card);
+        });
+    } catch(err) {}
 }
 
 async function fetchPartnerBond() {
     const uuid = getParam("uuid");
-
     if (!uuid) return;
-
     try {
         const response = await fetch(`${API_BASE}/api/partners/${uuid}`, {
             headers: { "x-api-secret": API_SECRET }
         });
-
         if (!response.ok) throw new Error("HTTP " + response.status);
-
         const data = await response.json();
-
+        window._lastPartners = data.partners || [];
         updatePartnerPanel(data.partners || []);
-    }
-    catch (err) {
-        console.error("Partner bond load failed:", err);
-
-        updatePartnerPanel([]);
-    }
+    } catch(err) { updatePartnerPanel([]); }
 }
 
 async function refreshHUDData() {
     await fetchProfile();
     await fetchPartnerBond();
+    await fetchMatchInterests();
+    await fetchMatches();
 }
 
 window.addEventListener("load", async () => {
     scaleHUD();
+
+    const uuid = getParam("uuid");
+    if (uuid) {
+        try {
+            const cached = localStorage.getItem("vo_profile_cache_" + uuid);
+            if (cached) updateHUD(JSON.parse(cached));
+        } catch(e) {}
+    }
+
+    dismissedMatches = loadDismissedMatches();
+
     await refreshHUDData();
-    setInterval(refreshHUDData, 30000);
+    setInterval(refreshHUDData, API_REFRESH_MS);
+
+    await tickLiveXP();
+    setInterval(tickLiveXP, LIVE_REFRESH_MS);
 });
 
 window.addEventListener("resize", scaleHUD);
