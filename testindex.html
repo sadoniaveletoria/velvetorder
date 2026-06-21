@@ -701,7 +701,7 @@ html, body {
     </div>
 
     <div class="partner-info-menu" id="partnerInfoMenu">
-        <div class="partner-info-title purple">BOND PARTNERS</div>
+        <div class="partner-info-title purple">YOUR MATCHES</div>
         <div id="partnerInfoList"></div>
         <button class="role-info-close" type="button" onclick="closePartnerInfo()" style="margin-top:16px;">CLOSE</button>
     </div>
@@ -818,23 +818,28 @@ function showPartnerInfo() {
     const list = document.getElementById("partnerInfoList");
     list.innerHTML = "";
 
-    const partners = window._lastPartners || [];
+    const matches = window._lastMatches || [];
 
-    if (partners.length === 0) {
-        list.innerHTML = "<div class='partner-empty'>NO BOND PARTNERS</div>";
+    if (matches.length === 0) {
+        list.innerHTML = "<div class='partner-empty'>NO MATCHES YET</div>";
     } else {
-        partners.forEach(p => {
-            const bondPct = p.bond_next_xp > 0
-                ? Math.round((p.bond_xp / p.bond_next_xp) * 100) : 100;
+        matches.forEach(m => {
+            const roleLabel = m.role
+                ? m.role.charAt(0).toUpperCase() + m.role.slice(1) : "";
+            const typeLabel = {ds:"D/s", longterm:"Long Term",
+                shortterm:"Short Term", anything:"Anything"}[m.relationship_type] || "";
             const card = document.createElement("div");
             card.className = "partner-card";
             card.innerHTML =
-                "<div class='partner-card-name'>" + (p.sl_name || "Unknown") + "</div>" +
+                "<div class='partner-card-name'>" + (m.sl_name || "Unknown") + "</div>" +
                 "<div class='partner-card-bond'>" +
-                    "Bond Level " + p.bond_level +
-                    " &nbsp;·&nbsp; " +
-                    p.bond_xp + " / " + p.bond_next_xp + " XP" +
-                    " &nbsp;·&nbsp; " + bondPct + "%" +
+                    (roleLabel ? roleLabel : "") +
+                    (typeLabel ? " &nbsp;·&nbsp; " + typeLabel : "") +
+                "</div>" +
+                "<div style='margin-top:8px;'>" +
+                    "<a href='secondlife:///app/agent/" + m.match_uuid + "/about' " +
+                    "style='color:#a78bfa;font-size:12px;letter-spacing:1px;text-decoration:none;' " +
+                    "target='_blank'>View Profile →</a>" +
                 "</div>";
             list.appendChild(card);
         });
@@ -1146,6 +1151,7 @@ async function fetchMatches() {
         if (!response.ok) return;
         const data    = await response.json();
         const matches = data.matches || [];
+        window._lastMatches = matches;
         const signature = matches.map(m => m.match_uuid).join("|");
         lastMatchSignature = signature;
 
