@@ -837,9 +837,9 @@ function showPartnerInfo() {
                     (typeLabel ? " &nbsp;·&nbsp; " + typeLabel : "") +
                 "</div>" +
                 "<div style='margin-top:8px;'>" +
-                    "<a href='secondlife:///app/agent/" + m.match_uuid + "/about' " +
-                    "style='color:#a78bfa;font-size:12px;letter-spacing:1px;text-decoration:none;' " +
-                    "target='_blank'>View Profile →</a>" +
+                    "<button onclick=\"sendPrompt('VO_VIEW_PROFILE|" + m.match_uuid + "|" + (m.sl_name||"") + "')\" " +
+                    "style='background:transparent;border:none;color:#a78bfa;font-size:12px;" +
+                    "letter-spacing:1px;cursor:pointer;padding:0;'>View Profile →</button>" +
                 "</div>";
             list.appendChild(card);
         });
