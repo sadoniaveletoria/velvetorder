@@ -1274,6 +1274,38 @@ window.addEventListener("load", async () => {
     await refreshHUDData();
     setInterval(refreshHUDData, API_REFRESH_MS);
 
+    // Poll for pending partner requests every 60 seconds so they
+    // show up quickly without needing a full page reload
+    setInterval(async () => {
+        const uuid = getParam("uuid");
+        if (!uuid) return;
+        try {
+            const res = await fetch(`${API_BASE}/api/partners/pending/${uuid}`, {
+                headers: { "x-api-secret": API_SECRET }
+            });
+            if (!res.ok) return;
+            const data = await res.json();
+            const requests = data.requests || [];
+            requests.forEach(r => {
+                const key = "partner_req_" + r.requester_uuid;
+                if (!window._shownPartnerRequests) window._shownPartnerRequests = {};
+                if (window._shownPartnerRequests[key]) return;
+                window._shownPartnerRequests[key] = true;
+                const feedItem = document.createElement("div");
+                feedItem.className = "activity-item";
+                feedItem.id = key;
+                feedItem.innerHTML =
+                    "💜 <b>" + r.requester_name + "</b> wants to bond with you.<br>" +
+                    "<button onclick=\"respondPartnerRequest('" + r.requester_uuid + "', true, '" + key + "')\" " +
+                    "style='margin-top:6px;margin-right:8px;background:rgba(155,48,255,0.2);border:1px solid #a78bfa;color:#a78bfa;padding:4px 12px;border-radius:4px;cursor:pointer;font-family:inherit;'>Accept</button>" +
+                    "<button onclick=\"respondPartnerRequest('" + r.requester_uuid + "', false, '" + key + "')\" " +
+                    "style='background:transparent;border:1px solid #8c6a12;color:#8c6a12;padding:4px 12px;border-radius:4px;cursor:pointer;font-family:inherit;'>Decline</button>";
+                const feed = document.getElementById("activityFeed");
+                if (feed) feed.insertBefore(feedItem, feed.firstChild);
+            });
+        } catch(err) {}
+    }, 60000);
+
     await tickLiveXP();
     setInterval(tickLiveXP, LIVE_REFRESH_MS);
 });
