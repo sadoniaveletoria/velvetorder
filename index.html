@@ -703,7 +703,7 @@ html, body {
         </div>
     </section>
 
-    <button class="close-btn" type="button" onclick="checkForUpdate()">UPDATE HUD</button>
+
 
     <div class="currency gold" id="hudCurrency">
         <span>💎 0</span><span>♦ 0</span><span>🔷 0</span>
@@ -1204,6 +1204,51 @@ async function fetchPartnerBond() {
         window._lastPartners = data.partners || [];
         updatePartnerPanel(data.partners || []);
     } catch(err) { updatePartnerPanel([]); }
+
+    // Also check for pending partner requests
+    try {
+        const res = await fetch(`${API_BASE}/api/partners/pending/${uuid}`, {
+            headers: { "x-api-secret": API_SECRET }
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const requests = data.requests || [];
+        requests.forEach(r => {
+            const key = "partner_req_" + r.requester_uuid;
+            if (!window._shownPartnerRequests) window._shownPartnerRequests = {};
+            if (window._shownPartnerRequests[key]) return;
+            window._shownPartnerRequests[key] = true;
+
+            const feedItem = document.createElement("div");
+            feedItem.className = "activity-item";
+            feedItem.id = key;
+            feedItem.innerHTML =
+                "💜 <b>" + r.requester_name + "</b> wants to bond with you.<br>" +
+                "<button onclick=\"respondPartnerRequest('" + r.requester_uuid + "', true, '" + key + "')\" " +
+                "style='margin-top:6px;margin-right:8px;background:rgba(155,48,255,0.2);border:1px solid #a78bfa;color:#a78bfa;padding:4px 12px;border-radius:4px;cursor:pointer;font-family:inherit;'>Accept</button>" +
+                "<button onclick=\"respondPartnerRequest('" + r.requester_uuid + "', false, '" + key + "')\" " +
+                "style='background:transparent;border:1px solid #8c6a12;color:#8c6a12;padding:4px 12px;border-radius:4px;cursor:pointer;font-family:inherit;'>Decline</button>";
+
+            const feed = document.getElementById("activityFeed");
+            if (feed) feed.insertBefore(feedItem, feed.firstChild);
+        });
+    } catch(err) {}
+}
+
+async function respondPartnerRequest(requesterUUID, accepted, elementId) {
+    const uuid = getParam("uuid");
+    if (!uuid) return;
+    try {
+        await fetch(`${API_BASE}/api/partners/respond`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-api-secret": API_SECRET },
+            body: JSON.stringify({ requester_uuid: requesterUUID, target_uuid: uuid, accepted })
+        });
+        const el = document.getElementById(elementId);
+        if (el) el.innerHTML = "💜 Bond partner request " + (accepted ? "<b>accepted</b>" : "declined") + ".";
+        if (window._shownPartnerRequests) delete window._shownPartnerRequests["partner_req_" + requesterUUID];
+        await fetchPartnerBond();
+    } catch(err) {}
 }
 
 async function refreshHUDData() {
