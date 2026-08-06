@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Velvet Order HUD</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
@@ -212,11 +213,25 @@ html, body {
 .menu-grid {
     display: grid;
     grid-template-columns: repeat(2, 220px);
-    grid-template-rows: repeat(2, 135px);
+    grid-template-rows: repeat(3, 135px);
     gap: 18px;
     justify-content: center;
 }
 
+.menu-btn {
+    background: linear-gradient(180deg, rgba(19,16,18,0.95), rgba(5,5,7,0.95));
+    border: 2px solid #8c6a12;
+    border-radius: 12px;
+    color: #d4af37;
+    font-family: "Cinzel", serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    box-shadow: inset 0 0 14px rgba(0,0,0,0.85);
+}
+
+.menu-btn:hover,
 .close-btn:hover,
 .role-info-close:hover {
     color: #fff1b0;
@@ -225,91 +240,36 @@ html, body {
     box-shadow: 0 0 16px rgba(155,48,255,0.5);
 }
 
-.vo-btn {
-    position: relative;
-    background: linear-gradient(160deg, #120d18 0%, #0a0610 50%, #160e1e 100%);
-    border: 1px solid #8c6a12;
-    border-radius: 14px;
-    cursor: pointer;
+.menu-icon {
+    display: block;
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+.role-image-btn {
+    background-image: url("VO_ROLES_BUTTON.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 100%;
+
+    width: 220px;
+    height: 135px;
+
+    border: none;
+    background-color: transparent;
+
+    text-indent: -9999px;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: all 0.2s ease;
+
+    box-shadow: none;
+
+    margin-left: -15px;
+    margin-top: -10px;
 }
 
-.vo-btn::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: 14px;
-    padding: 1px;
-    background: linear-gradient(135deg, #d4af37 0%, #7c5416 40%, #2a1a06 60%, #8c6a12 100%);
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-}
-
-.vo-btn::after {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(212,175,55,0.6), transparent);
-}
-
-.vo-btn-corner {
-    position: absolute;
-    width: 18px;
-    height: 18px;
-    border-color: #d4af37;
-    border-style: solid;
-    opacity: 0.6;
-}
-.vo-btn-corner.tl { top: 6px; left: 6px; border-width: 1px 0 0 1px; border-radius: 3px 0 0 0; }
-.vo-btn-corner.tr { top: 6px; right: 6px; border-width: 1px 1px 0 0; border-radius: 0 3px 0 0; }
-.vo-btn-corner.bl { bottom: 6px; left: 6px; border-width: 0 0 1px 1px; border-radius: 0 0 0 3px; }
-.vo-btn-corner.br { bottom: 6px; right: 6px; border-width: 0 1px 1px 0; border-radius: 0 0 3px 0; }
-
-.vo-btn-glyph {
-    font-size: 28px;
-    line-height: 1;
-    background: linear-gradient(to bottom, #fff8d0 0%, #d4af37 50%, #8c6a12 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 8px rgba(212,175,55,0.4));
-}
-
-.vo-btn-label {
-    font-family: "Cinzel", Georgia, serif;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 4px;
-    background: linear-gradient(to bottom, #fff8d0 0%, #d4af37 55%, #9a7220 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.vo-btn-sub {
-    font-family: "Cormorant Garamond", serif;
-    font-size: 11px;
-    letter-spacing: 2px;
-    color: rgba(180,140,60,0.55);
-    text-transform: uppercase;
-    margin-top: -6px;
-}
-
-.vo-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 30px rgba(155,48,255,0.25), 0 0 20px rgba(212,175,55,0.12);
-    border-color: #d4af37;
-}
-
-.vo-btn:hover .vo-btn-corner {
-    opacity: 1;
+.role-image-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
 }
 
 .large-panel {
@@ -410,47 +370,29 @@ html, body {
     top: 500px;
     right: 20px;
     width: 470px;
-    height: 470px;
+    height: 275px;
     padding: 28px;
-    display: flex;
-    flex-direction: column;
 }
 
 .notifications-title {
     text-align: center;
     font-size: 24px;
     letter-spacing: 2px;
-    flex-shrink: 0;
 }
 
 .notifications-body {
-    margin-top: 18px;
-    font-size: 16px;
-    line-height: 1.6;
+    margin-top: 28px;
+    font-size: 17px;
+    line-height: 1.55;
     color: #c9aa69;
-    text-align: left;
-    flex: 1;
-    overflow-y: auto;
-    padding-right: 6px;
-    scrollbar-width: thin;
-    scrollbar-color: #8c6a12 transparent;
-}
-
-.notifications-body::-webkit-scrollbar { width: 5px; }
-.notifications-body::-webkit-scrollbar-thumb {
-    background: #8c6a12;
-    border-radius: 4px;
+    text-align: center;
 }
 
 .activity-item {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(140,106,18,0.2);
+    margin-bottom: 8px;
     color: #c9aa69;
     text-shadow: 0 0 8px rgba(155,48,255,0.3);
 }
-
-.activity-item:last-child { border-bottom: none; }
 
 .close-btn {
     position: absolute;
@@ -524,59 +466,6 @@ html, body {
     margin-bottom: 28px;
 }
 
-.partner-info-menu {
-    display: none;
-    position: absolute;
-    top: 300px;
-    left: 360px;
-    width: 520px;
-    min-height: 360px;
-    z-index: 6000;
-    background: rgba(4, 4, 6, 0.98);
-    border: 2px solid #8c6a12;
-    border-radius: 16px;
-    box-shadow: 0 0 35px rgba(155,48,255,0.55);
-    padding: 35px;
-    text-align: center;
-}
-
-.partner-info-title {
-    font-size: 28px;
-    letter-spacing: 4px;
-    margin-bottom: 24px;
-    color: #d4af37;
-}
-
-.partner-card {
-    background: rgba(155,48,255,0.06);
-    border: 1px solid rgba(140,106,18,0.4);
-    border-radius: 10px;
-    padding: 14px 18px;
-    margin-bottom: 12px;
-    text-align: left;
-}
-
-.partner-card-name {
-    font-family: "Cinzel", serif;
-    font-size: 16px;
-    color: #f0c95a;
-    letter-spacing: 2px;
-    margin-bottom: 6px;
-}
-
-.partner-card-bond {
-    font-size: 13px;
-    color: #c9aa69;
-    letter-spacing: 1px;
-}
-
-.partner-empty {
-    font-size: 18px;
-    color: #8c6a12;
-    margin: 30px 0;
-    letter-spacing: 2px;
-}
-
 .role-info-close {
     background: #080808;
     border: 2px solid #8c6a12;
@@ -642,40 +531,33 @@ html, body {
 
     <section class="panel menu-panel">
         <div class="menu-grid">
-            <button class="vo-btn" type="button" onclick="showRoleInfo()">
-                <span class="vo-btn-corner tl"></span>
-                <span class="vo-btn-corner tr"></span>
-                <span class="vo-btn-corner bl"></span>
-                <span class="vo-btn-corner br"></span>
-                <span class="vo-btn-glyph">⚜</span>
-                <span class="vo-btn-label">ROLES</span>
-                <span class="vo-btn-sub">progression</span>
+            <button
+                class="menu-btn role-image-btn"
+                type="button"
+                onclick="showRoleInfo()">
+                ROLES
             </button>
-            <button class="vo-btn" type="button" id="partnerBtn" onclick="showPartnerInfo()">
-                <span class="vo-btn-corner tl"></span>
-                <span class="vo-btn-corner tr"></span>
-                <span class="vo-btn-corner bl"></span>
-                <span class="vo-btn-corner br"></span>
-                <span class="vo-btn-glyph">♥</span>
-                <span class="vo-btn-label">PARTNER</span>
-                <span class="vo-btn-sub">bonds &amp; matches</span>
-            </button>
-            <button class="vo-btn" type="button" onclick="sendPrompt('VO_BTN_LEADERBOARD')">
-                <span class="vo-btn-corner tl"></span>
-                <span class="vo-btn-corner tr"></span>
-                <span class="vo-btn-corner bl"></span>
-                <span class="vo-btn-corner br"></span>
-                <span class="vo-btn-glyph">♛</span>
-                <span class="vo-btn-label">RANKS</span>
-                <span class="vo-btn-sub">leaderboard</span>
-            </button>
+            <button class="menu-btn" type="button"><span class="menu-icon">♡</span>PARTNER</button>
+
+            <!-- Events button reserved for future release.
+            <button class="menu-btn" type="button"><span class="menu-icon">☆</span>EVENTS</button>
+            -->
+
+            <!-- House button reserved for future release.
+            <button class="menu-btn" type="button"><span class="menu-icon">⚜</span>HOUSE</button>
+            -->
+
+            <!-- Settings button reserved for future release.
+            <button class="menu-btn" type="button"><span class="menu-icon">⚙</span>SETTINGS</button>
+            -->
         </div>
     </section>
 
     <section class="panel large-panel">
-        <div class="feature-title gold">BOND PARTNERS</div>
+        <div class="feature-title gold">PARTNER PANEL</div>
+
         <div class="partner-panel-list" id="partnerPanelList">
-            <div class="partner-empty gold">NO BOND PARTNERS</div>
+            <div class="partner-empty gold">NO BONDED PARTNERS</div>
         </div>
     </section>
 
@@ -685,18 +567,6 @@ html, body {
 
     <section class="panel notifications-panel">
         <div class="notifications-title gold">ACTIVITY FEED</div>
-        <div style="text-align:center;margin-top:10px;margin-bottom:4px;">
-            <button id="lookingToggle"
-                style="background:linear-gradient(180deg,rgba(28,18,32,0.97),rgba(8,5,10,0.97));
-                       border:1px solid #8c6a12;
-                       font-family:'Cinzel',serif;font-size:14px;letter-spacing:2px;
-                       padding:6px 18px;border-radius:6px;cursor:pointer;
-                       background-clip:text;
-                       color:#d4af37;
-                       transition:all 0.18s ease;">
-                Looking: OFF
-            </button>
-        </div>
         <div class="notifications-body" id="hudNotifications">
             <div class="activity-item">Waiting for live data...</div>
         </div>
@@ -708,10 +578,10 @@ html, body {
         <span>💎 0</span><span>♦ 0</span><span>🔷 0</span>
     </div>
 
-    <div class="partner-info-menu" id="partnerInfoMenu">
-        <div class="partner-info-title purple">YOUR MATCHES</div>
+    <div id="partnerInfoMenu" style="display:none;position:absolute;top:300px;left:360px;width:520px;min-height:360px;z-index:6000;background:rgba(4,4,6,0.98);border:2px solid #8c6a12;border-radius:16px;box-shadow:0 0 35px rgba(155,48,255,0.55);padding:35px;text-align:center;">
+        <div style="font-family:'Cinzel',serif;font-size:28px;letter-spacing:4px;margin-bottom:24px;background:linear-gradient(to bottom,#f0b8ff,#a735ff,#4d0872);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">YOUR MATCHES</div>
         <div id="partnerInfoList"></div>
-        <button class="role-info-close" type="button" onclick="closePartnerInfo()" style="margin-top:16px;">CLOSE</button>
+        <button onclick="closePartnerInfo()" style="margin-top:16px;background:#080808;border:2px solid #8c6a12;color:#d4af37;border-radius:8px;width:180px;height:52px;font-family:'Cinzel',serif;font-size:16px;cursor:pointer;">CLOSE</button>
     </div>
 
     <div class="role-info-menu" id="roleInfoMenu">
@@ -726,58 +596,19 @@ html, body {
 </div>
 
 <script>
-const API_BASE        = "https://api.velvetorder.duckdns.org";
-const API_SECRET      = "jSDGBnYYqy08Hk4afpELPmzRkJTlfApR";
-const API_REFRESH_MS  = 300000;
-const LIVE_REFRESH_MS = 10000;
+const API_BASE = "https://api.velvetorder.duckdns.org";
+const API_SECRET = "jSDGBnYYqy08Hk4afpELPmzRkJTlfApR";
+const HUD_REFRESH_MS = 300000;
 
-let currentRole        = "loading";
-let currentLevel       = 1;
-let activityFeed       = [];
-let profileLoadedOnce  = false;
-let partnerLoadedOnce  = false;
-let lastSeenLevel      = null;
-let notifiedLevel      = null;  // tracks which level we already announced
-let lastSeenRank       = "";
-let lastSeenRole       = "";
+let currentRole = "loading";
+let currentLevel = 1;
+let activityFeed = [];
+let profileLoadedOnce = false;
+let partnerLoadedOnce = false;
+let lastSeenLevel = null;
+let lastSeenRank = "";
+let lastSeenRole = "";
 let lastPartnerSignature = "";
-let lastMatchSignature   = "";
-
-function loadDismissedMatches() {
-    try {
-        const uuid = getParam("uuid");
-        if (!uuid) return new Set();
-        const stored = localStorage.getItem("vo_dismissed_matches_" + uuid);
-        return stored ? new Set(JSON.parse(stored)) : new Set();
-    } catch(e) { return new Set(); }
-}
-function saveDismissedMatches(set) {
-    try {
-        const uuid = getParam("uuid");
-        if (!uuid) return;
-        localStorage.setItem("vo_dismissed_matches_" + uuid, JSON.stringify([...set]));
-    } catch(e) {}
-}
-let dismissedMatches = new Set();
-
-function loadSeenMatchNotifs() {
-    try {
-        const uuid = getParam("uuid");
-        if (!uuid) return new Set();
-        const stored = localStorage.getItem("vo_seen_match_notifs_" + uuid);
-        return stored ? new Set(JSON.parse(stored)) : new Set();
-    } catch(e) { return new Set(); }
-}
-function markMatchNotifSeen(matchUUID) {
-    try {
-        const uuid = getParam("uuid");
-        if (!uuid) return;
-        const set = loadSeenMatchNotifs();
-        set.add(matchUUID);
-        localStorage.setItem("vo_seen_match_notifs_" + uuid, JSON.stringify([...set]));
-    } catch(e) {}
-}
-let seenMatchNotifs = new Set();
 
 function scaleHUD() {
     const scale = Math.min(window.innerWidth / 1240, window.innerHeight / 1240);
@@ -791,234 +622,185 @@ function getParam(name, fallback = "") {
 
 function cleanRole(role) {
     role = (role || "loading").toLowerCase();
-    if (role === "dominant")   return "DOMINANT";
+
+    if (role === "dominant") return "DOMINANT";
     if (role === "submissive") return "SUBMISSIVE";
-    if (role === "switch")     return "SWITCH";
+    if (role === "switch") return "SWITCH";
+
     return "LOADING";
 }
 
 function addActivity(message) {
     if (!message) return;
+
     activityFeed.unshift(message);
-    activityFeed = activityFeed.slice(0, 20);
+    activityFeed = activityFeed.slice(0, 4);
 
     const box = document.getElementById("hudNotifications");
-    const pinnedCards = Array.from(box.querySelectorAll("[data-match-uuid], [data-interest-id]"));
-    box.innerHTML = activityFeed.map(item => `<div class="activity-item">${item}</div>`).join("");
-    pinnedCards.reverse().forEach(card => box.insertAdjacentElement("afterbegin", card));
-    box.scrollTop = 0;
+    box.innerHTML = activityFeed
+        .map(item => `<div class="activity-item">${item}</div>`)
+        .join("");
 }
 
 function getNextRankForRole(role, level) {
     const sets = {
-        dominant:   [[10,"Handler"],[20,"Trainer"],[30,"Keeper"],[40,"Owner"],[50,"Regent"],[60,"Sovereign"],[70,"High Sovereign"],[80,"Velvet Monarch"],[90,"Ascendant Dominant"],[100,"Eternal Sovereign"]],
+        dominant: [[10,"Handler"],[20,"Trainer"],[30,"Keeper"],[40,"Owner"],[50,"Regent"],[60,"Sovereign"],[70,"High Sovereign"],[80,"Velvet Monarch"],[90,"Ascendant Dominant"],[100,"Eternal Sovereign"]],
         submissive: [[10,"Attendant"],[20,"Pet"],[30,"Companion"],[40,"Service Bound"],[50,"Devoted"],[60,"Cherished"],[70,"Treasured"],[80,"Velvet Beloved"],[90,"Ascendant Submissive"],[100,"Eternal Devotion"]],
-        switch:     [[10,"Curious"],[20,"Adaptive"],[30,"Dual-Bonded"],[40,"Harmonized"],[50,"Versatile Elite"],[60,"Ascendant"],[70,"Velvet Balanced"],[80,"Twin Flame"],[90,"Ascendant Switch"],[100,"Eternal Balance"]]
+        switch: [[10,"Curious"],[20,"Adaptive"],[30,"Dual-Bonded"],[40,"Harmonized"],[50,"Versatile Elite"],[60,"Ascendant"],[70,"Velvet Balanced"],[80,"Twin Flame"],[90,"Ascendant Switch"],[100,"Eternal Balance"]]
     };
+
     const set = sets[(role || "switch").toLowerCase()] || sets.switch;
+
     for (let i = 0; i < set.length; i++) {
-        if (level < set[i][0]) return set[i][1] + " at Level " + set[i][0];
+        if (level < set[i][0]) {
+            return set[i][1] + " at Level " + set[i][0];
+        }
     }
+
     return "Max Rank Reached";
 }
 
 function showPartnerInfo() {
     const list = document.getElementById("partnerInfoList");
     list.innerHTML = "";
-
     const matches = window._lastMatches || [];
-
     if (matches.length === 0) {
-        list.innerHTML = "<div class='partner-empty'>NO MATCHES YET</div>";
+        list.innerHTML = "<div style='font-size:18px;color:#8c6a12;margin:30px 0;letter-spacing:2px;'>NO MATCHES YET</div>";
     } else {
         matches.forEach(m => {
-            const roleLabel = m.role
-                ? m.role.charAt(0).toUpperCase() + m.role.slice(1) : "";
-            const typeLabel = {ds:"D/s", longterm:"Long Term",
-                shortterm:"Short Term", anything:"Anything"}[m.relationship_type] || "";
+            const roleLabel = m.role ? m.role.charAt(0).toUpperCase() + m.role.slice(1) : "";
+            const typeLabel = {ds:"D/s",longterm:"Long Term",shortterm:"Short Term",anything:"Anything"}[m.relationship_type] || "";
             const card = document.createElement("div");
-            card.className = "partner-card";
+            card.style.cssText = "background:rgba(155,48,255,0.06);border:1px solid rgba(140,106,18,0.4);border-radius:10px;padding:14px 18px;margin-bottom:12px;text-align:left;";
             card.innerHTML =
-                "<div class='partner-card-name'>" + (m.sl_name || "Unknown") + "</div>" +
-                "<div class='partner-card-bond'>" +
-                    (roleLabel ? roleLabel : "") +
-                    (typeLabel ? " &nbsp;·&nbsp; " + typeLabel : "") +
-                "</div>" +
-                "<div style='margin-top:8px;'>" +
-                    "<button onclick=\\"sendPrompt('VO_BTN_VIEW_PROFILE|" + m.match_uuid + "|" + (m.sl_name||"") + "')\\" " +
-                    "style='background:transparent;border:none;color:#a78bfa;font-size:12px;" +
-                    "letter-spacing:1px;cursor:pointer;padding:0;'>View Profile →</button>" +
-                "</div>";
+                "<div style='font-family:Cinzel,serif;font-size:16px;color:#f0c95a;letter-spacing:2px;margin-bottom:6px;'>" + (m.sl_name||"Unknown") + "</div>" +
+                "<div style='font-size:13px;color:#c9aa69;'>" + (roleLabel||"") + (typeLabel?" &nbsp;·&nbsp; "+typeLabel:"") + "</div>";
             list.appendChild(card);
         });
     }
-
     document.getElementById("partnerInfoMenu").style.display = "block";
 }
-
 function closePartnerInfo() {
     document.getElementById("partnerInfoMenu").style.display = "none";
 }
-
+async function respondPartnerRequest(requesterUUID, accepted, elementId) {
+    const uuid = getParam("uuid");
+    if (!uuid) return;
+    try {
+        await fetch(`${API_BASE}/api/partners/respond`, {
+            method:"POST",
+            headers:{"Content-Type":"application/json","x-api-secret":API_SECRET},
+            body:JSON.stringify({requester_uuid:requesterUUID,target_uuid:uuid,accepted})
+        });
+        const el = document.getElementById(elementId);
+        if (el) el.innerHTML = "💜 Bond partner request " + (accepted?"<b>accepted</b>":"declined") + ".";
+        await fetchPartnerBond();
+    } catch(err) {}
+}
 function showRoleInfo() {
     document.getElementById("roleInfoCurrent").textContent = cleanRole(currentRole);
-    document.getElementById("roleInfoNext").textContent = "Next Rank: " + getNextRankForRole(currentRole, currentLevel);
+
+    document.getElementById("roleInfoNext").textContent =
+        "Next Rank: " + getNextRankForRole(currentRole, currentLevel);
+
     document.getElementById("roleInfoMenu").style.display = "block";
 }
+
 function closeRoleInfo() {
     document.getElementById("roleInfoMenu").style.display = "none";
 }
 
 function updateHUD(data) {
-    const role     = data.role || "loading";
-    const rank     = data.rank || "Initiate";
-    const level    = parseInt(data.level || 1);
-    const xp       = parseInt(data.xp || 0);
-    const next     = parseInt(data.next_level_xp || 250);
-    const tokens   = parseInt(data.tokens || 0);
+    const role = data.role || "loading";
+    const rank = data.rank || "Initiate";
+    const level = parseInt(data.level || 1);
+    const xp = parseInt(data.xp || 0);
+    const next = parseInt(data.next_level_xp || 250);
+    const tokens = parseInt(data.tokens || 0);
     const prestige = parseInt(data.prestige || 0);
-    const max      = parseInt(data.max_level || 100);
+    const max = parseInt(data.max_level || 100);
 
     if (profileLoadedOnce) {
-        if (lastSeenLevel !== null && level > lastSeenLevel && level !== notifiedLevel) { addActivity(`✨ Level gained: ${level}`); notifiedLevel = level; }
-        if (lastSeenRank && rank !== lastSeenRank)           addActivity(`New rank: ${rank}`);
-        if (lastSeenRole && role !== lastSeenRole)           addActivity(`Role changed: ${cleanRole(role)}`);
+        if (lastSeenLevel !== null && level > lastSeenLevel) {
+            addActivity(`Level gained: ${level}`);
+        }
+
+        if (lastSeenRank && rank !== lastSeenRank) {
+            addActivity(`New rank: ${rank}`);
+        }
+
+        if (lastSeenRole && role !== lastSeenRole) {
+            addActivity(`Role changed: ${cleanRole(role)}`);
+        }
     }
 
-    currentRole  = role;
+    currentRole = role;
     currentLevel = level;
     lastSeenLevel = level;
-    lastSeenRank  = rank;
-    lastSeenRole  = role;
+    lastSeenRank = rank;
+    lastSeenRole = role;
 
     let percent = 100;
-    if (level < max && next > 0) percent = Math.min((xp / next) * 100, 100);
+
+    if (level < max && next > 0) {
+        percent = Math.min((xp / next) * 100, 100);
+    }
+
     const remaining = level >= max ? 0 : Math.max(next - xp, 0);
 
-    document.getElementById("hudRole").textContent    = cleanRole(role);
-    document.getElementById("hudRank").textContent    = rank.toUpperCase();
-    document.getElementById("hudLevel").textContent   = level;
+    document.getElementById("hudRole").textContent = cleanRole(role);
+    document.getElementById("hudRank").textContent = rank.toUpperCase();
+    document.getElementById("hudLevel").textContent = level;
     document.getElementById("hudPrestige").textContent = prestige;
-    document.getElementById("hudXPText").textContent  = xp.toLocaleString() + " / " + next.toLocaleString();
-    document.getElementById("hudXPFill").style.width  = percent + "%";
-    document.getElementById("hudXPPercent").textContent = Math.round(percent) + "%";
-    document.getElementById("hudNextText").textContent = level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
-    document.getElementById("hudCurrency").innerHTML  = `<span>💎 ${tokens.toLocaleString()}</span><span>♦ 0</span><span>🔷 0</span>`;
 
-    profileLoadedOnce = true;
+    document.getElementById("hudXPText").textContent =
+        xp.toLocaleString() + " / " + next.toLocaleString();
 
-    // Wire up looking toggle from profile data
-    try {
-        const uuid = getParam("uuid");
-        if (uuid) {
-            fetch(`${API_BASE}/api/matchmaking/profile/${uuid}`, {
-                headers: { "x-api-secret": API_SECRET }
-            }).then(r => r.ok ? r.json() : null).then(pData => {
-                const btn = document.getElementById("lookingToggle");
-                if (!btn) return;
-                const looking = pData && pData.looking !== undefined ? pData.looking : 0;
-                btn.textContent   = looking ? "Looking: ON" : "Looking: OFF";
-                btn.style.color   = looking ? "#f0c95a" : "#8c6a12";
-                btn.style.borderColor = looking ? "#d4af37" : "#8c6a12";
-                btn.onclick       = () => toggleLooking(!!looking);
-            }).catch(() => {});
-        }
-    } catch(e) {}
-}
+    document.getElementById("hudXPFill").style.width = percent + "%";
 
-async function checkForUpdate() {
-    const uuid = getParam("uuid");
-    if (!uuid) return;
-    try {
-        const res = await fetch(`${API_BASE}/api/hud/version`, {
-            headers: { "x-api-secret": API_SECRET }
-        });
-        if (!res.ok) return;
-        const data = await res.json();
-        const latest = data.latest_version || "";
-        const current = "1.5";
-        if (latest && latest !== current) {
-            addActivity(`⚠️ HUD update available! Your version: ${current} · Latest: ${latest}`);
-            addActivity(data.update_message || "Please contact the creator for an update.");
-        } else {
-            addActivity("✅ HUD is up to date (v" + current + ").");
-        }
-    } catch(e) {
-        addActivity("Unable to check for updates.");
+    document.getElementById("hudXPPercent").textContent =
+        Math.round(percent) + "%";
+
+    document.getElementById("hudNextText").textContent =
+        level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
+
+    document.getElementById("hudCurrency").innerHTML =
+        `<span>💎 ${tokens.toLocaleString()}</span><span>♦ 0</span><span>🔷 0</span>`;
+
+    if (!profileLoadedOnce) {
+        profileLoadedOnce = true;
+        addActivity("Profile loaded.");
     }
-}
-
-async function toggleLooking(currentlyLooking) {
-    const uuid = getParam("uuid");
-    if (!uuid) return;
-    const newVal = !currentlyLooking;
-    try {
-        const res = await fetch(`${API_BASE}/api/matchmaking/looking`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "x-api-secret": API_SECRET },
-            body: JSON.stringify({ user_uuid: uuid, looking: newVal })
-        });
-        if (res.ok) {
-            const btn = document.getElementById("lookingToggle");
-            if (btn) {
-                btn.textContent = newVal ? "Looking: ON" : "Looking: OFF";
-                btn.style.color = newVal ? "#f0c95a" : "#8c6a12";
-                btn.style.borderColor = newVal ? "#d4af37" : "#8c6a12";
-                btn.onclick     = () => toggleLooking(newVal);
-            }
-            addActivity(newVal ? "💜 You are now visible to matchmaking." : "Matchmaking visibility turned off.");
-        }
-    } catch(e) {}
-}
-
-async function tickLiveXP() {
-    const uuid = getParam("uuid");
-    if (!uuid) return;
-    try {
-        const response = await fetch(`${API_BASE}/api/user/xp-live/${uuid}`, {
-            headers: { "x-api-secret": API_SECRET }
-        });
-        if (!response.ok) return;
-        const data   = await response.json();
-        const xp     = parseInt(data.live_xp      || 0);
-        const level  = parseInt(data.level         || currentLevel);
-        const nextXP = parseInt(data.next_level_xp || 250);
-        const rank   = data.rank || "";
-        const role   = data.role || currentRole;
-        const max    = 100;
-
-        let percent = 100;
-        if (level < max && nextXP > 0) percent = Math.min((xp / nextXP) * 100, 100);
-        const remaining = level >= max ? 0 : Math.max(nextXP - xp, 0);
-
-        document.getElementById("hudXPText").textContent    = xp.toLocaleString() + " / " + nextXP.toLocaleString();
-        document.getElementById("hudXPFill").style.width    = percent + "%";
-        document.getElementById("hudXPPercent").textContent = Math.round(percent) + "%";
-        document.getElementById("hudNextText").textContent  = level >= max ? "MAX LEVEL" : "+" + remaining.toLocaleString() + " XP";
-
-        if (level !== currentLevel) {
-            currentLevel = level;
-            document.getElementById("hudLevel").textContent = level;
-            if (level !== notifiedLevel) { addActivity("✨ Level gained: " + level); notifiedLevel = level; }
-        }
-        if (rank && rank !== lastSeenRank && lastSeenRank !== "") addActivity("New rank: " + rank);
-        if (rank) { lastSeenRank = rank; document.getElementById("hudRank").textContent = rank.toUpperCase(); }
-        if (role) { currentRole  = role; }
-    } catch(err) {}
 }
 
 async function fetchProfile() {
     const uuid = getParam("uuid");
-    if (!uuid) { addActivity("Missing avatar UUID."); return; }
+
+    if (!uuid) {
+        addActivity("Missing avatar UUID.");
+        return;
+    }
+
     try {
         const response = await fetch(`${API_BASE}/api/user/${uuid}`, {
             headers: { "x-api-secret": API_SECRET }
         });
+
         if (!response.ok) throw new Error("HTTP " + response.status);
+
         const data = await response.json();
-        try { localStorage.setItem("vo_profile_cache_" + uuid, JSON.stringify(data)); } catch(e) {}
+
+        // Keep the latest profile data cached locally in the MOAP page.
+        // The HUD uses this cached data between 5-minute API refreshes.
+        try {
+            localStorage.setItem("vo_profile_cache_" + uuid, JSON.stringify(data));
+        } catch (e) {
+            console.warn("Local profile cache failed:", e);
+        }
+
         updateHUD(data);
-    } catch(err) {
+    }
+    catch (err) {
         console.error("Profile load failed:", err);
         addActivity("Unable to load profile data.");
     }
@@ -1027,234 +809,151 @@ async function fetchProfile() {
 function updatePartnerPanel(partners) {
     const box = document.getElementById("partnerPanelList");
     box.innerHTML = "";
+
     if (!partners || partners.length === 0) {
-        box.innerHTML = '<div class="partner-empty gold">NO BOND PARTNERS</div>';
+        box.innerHTML = '<div class="partner-empty gold">NO BONDED PARTNERS</div>';
+
+        if (partnerLoadedOnce && lastPartnerSignature !== "none") {
+            addActivity("No bonded partners active.");
+        }
+
         lastPartnerSignature = "none";
-        partnerLoadedOnce    = true;
+        partnerLoadedOnce = true;
         return;
     }
-    const signature = partners.map(p => `${p.partner_uuid||p.sl_name||"unknown"}:${p.bond_level||1}:${p.bond_xp||0}`).join("|");
+
+    const signature = partners
+        .map(p => `${p.partner_uuid || p.sl_name || "unknown"}:${p.bond_level || 1}:${p.bond_xp || 0}`)
+        .join("|");
+
     partners.slice(0, 2).forEach(partner => {
-        const name      = partner.sl_name || "Unknown Partner";
+        const name = partner.sl_name || "Unknown Partner";
         const bondLevel = parseInt(partner.bond_level || 1);
-        const bondXP    = parseInt(partner.bond_xp || 0);
-        const bondNext  = parseInt(partner.bond_next_xp || 100);
-        const maxBond   = parseInt(partner.max_bond_level || 10);
+        const bondXP = parseInt(partner.bond_xp || 0);
+        const bondNext = parseInt(partner.bond_next_xp || 100);
+        const maxBondLevel = parseInt(partner.max_bond_level || 10);
+
         let percent = 100;
-        if (bondLevel < maxBond && bondNext > 0) percent = Math.min((bondXP / bondNext) * 100, 100);
+
+        if (bondLevel < maxBondLevel && bondNext > 0) {
+            percent = Math.min((bondXP / bondNext) * 100, 100);
+        }
+
         box.innerHTML += `
             <div class="partner-card">
                 <div class="partner-name gold">${name}</div>
                 <div class="partner-level">Bond Level ${bondLevel} · ${bondXP} / ${bondNext} XP</div>
-                <div class="partner-bar"><div class="partner-fill" style="width:${percent}%"></div></div>
+                <div class="partner-bar">
+                    <div class="partner-fill" style="width:${percent}%"></div>
+                </div>
                 <div class="partner-percent gold">${Math.round(percent)}%</div>
-            </div>`;
+            </div>
+        `;
     });
-    if (partnerLoadedOnce && signature !== lastPartnerSignature) addActivity("Partner bond updated.");
+
+    if (!partnerLoadedOnce) {
+        addActivity("Partner panel loaded.");
+    }
+    else if (signature !== lastPartnerSignature) {
+        addActivity("Partner bond updated.");
+    }
+
     lastPartnerSignature = signature;
-    partnerLoadedOnce    = true;
+    partnerLoadedOnce = true;
 }
 
 async function fetchMatchInterests() {
     const uuid = getParam("uuid");
+
     if (!uuid) return;
+
     try {
         const response = await fetch(`${API_BASE}/api/matchmaking/interests/${uuid}`, {
             headers: { "x-api-secret": API_SECRET }
         });
+
         if (!response.ok) return;
+
         const data = await response.json();
-        const box  = document.getElementById("hudNotifications");
-        if (!data.interests || data.interests.length === 0) return;
-        data.interests.forEach(i => {
-            if (box.querySelector(`[data-interest-id="${i.id}"]`)) return;
-            const senderName = i.sender_name || "Someone";
-            const profileURL = `secondlife:///app/agent/${i.sender_uuid}/about`;
-            const detail = (i.role ? ` · Role: ${i.role}` : "") + (i.relationship_type ? ` · ${i.relationship_type}` : "");
-            const card = document.createElement("div");
-            card.className = "activity-item match-interest-card";
-            card.setAttribute("data-interest-id", i.id);
-            card.innerHTML =
-                `💜 <a href="${profileURL}" style="color:#f0c95a;">${senderName}</a> is interested in matching.` +
-                (detail ? `<br><span style="font-size:13px;opacity:0.8;">${detail}</span>` : "") +
-                `<br><button onclick="respondMatchInterest(${i.id}, true)">Accept</button>` +
-                ` <button onclick="respondMatchInterest(${i.id}, false)">Decline</button>`;
-            box.insertAdjacentElement("afterbegin", card);
-        });
-    } catch(err) {}
+
+        if (!data.interests || data.interests.length === 0) {
+            return;
+        }
+
+        const box = document.getElementById("hudNotifications");
+
+        box.innerHTML = data.interests.map(i => `
+            <div class="activity-item">
+                💜 Match Interest<br>
+                <b>${i.sender_name || "Someone"}</b> is interested in matching.<br>
+                ${i.role ? "Role: " + i.role + "<br>" : ""}
+                ${i.relationship_type ? "Seeking: " + i.relationship_type + "<br>" : ""}
+
+                <button onclick="respondMatchInterest(${i.id}, true)">Accept</button>
+                <button onclick="respondMatchInterest(${i.id}, false)">Decline</button>
+                <br>
+                <a href="secondlife:///app/agent/${i.sender_uuid}/about">View Profile</a>
+            </div>
+        `).join("");
+    }
+    catch (err) {
+        console.error("Match interests failed:", err);
+    }
 }
 
 async function respondMatchInterest(interestId, accepted) {
     const uuid = getParam("uuid");
-    const card = document.querySelector(`[data-interest-id="${interestId}"]`);
-    if (card) card.remove();
+
     try {
         const response = await fetch(`${API_BASE}/api/matchmaking/respond`, {
             method: "POST",
-            headers: { "Content-Type": "application/json", "x-api-secret": API_SECRET },
-            body: JSON.stringify({ interest_id: interestId, target_uuid: uuid, accepted: accepted })
+            headers: {
+                "Content-Type": "application/json",
+                "x-api-secret": API_SECRET
+            },
+            body: JSON.stringify({
+                interest_id: interestId,
+                target_uuid: uuid,
+                accepted: accepted
+            })
         });
-        if (!response.ok) return;
-        const result = await response.json();
-        if (accepted && result.matched_name) {
-            const profileURL = `secondlife:///app/agent/${result.match_uuid}/about`;
-            addActivity(`✨ NEW MATCH! You accepted <a href="${profileURL}">${result.matched_name}</a>'s interest.`);
-            seenMatchNotifs.add(result.match_uuid);
-            markMatchNotifSeen(result.match_uuid);
-            await fetchMatches();
-        } else {
-            addActivity("Match interest declined.");
+
+        if (response.ok) {
+            addActivity(accepted ? "Match interest accepted." : "Match interest declined.");
+            await fetchMatchInterests();
         }
-    } catch(err) { addActivity("Unable to respond to match interest."); }
+    }
+    catch (err) {
+        console.error("Respond match interest failed:", err);
+        addActivity("Unable to respond to match interest.");
+    }
 }
-
-async function dismissMatch(matchUUID) {
-    const card = document.querySelector(`[data-match-uuid="${matchUUID}"]`);
-    if (card) card.remove();
-    const uuid = getParam("uuid");
-    if (!uuid) return;
-    try {
-        await fetch(`${API_BASE}/api/matchmaking/dismiss`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "x-api-secret": API_SECRET },
-            body: JSON.stringify({ user_uuid: uuid, match_uuid: matchUUID })
-        });
-    } catch(e) {}
-}
-
-function formatRelType(val) {
-    if (!val) return "";
-    if (val === "ds")        return "D/s";
-    if (val === "longterm")  return "Long Term";
-    if (val === "shortterm") return "Short Term";
-    if (val === "anything")  return "Anything";
-    return val;
-}
-
-async function fetchMatches() {
-    const uuid = getParam("uuid");
-    if (!uuid) return;
-
-    dismissedMatches   = new Set();
-    seenMatchNotifs    = loadSeenMatchNotifs();
-    lastMatchSignature = localStorage.getItem("vo_match_sig_" + uuid) || "";
-
-    try {
-        const dRes = await fetch(`${API_BASE}/api/matchmaking/dismissed/${uuid}`, {
-            headers: { "x-api-secret": API_SECRET }
-        });
-        if (dRes.ok) { const d = await dRes.json(); dismissedMatches = new Set(d.dismissed || []); }
-    } catch(e) {}
-
-    try {
-        const response = await fetch(`${API_BASE}/api/matchmaking/matches/${uuid}`, {
-            headers: { "x-api-secret": API_SECRET }
-        });
-        if (!response.ok) return;
-        const data    = await response.json();
-        const matches = data.matches || [];
-        window._lastMatches = matches;
-        const signature = matches.map(m => m.match_uuid).join("|");
-        lastMatchSignature = signature;
-
-        // Drain server notifications
-        try {
-            const nRes = await fetch(`${API_BASE}/api/matchmaking/notifications/${uuid}`, {
-                headers: { "x-api-secret": API_SECRET }
-            });
-            if (nRes.ok) {
-                const nData = await nRes.json();
-                for (const n of (nData.notifications || [])) {
-                    const profileURL = `secondlife:///app/agent/${n.matchedUUID}/about`;
-                    addActivity(`✨ NEW MATCH! <a href="${profileURL}">${n.matchedName}</a> accepted your interest.`);
-                }
-            }
-        } catch(_) {}
-
-        const feed = document.getElementById("hudNotifications");
-        matches.forEach(m => {
-            if (dismissedMatches.has(m.match_uuid)) return;
-            if (feed.querySelector(`[data-match-uuid="${m.match_uuid}"]`)) return;
-            const profileURL = `secondlife:///app/agent/${m.match_uuid}/about`;
-            const role    = m.role ? `Role: ${m.role} · ` : "";
-            const relType = formatRelType(m.relationship_type);
-            const score   = m.score ? `<span style="color:#a735ff;font-size:12px;"> · ${m.score}% compatible</span>` : "";
-            const card = document.createElement("div");
-            card.className = "activity-item match-card";
-            card.setAttribute("data-match-uuid", m.match_uuid);
-            card.innerHTML =
-                `<button onclick="dismissMatch('${m.match_uuid}')" style="float:right;cursor:pointer;font-size:11px;padding:2px 7px;background:transparent;border:1px solid #8c6a12;color:#c9aa69;border-radius:4px;font-family:inherit;">Dismiss</button>` +
-                `💜 <b>MATCH</b> · <a href="${profileURL}" style="color:#f0c95a;">${m.sl_name}</a>${score}<br>` +
-                (role || relType ? `<span style="font-size:12px;opacity:0.8;">${role}${relType}</span>` : "");
-            feed.insertAdjacentElement("afterbegin", card);
-        });
-    } catch(err) {}
-}
-
+    
 async function fetchPartnerBond() {
     const uuid = getParam("uuid");
+
     if (!uuid) return;
+
     try {
         const response = await fetch(`${API_BASE}/api/partners/${uuid}`, {
             headers: { "x-api-secret": API_SECRET }
         });
+
         if (!response.ok) throw new Error("HTTP " + response.status);
+
         const data = await response.json();
-        window._lastPartners = data.partners || [];
         updatePartnerPanel(data.partners || []);
-    } catch(err) { updatePartnerPanel([]); }
-
-    // Also check for pending partner requests
-    try {
-        const res = await fetch(`${API_BASE}/api/partners/pending/${uuid}`, {
-            headers: { "x-api-secret": API_SECRET }
-        });
-        if (!res.ok) return;
-        const data = await res.json();
-        const requests = data.requests || [];
-        requests.forEach(r => {
-            const key = "partner_req_" + r.requester_uuid;
-            if (!window._shownPartnerRequests) window._shownPartnerRequests = {};
-            if (window._shownPartnerRequests[key]) return;
-            window._shownPartnerRequests[key] = true;
-
-            const feedItem = document.createElement("div");
-            feedItem.className = "activity-item";
-            feedItem.id = key;
-            feedItem.innerHTML =
-                "💜 <b>" + r.requester_name + "</b> wants to bond with you.<br>" +
-                "<button onclick=\"respondPartnerRequest('" + r.requester_uuid + "', true, '" + key + "')\" " +
-                "style='margin-top:6px;margin-right:8px;background:rgba(155,48,255,0.2);border:1px solid #a78bfa;color:#a78bfa;padding:4px 12px;border-radius:4px;cursor:pointer;font-family:inherit;'>Accept</button>" +
-                "<button onclick=\"respondPartnerRequest('" + r.requester_uuid + "', false, '" + key + "')\" " +
-                "style='background:transparent;border:1px solid #8c6a12;color:#8c6a12;padding:4px 12px;border-radius:4px;cursor:pointer;font-family:inherit;'>Decline</button>";
-
-            const feed = document.getElementById("activityFeed");
-            if (feed) feed.insertBefore(feedItem, feed.firstChild);
-        });
-    } catch(err) {}
-}
-
-async function respondPartnerRequest(requesterUUID, accepted, elementId) {
-    const uuid = getParam("uuid");
-    if (!uuid) return;
-    try {
-        await fetch(`${API_BASE}/api/partners/respond`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "x-api-secret": API_SECRET },
-            body: JSON.stringify({ requester_uuid: requesterUUID, target_uuid: uuid, accepted })
-        });
-        const el = document.getElementById(elementId);
-        if (el) el.innerHTML = "💜 Bond partner request " + (accepted ? "<b>accepted</b>" : "declined") + ".";
-        if (window._shownPartnerRequests) delete window._shownPartnerRequests["partner_req_" + requesterUUID];
-        await fetchPartnerBond();
-    } catch(err) {}
+    }
+    catch (err) {
+        console.error("Partner bond load failed:", err);
+        updatePartnerPanel([]);
+    }
 }
 
 async function refreshHUDData() {
     await fetchProfile();
     await fetchPartnerBond();
     await fetchMatchInterests();
-    await fetchMatches();
 }
 
 window.addEventListener("load", async () => {
@@ -1263,50 +962,20 @@ window.addEventListener("load", async () => {
     const uuid = getParam("uuid");
     if (uuid) {
         try {
-            const cached = localStorage.getItem("vo_profile_cache_" + uuid);
-            if (cached) updateHUD(JSON.parse(cached));
-        } catch(e) {}
+            const cachedProfile = localStorage.getItem("vo_profile_cache_" + uuid);
+            if (cachedProfile) {
+                updateHUD(JSON.parse(cachedProfile));
+                addActivity("Loaded cached profile.");
+            }
+        } catch (e) {
+            console.warn("Cached profile read failed:", e);
+        }
     }
 
-    dismissedMatches = loadDismissedMatches();
-
     await refreshHUDData();
-    setInterval(refreshHUDData, API_REFRESH_MS);
 
-    // Poll for pending partner requests every 60 seconds so they
-    // show up quickly without needing a full page reload
-    setInterval(async () => {
-        const uuid = getParam("uuid");
-        if (!uuid) return;
-        try {
-            const res = await fetch(`${API_BASE}/api/partners/pending/${uuid}`, {
-                headers: { "x-api-secret": API_SECRET }
-            });
-            if (!res.ok) return;
-            const data = await res.json();
-            const requests = data.requests || [];
-            requests.forEach(r => {
-                const key = "partner_req_" + r.requester_uuid;
-                if (!window._shownPartnerRequests) window._shownPartnerRequests = {};
-                if (window._shownPartnerRequests[key]) return;
-                window._shownPartnerRequests[key] = true;
-                const feedItem = document.createElement("div");
-                feedItem.className = "activity-item";
-                feedItem.id = key;
-                feedItem.innerHTML =
-                    "💜 <b>" + r.requester_name + "</b> wants to bond with you.<br>" +
-                    "<button onclick=\"respondPartnerRequest('" + r.requester_uuid + "', true, '" + key + "')\" " +
-                    "style='margin-top:6px;margin-right:8px;background:rgba(155,48,255,0.2);border:1px solid #a78bfa;color:#a78bfa;padding:4px 12px;border-radius:4px;cursor:pointer;font-family:inherit;'>Accept</button>" +
-                    "<button onclick=\"respondPartnerRequest('" + r.requester_uuid + "', false, '" + key + "')\" " +
-                    "style='background:transparent;border:1px solid #8c6a12;color:#8c6a12;padding:4px 12px;border-radius:4px;cursor:pointer;font-family:inherit;'>Decline</button>";
-                const feed = document.getElementById("activityFeed");
-                if (feed) feed.insertBefore(feedItem, feed.firstChild);
-            });
-        } catch(err) {}
-    }, 60000);
-
-    await tickLiveXP();
-    setInterval(tickLiveXP, LIVE_REFRESH_MS);
+    // Refresh from the API every 5 minutes instead of every 30 seconds.
+    setInterval(refreshHUDData, HUD_REFRESH_MS);
 });
 
 window.addEventListener("resize", scaleHUD);
