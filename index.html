@@ -213,7 +213,7 @@ html, body {
 .menu-grid {
     display: grid;
     grid-template-columns: repeat(2, 220px);
-    grid-template-rows: repeat(3, 135px);
+    grid-template-rows: repeat(2, 135px);
     gap: 18px;
     justify-content: center;
 }
@@ -661,6 +661,15 @@ html, body {
                 <span class="vo-btn-label">PARTNER</span>
                 <span class="vo-btn-sub">bonds &amp; matches</span>
             </button>
+            <button class="vo-btn" type="button" onclick="sendPrompt('VO_BTN_LEADERBOARD')">
+                <span class="vo-btn-corner tl"></span>
+                <span class="vo-btn-corner tr"></span>
+                <span class="vo-btn-corner bl"></span>
+                <span class="vo-btn-corner br"></span>
+                <span class="vo-btn-glyph">♛</span>
+                <span class="vo-btn-label">RANKS</span>
+                <span class="vo-btn-sub">leaderboard</span>
+            </button>
         </div>
     </section>
 
@@ -686,7 +695,7 @@ html, body {
                        background-clip:text;
                        color:#d4af37;
                        transition:all 0.18s ease;">
-                Looking: --
+                Looking: OFF
             </button>
         </div>
         <div class="notifications-body" id="hudNotifications">
@@ -837,9 +846,9 @@ function showPartnerInfo() {
                     (typeLabel ? " &nbsp;·&nbsp; " + typeLabel : "") +
                 "</div>" +
                 "<div style='margin-top:8px;'>" +
-                    "<a href='secondlife:///app/agent/" + m.match_uuid + "/about' " +
-                    "style='color:#a78bfa;font-size:12px;letter-spacing:1px;text-decoration:none;' " +
-                    "target='_blank'>View Profile →</a>" +
+                    "<button onclick=\\"sendPrompt('VO_BTN_VIEW_PROFILE|" + m.match_uuid + "|" + (m.sl_name||"") + "')\\" " +
+                    "style='background:transparent;border:none;color:#a78bfa;font-size:12px;" +
+                    "letter-spacing:1px;cursor:pointer;padding:0;'>View Profile →</button>" +
                 "</div>";
             list.appendChild(card);
         });
@@ -906,19 +915,13 @@ function updateHUD(data) {
             fetch(`${API_BASE}/api/matchmaking/profile/${uuid}`, {
                 headers: { "x-api-secret": API_SECRET }
             }).then(r => r.ok ? r.json() : null).then(pData => {
-                if (!pData) return;
-                const looking = pData.looking !== undefined ? pData.looking : null;
                 const btn = document.getElementById("lookingToggle");
                 if (!btn) return;
-                if (looking !== null) {
-                    btn.textContent = looking ? "Looking: ON" : "Looking: OFF";
-                    btn.style.color = looking ? "#f0c95a" : "#8c6a12";
-                    btn.style.borderColor = looking ? "#d4af37" : "#8c6a12";
-                    btn.onclick     = () => toggleLooking(!!looking);
-                } else {
-                    btn.textContent = "Set Up Matchmaking";
-                    btn.onclick     = () => addActivity("Use Partners > Find Match to set up your matchmaking profile.");
-                }
+                const looking = pData && pData.looking !== undefined ? pData.looking : 0;
+                btn.textContent   = looking ? "Looking: ON" : "Looking: OFF";
+                btn.style.color   = looking ? "#f0c95a" : "#8c6a12";
+                btn.style.borderColor = looking ? "#d4af37" : "#8c6a12";
+                btn.onclick       = () => toggleLooking(!!looking);
             }).catch(() => {});
         }
     } catch(e) {}
